@@ -15,14 +15,19 @@ setup(name='BanDiTS',
       include_package_data=True,
       setup_requires=['setuptools_scm'],
       use_scm_version=True,
-      description='....', # add description
+      description='Python script for processing Sentinel-3 and MODIS LST data',
       classifiers=[
           'License :: FSF Approved :: MIT License',
           'Operating System :: Microsoft :: Windows',
           'Programming Language :: Python',
       ],
-      install_requires=['...', # add requieremtns
-                        ],
+      install_requires=["fiona",
+                        "rasterio",
+                        "GDAL",
+                        "matplotlib",
+                        "pathos",
+                        "scipy",
+                        "numpy"],
       python_requires='>=3.6.0',
       url='https://github.com/marlinmm/SenLAST.git',
       author='Marlin Mueller', #'Jonas Ziemer'  # how to add second author?

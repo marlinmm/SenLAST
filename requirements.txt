@@ -1,0 +1,7 @@
+fiona
+rasterio
+GDAL
+matplotlib
+pathos
+scipy
+numpy
