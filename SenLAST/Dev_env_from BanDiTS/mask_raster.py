@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import fiona
 import rasterio as rio
 import rasterio.mask
@@ -9,6 +11,7 @@ import scipy.signal as sig
 
 list_list = []
 
+start_time = datetime.now()
 
 def mask_raster_test():
     import numpy as np
@@ -78,7 +81,8 @@ def mask_raster_test():
 #### activate for testing this file standalone ####
 mask_raster_test()
 
-
+statistics_time = datetime.now()
+print("breakpoint-time = ", statistics_time - start_time, "Hr:min:sec")
 
 
 ###---Infos zum Plotten von Graphen---###
