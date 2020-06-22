@@ -19,9 +19,9 @@ def mask_raster_test():
 
     for h in range(0,19):
         ## Shapefile Marlin:
-        shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+        # shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
         ## Shapefile Jonas:
-        #shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+        shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
 
         inputshape = "Stationen_Thüringen_Umland_3x3box.shp"
         shapefile = fiona.open(shapefolder+inputshape, "r")
@@ -32,50 +32,58 @@ def mask_raster_test():
     print(shape_list)
     print(shape_list[0][0])
 
+    # ------------------------------------------------------------------------------#
+
     list_means = []
 
-    for i in range(0, len(shape_list)+1):
-        ######## SENTINEL ########
-        ## TIFF-File Marlin:
-        Sentinel_folder = "F:/GEO411_data/Sentinel_Daten/"
-        Sentinel_file = "S3A_LST_2018-07-03_21h13m_086_NIGHT_1km_utm32_etrs89.tif"
+    ######## SENTINEL ########
+    ## TIFF-File Marlin:
+    # Sentinel_folder = "F:/GEO411_data/Sentinel_Daten/"
+    # Sentinel_file = "S3A_LST_2018-07-03_21h13m_086_NIGHT_1km_utm32_etrs89.tif"
 
-        ## TIFF-File Jonas:
-        #Sentinel_folder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2018/07_2018_Juli/S3A/"
-        #Sentinel_file = "S3A_LST_2018-07-23_20h54m_371_NIGHT_1km_utm32_etrs89.tif"
+    ## TIFF-File Jonas:
+    Sentinel_folder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2018/07_2018_Juli/S3A/"
+    # Sentinel_file = "S3A_LST_2018-07-23_20h54m_371_NIGHT_1km_utm32_etrs89.tif" # works
+    Sentinel_file = "S3A_LST_2018-07-28_20h24m_057_NIGHT_1km_utm32_etrs89.tif" # doesnt work because does not totally overlap
 
-        # ------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------#
 
-        ######## MODIS ########
-        ## TIFF-File Marlin:
-        Modis_folder = "F:/GEO411_data/MODIS_R_dir/Downloaded_HDFs/GeoTIFF/Thuringia/scaled/"
-        Modis_file = "MOD11A1.A2018184.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
+    ######## MODIS ########
+    ## TIFF-File Marlin:
+    # Modis_folder = "F:/GEO411_data/MODIS_R_dir/Downloaded_HDFs/GeoTIFF/Thuringia/scaled/"
+    # Modis_file = "MOD11A1.A2018184.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
 
-        ## TIFF-File Jonas:
-        #Modis_folder = "F:/411/LST/GeoTIFF/Thuringia/scaled/"
-        #Modis_file = "MOD11A1.A2020153.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
+    ## TIFF-File Jonas:
+    Modis_folder = "F:/411/LST/GeoTIFF/Thuringia/scaled/"
+    Modis_file = "MOD11A1.A2020153.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
 
-        # ------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------#
 
-        # Select between MODIS and SENTINEL
-        src1 = rio.open(Sentinel_folder + Sentinel_file)
-        #src1 = rio.open(Modis_folder + Modis_file)
+    try:
+        for i in range(0, len(shape_list)+1):
+            # Select between MODIS and SENTINEL
+            src1 = rio.open(Sentinel_folder + Sentinel_file)
+            #src1 = rio.open(Modis_folder + Modis_file)
 
-        # ------------------------------------------------------------------------------#
+            out_image1, out_transform1 = rasterio.mask.mask(src1, [shape_list[0][i]], all_touched=0, crop=True, nodata= np.nan)
+            ras_meta1 = src1.profile
+            ras_meta1.update({"driver": "GTiff",
+                             "height": out_image1.shape[1],
+                             "width": out_image1.shape[2],
+                             "transform": out_transform1,
+                             "nodata": 0. })
 
-        out_image1, out_transform1 = rasterio.mask.mask(src1, [shape_list[0][i]], all_touched=0, crop=True, nodata= np.nan)
-        ras_meta1 = src1.profile
-        ras_meta1.update({"driver": "GTiff",
-                         "height": out_image1.shape[1],
-                         "width": out_image1.shape[2],
-                         "transform": out_transform1,
-                         "nodata": 0. })
+            list_means.append(np.nanmean(out_image1))
+             # print(out_image1)
 
-        list_means.append(np.nanmean(out_image1))
-        # print(out_image1)
+            print(list_means)
+            print(len(list_means))
 
-    print(list_means)
-    print(len(list_means))
+    except ValueError:
+        pass
+        # print("Huuch!  This scene does not totally cover all existing weather stations! Go on!")
+
+
 
 #### activate for testing this file standalone ####
 mask_raster_test()
