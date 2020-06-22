@@ -41,9 +41,6 @@ def import_polygons():
         shape_list.append(shapes)
     return shape_list
 
-statistics_time = datetime.now()
-print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
-
 def eliminate_nanoverlap():
     import_list = import_polygons()
     file_list = extract_files_to_list()
@@ -72,3 +69,5 @@ def eliminate_nanoverlap():
 
 eliminate_nanoverlap()
 
+statistics_time = datetime.now()
+print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
