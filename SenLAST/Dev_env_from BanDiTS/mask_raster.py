@@ -1,27 +1,21 @@
 from datetime import datetime
-
 import fiona
 import rasterio as rio
 import rasterio.mask
 import numpy as np
-import csv
-import numpy as np
-import matplotlib.pyplot as plt
-import scipy.signal as sig
 
 list_list = []
 
 start_time = datetime.now()
 
 def mask_raster_test():
-    import numpy as np
     shape_list = []
 
     for h in range(0,19):
         ## Shapefile Marlin:
-        # shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+        shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
         ## Shapefile Jonas:
-        shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+        #shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
 
         inputshape = "Stationen_Thüringen_Umland_3x3box.shp"
         shapefile = fiona.open(shapefolder+inputshape, "r")
@@ -38,13 +32,13 @@ def mask_raster_test():
 
     ######## SENTINEL ########
     ## TIFF-File Marlin:
-    # Sentinel_folder = "F:/GEO411_data/Sentinel_Daten/"
-    # Sentinel_file = "S3A_LST_2018-07-03_21h13m_086_NIGHT_1km_utm32_etrs89.tif"
+    Sentinel_folder = "F:/GEO411_data/Sentinel_Daten/"
+    Sentinel_file = "S3A_LST_2018-07-03_21h13m_086_NIGHT_1km_utm32_etrs89.tif"
 
     ## TIFF-File Jonas:
-    Sentinel_folder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2018/07_2018_Juli/S3A/"
+    #Sentinel_folder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2018/07_2018_Juli/S3A/"
     # Sentinel_file = "S3A_LST_2018-07-23_20h54m_371_NIGHT_1km_utm32_etrs89.tif" # works
-    Sentinel_file = "S3A_LST_2018-07-28_20h24m_057_NIGHT_1km_utm32_etrs89.tif" # doesnt work because does not totally overlap
+    #Sentinel_file = "S3A_LST_2018-07-28_20h24m_057_NIGHT_1km_utm32_etrs89.tif" # doesnt work because does not totally overlap
 
     # ------------------------------------------------------------------------------#
 
@@ -54,8 +48,8 @@ def mask_raster_test():
     # Modis_file = "MOD11A1.A2018184.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
 
     ## TIFF-File Jonas:
-    Modis_folder = "F:/411/LST/GeoTIFF/Thuringia/scaled/"
-    Modis_file = "MOD11A1.A2020153.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
+    #Modis_folder = "F:/411/LST/GeoTIFF/Thuringia/scaled/"
+    #Modis_file = "MOD11A1.A2020153.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
 
     # ------------------------------------------------------------------------------#
 
@@ -81,7 +75,7 @@ def mask_raster_test():
 
     except ValueError:
         pass
-        # print("Huuch!  This scene does not totally cover all existing weather stations! Go on!")
+        # print("Whaaaaaaaat?!?!?!  This scene does not totally cover all existing weather stations! Go on!")
 
 
 
@@ -90,6 +84,9 @@ mask_raster_test()
 
 statistics_time = datetime.now()
 print("breakpoint-time = ", statistics_time - start_time, "Hr:min:sec")
+
+
+
 
 
 ###---Infos zum Plotten von Graphen---###
