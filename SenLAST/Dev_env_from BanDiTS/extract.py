@@ -20,6 +20,7 @@ def extract_files_to_list():
 
     print(new_list)
 
+
 extract_files_to_list()
 
 statistics_time = datetime.now()
