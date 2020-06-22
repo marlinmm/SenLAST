@@ -26,6 +26,8 @@ def mask_raster_test():
     print(shape_list)
     print(shape_list[0][0])
 
+    list_means = []
+
     for i in range(0, len(shape_list)):
         ## Tiff-File Marlin:
         # src1 = rio.open("F:/GEO411_data/MODIS_R_dir/Downloaded_HDFs/GeoTIFF/Thuringia/scaled/MOD11A1.A2018184.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif")
@@ -39,13 +41,10 @@ def mask_raster_test():
                          "transform": out_transform1,
                          "nodata": 0. })
 
-        print(out_image1)
+        list_means.append(np.nanmean(out_image1))
+        # print(out_image1)
 
-        list1 = []
-        for j in range(0, len(out_image1)):
-            tmp = np.nanmean(out_image1[j])
-            list1.append(tmp)
-
+    print(list_means)
 
 #### activate for testing this file standalone ####
 mask_raster_test()
