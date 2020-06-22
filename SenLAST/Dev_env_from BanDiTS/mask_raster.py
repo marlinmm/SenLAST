@@ -1,144 +1,137 @@
+from datetime import datetime
 import fiona
 import rasterio as rio
 import rasterio.mask
 import numpy as np
-import csv
-import numpy as np
-import matplotlib.pyplot as plt
-import scipy.signal as sig
 
 list_list = []
 
+start_time = datetime.now()
 
 def mask_raster_test():
-    import numpy as np
     shape_list = []
-    for h in range(1,9):
-        shapefile = fiona.open("C:/Users/marli/Desktop/GEO402_Testdaten/Input_Files/Shapes/A_test_export_polygon_reproj" + str(h) + ".shp", "r")
+
+    for h in range(0,19):
+        ## Shapefile Marlin:
+        shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+        ## Shapefile Jonas:
+        #shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+
+        inputshape = "Stationen_Thüringen_Umland_3x3box.shp"
+        shapefile = fiona.open(shapefolder+inputshape, "r")
+
         shapes = [feature["geometry"] for feature in shapefile]
         shape_list.append(shapes)
-    #print(len(shape_list))
-    #print(shape_list)
-    #print(shape_list[0])
-    #print(shape_list[1][0])
+    print(len(shapes))
+    print(shape_list)
+    print(shape_list[0][0])
 
-    for i in range(0, len(shape_list)):
-        src1 = rio.open("C:/Users/marli/Desktop/GEO402_Testdaten/Input_Files/Raster/Original/S1A_VH_Agulhas_50m_selected_bands_VH_2.tif")
-        src2 = rio.open("C:/Users/marli/Desktop/GEO402_Testdaten/Input_Files/Raster/S1_A_VV_agulhas_full_median_filtered11_sobel9.tif")
-        out_image1, out_transform1 = rasterio.mask.mask(src1, [shape_list[i][0]], crop=True, nodata= np.nan)
-        out_image2, out_transform2 = rasterio.mask.mask(src2, [shape_list[i][0]], crop=True, nodata=np.nan)
-        ras_meta1 = src1.profile
-        ras_meta2 = src2.profile
-        ras_meta1.update({"driver": "GTiff",
-                         "height": out_image1.shape[1],
-                         "width": out_image1.shape[2],
-                         "transform": out_transform1,
-                         "nodata": 0. })
-        ras_meta2.update({"driver": "GTiff",
-                         "height": out_image1.shape[1],
-                         "width": out_image1.shape[2],
-                         "transform": out_transform2,
-                         "nodata": 0. })
-        list1 = []
-        for j in range(0, len(out_image1)):
-            tmp = np.nanmean(out_image1[j])
-            list1.append(tmp)
+    # ------------------------------------------------------------------------------#
 
-        list2 = []
-        for k in range(0, len(out_image2)):
-            tmp2 = np.nanmean(out_image2[k])
-            list2.append(tmp2)
-        list2_clean = np.delete(list2, [79, 81, 83, 85, 87, 89, 92, 94, 97, 99, 101, 103, 105, 107, 109, 111, 113, 115, 117, 119, 121, 123, 125, 127, 130, 132], 0)
-        med_filter1 = sig.medfilt(list1, kernel_size=11)
+    list_means = []
 
-        kernel = [-5, -5, -5, -5, 0, 5, 5, 5, 5]
-        # kernel = [-5, 0, 5]
-        out = np.float32(np.convolve(med_filter1, kernel, "valid"))
+    ######## SENTINEL ########
+    ## TIFF-File Marlin:
+    Sentinel_folder = "F:/GEO411_data/Sentinel_Daten/"
+    Sentinel_file = "S3A_LST_2018-07-03_21h13m_086_NIGHT_1km_utm32_etrs89.tif"
 
+    ## TIFF-File Jonas:
+    #Sentinel_folder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2018/07_2018_Juli/S3A/"
+    # Sentinel_file = "S3A_LST_2018-07-23_20h54m_371_NIGHT_1km_utm32_etrs89.tif" # works
+    #Sentinel_file = "S3A_LST_2018-07-28_20h24m_057_NIGHT_1km_utm32_etrs89.tif" # doesnt work because does not totally overlap
 
-        from scipy.signal import find_peaks
-        peaks = find_peaks(out, height=10, distance=10)
-        print(peaks[0][0])
+    # ------------------------------------------------------------------------------#
 
-        median_value = np.median(out)
-        mean_value = np.mean(out)
+    ######## MODIS ########
+    ## TIFF-File Marlin:
+    # Modis_folder = "F:/GEO411_data/MODIS_R_dir/Downloaded_HDFs/GeoTIFF/Thuringia/scaled/"
+    # Modis_file = "MOD11A1.A2018184.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
 
-        original_VH = list1
-        median_filter_VH = med_filter1
-        sobel_filter_VH = out
-        sobel_filter_VV = list2_clean
+    ## TIFF-File Jonas:
+    #Modis_folder = "F:/411/LST/GeoTIFF/Thuringia/scaled/"
+    #Modis_file = "MOD11A1.A2020153.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
 
-        #data4 = [median_value] * len(sobel_filter)
-        #data5 = [mean_value] * len(sobel_filter)
+    # ------------------------------------------------------------------------------#
 
-        fig, ax1 = plt.subplots()
+    try:
+        for i in range(0, len(shape_list)+1):
+            # Select between MODIS and SENTINEL
+            src1 = rio.open(Sentinel_folder + Sentinel_file)
+            #src1 = rio.open(Modis_folder + Modis_file)
 
-        # color = '#bebebe'
-        #plt.title('Edge Detection (VH vs. VV ' + str(i+1) + ')')
-        ax1.set_xlabel('No. of values')
-        # ax1.plot(original_VH, color=color, linewidth=1)
-        #
-        # color = 'tab:red'
-        # ax1.set_ylabel('median', color=color)  # we already handled the x-label with ax1
-        # ax1.plot(median_filter_VH, color=color)
-        # ax1.tick_params(axis='y', labelcolor=color)
-        #
-        # ax3 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-        #
-        # color = 'tab:green'
-        # ax3.set_ylabel('Edge detection', color=color)  # we already handled the x-label with ax1
-        # ax3.plot(sobel_filter_VH, color=color)
-        # ax3.tick_params(axis='y', labelcolor=color)
+            out_image1, out_transform1 = rasterio.mask.mask(src1, [shape_list[0][i]], all_touched=0, crop=True, nodata= np.nan)
+            ras_meta1 = src1.profile
+            ras_meta1.update({"driver": "GTiff",
+                             "height": out_image1.shape[1],
+                             "width": out_image1.shape[2],
+                             "transform": out_transform1,
+                             "nodata": 0. })
 
-        # color = '#bebebe'
-        # ax1.set_xlabel('no. of values')
-        # ax1.plot(original_VH, color=color, linewidth=1)
-        plt.ylim(-30, 60)
-        color = 'tab:green'
-        ax1.set_ylabel('Edge Detection VH', color=color)  # we already handled the x-label with ax1
-        ax1.plot(sobel_filter_VH, color=color)
-        ax1.tick_params(axis='y', labelcolor=color)
+            list_means.append(np.nanmean(out_image1))
+             # print(out_image1)
 
-        ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
-        plt.ylim(-30, 60)
-        color = 'tab:red'
-        ax2.set_ylabel('Edge Detection VV', color=color)  # we already handled the x-label with ax1
-        ax2.plot(sobel_filter_VV, color=color)
-        ax2.tick_params(axis='y', labelcolor=color)
+        print(list_means)
+        print(len(list_means))
 
-        #color = 'tab:blue'
-        #ax3.plot(data4, color=color)
-
-        #color = '#ffff00'
-        #ax3.plot(data5, color=color)
-
-        fig.tight_layout()  # otherwise the right y-label is slightly clipped
-
-        plt.show()
-
-        # fig, ax1 = plt.subplots()
-        # # plt.plot(out)
-        # ax1.set_ylabel("db" + str(i))
-        # plt.plot(list1)
-        # plt.show()
+    except ValueError:
+        pass
+        # print("Whaaaaaaaat?!?!?!  This scene does not totally cover all existing weather stations! Go on!")
 
 
-        # with open("C:/Users/marli/Desktop/GEO402_Testdaten/AAA_output/test" + str(i) + ".txt", 'w', newline='') as myfile:
-        #     #wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-        #     wr = csv.writer(myfile, delimiter=',')
-        #     wr.writerow(list1)
-
-        #list_list.append(list1)
-    #print(list_list)
-
-        #with rio.open("C:/Users/marli/Desktop/GEO402_Testdaten/AAA_output/test.tif", 'w', **ras_meta) as dst:
-        #    dst.write(out_image)
-
-        # export_arr.out_array(outname=outname + i, arr=out_image, input_file="C:/Users/marli/Desktop/GEO402_Testdaten/Input_Files/Raster/S1A_VH_Agulhas_50m_selected_bands_VH_subset2.tif", dtype="float32")
-        # with rio.open(outname, 'w', **ras_meta) as dst:
-        #     dst.write(out_image, 1)
-    #return out_image
 
 
 #### activate for testing this file standalone ####
-#mask_raster_test()
+mask_raster_test()
+
+statistics_time = datetime.now()
+print("mask_raster-time = ", statistics_time - start_time, "Hr:min:sec")
+
+
+
+
+
+###---Infos zum Plotten von Graphen---###
+# fig, ax1 = plt.subplots()
+#
+# # color = '#bebebe'
+# #plt.title('Edge Detection (VH vs. VV ' + str(i+1) + ')')
+# ax1.set_xlabel('No. of values')
+# # ax1.plot(original_VH, color=color, linewidth=1)
+# #
+# # color = 'tab:red'
+# # ax1.set_ylabel('median', color=color)  # we already handled the x-label with ax1
+# # ax1.plot(median_filter_VH, color=color)
+# # ax1.tick_params(axis='y', labelcolor=color)
+# #
+# # ax3 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+# #
+# # color = 'tab:green'
+# # ax3.set_ylabel('Edge detection', color=color)  # we already handled the x-label with ax1
+# # ax3.plot(sobel_filter_VH, color=color)
+# # ax3.tick_params(axis='y', labelcolor=color)
+#
+# # color = '#bebebe'
+# # ax1.set_xlabel('no. of values')
+# # ax1.plot(original_VH, color=color, linewidth=1)
+# plt.ylim(-30, 60)
+# color = 'tab:green'
+# ax1.set_ylabel('Edge Detection VH', color=color)  # we already handled the x-label with ax1
+# ax1.plot(sobel_filter_VH, color=color)
+# ax1.tick_params(axis='y', labelcolor=color)
+#
+# ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+# plt.ylim(-30, 60)
+# color = 'tab:red'
+# ax2.set_ylabel('Edge Detection VV', color=color)  # we already handled the x-label with ax1
+# ax2.plot(sobel_filter_VV, color=color)
+# ax2.tick_params(axis='y', labelcolor=color)
+#
+# #color = 'tab:blue'
+# #ax3.plot(data4, color=color)
+#
+# #color = '#ffff00'
+# #ax3.plot(data5, color=color)
+#
+# fig.tight_layout()  # otherwise the right y-label is slightly clipped
+#
+# plt.show()
