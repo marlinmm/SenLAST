@@ -83,7 +83,7 @@ def mask_raster_test():
 mask_raster_test()
 
 statistics_time = datetime.now()
-print("breakpoint-time = ", statistics_time - start_time, "Hr:min:sec")
+print("mask_raster-time = ", statistics_time - start_time, "Hr:min:sec")
 
 
 

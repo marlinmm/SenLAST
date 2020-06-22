@@ -1,4 +1,8 @@
+from datetime import datetime
 import os
+
+start_time = datetime.now()
+
 
 def extract_files_to_list():
     ## Jonas Folder:
@@ -15,3 +19,8 @@ def extract_files_to_list():
             continue
 
     print(new_list)
+
+extract_files_to_list()
+
+statistics_time = datetime.now()
+print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
