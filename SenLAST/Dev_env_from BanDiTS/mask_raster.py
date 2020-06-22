@@ -70,8 +70,8 @@ def mask_raster_test():
             list_means.append(np.nanmean(out_image1))
              # print(out_image1)
 
-            print(list_means)
-            print(len(list_means))
+        print(list_means)
+        print(len(list_means))
 
     except ValueError:
         pass
