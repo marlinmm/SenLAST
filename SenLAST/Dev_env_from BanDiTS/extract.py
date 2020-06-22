@@ -47,8 +47,11 @@ print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
 def eliminate_nanoverlap():
     import_list = import_polygons()
     file_list = extract_files_to_list()
-    os.mkdir(directory + "/selected")
     tifs_selected = directory + "/selected"
+    if os.path.exists(tifs_selected):
+        shutil.rmtree(tifs_selected)
+    os.mkdir(directory + "/selected")
+
 
     for i in range(0, len(file_list)):
         # Select between MODIS and SENTINEL
@@ -62,6 +65,7 @@ def eliminate_nanoverlap():
             # print(type(file_list[i]))
             # print(type(tifs_selected))
             shutil.copy(file_list[i], tifs_selected)
+
 
         except ValueError:
             pass
