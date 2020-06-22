@@ -16,9 +16,12 @@ def mask_raster_test():
 
     for h in range(0,19):
         ## Shapefile Marlin:
-        shapefile = fiona.open("F:/GEO411_data/Daten_Sandra/new/Stationen_Thüringen_Umland_3x3box_reprojected.shp", "r")
+        # shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
         ## Shapefile Jonas:
-        #shapefile = fiona.open("C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/Stationen_Thüringen_Umland_3x3box_reprojected.shp")
+        shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+
+        inputshape = "Stationen_Thüringen_Umland_3x3box.shp"
+        shapefile = fiona.open(shapefolder+inputshape, "r")
 
         shapes = [feature["geometry"] for feature in shapefile]
         shape_list.append(shapes)
@@ -29,10 +32,35 @@ def mask_raster_test():
     list_means = []
 
     for i in range(0, len(shape_list)+1):
-        ## Tiff-File Marlin:
-        src1 = rio.open("F:/GEO411_data/MODIS_R_dir/Downloaded_HDFs/GeoTIFF/Thuringia/scaled/MOD11A1.A2018184.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif")
-        ## Tiff-File Jonas:
-        #src1 = rio.open("F:/411/LST/GeoTIFF/Thuringia/scaled/MOD11A1.A2020153.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif")
+        ######## SENTINEL ########
+        ## TIFF-File Marlin:
+        Sentinel_folder = "F:/GEO411_data/MODIS_R_dir/Downloaded_HDFs/GeoTIFF/Thuringia/scaled/MOD11A1.A2018184.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
+        Sentinel_file = ""
+
+        ## TIFF-File Jonas:
+        Sentinel_folder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2018/07_2018_Juli/S3A/"
+        Sentinel_file = "S3A_LST_2018-07-23_20h54m_371_NIGHT_1km_utm32_etrs89.tif"
+
+        # ------------------------------------------------------------------------------#
+
+        ######## MODIS ########
+        ## TIFF-File Marlin:
+        Modis_folder = "F:/GEO411_data/MODIS_R_dir/Downloaded_HDFs/GeoTIFF/Thuringia/scaled/MOD11A1.A2018184.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
+        Modis_file = ""
+
+        ## TIFF-File Jonas:
+        Modis_folder = "F:/411/LST/GeoTIFF/Thuringia/scaled/"
+        Modis_file = "MOD11A1.A2020153.h18v03.006_LST_Day_1km_latlon_wgs84_Thuringia_celsius.tif"
+
+        # ------------------------------------------------------------------------------#
+
+        # Select between MODIS and SENTINEL
+        src1 = Sentinel_folder + Sentinel_file
+        # src1 = Modis_folder + Modis_file
+
+        # ------------------------------------------------------------------------------#
+
+        src1 = rio.open("C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2018/07_2018_Juli/S3A/S3A_LST_2018-07-23_20h54m_371_NIGHT_1km_utm32_etrs89.tif")
         out_image1, out_transform1 = rasterio.mask.mask(src1, [shape_list[0][i]], all_touched=0, crop=True, nodata= np.nan)
         ras_meta1 = src1.profile
         ras_meta1.update({"driver": "GTiff",
