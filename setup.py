@@ -24,6 +24,7 @@ setup(name='BanDiTS',
       install_requires=["fiona",
                         "rasterio",
                         "GDAL",
+                        "geopandas"
                         "matplotlib",
                         "pathos",
                         "scipy",
