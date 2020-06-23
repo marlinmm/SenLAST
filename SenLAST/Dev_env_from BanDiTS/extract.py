@@ -15,7 +15,12 @@ directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
 # directory = "F:/GEO411_data/Sentinel_Daten"
 
 def extract_files_to_list():
+    """
+    finds all .tif-files in the corresponding directory
+    :return:
+    """
     new_list = []
+
     for filename in os.listdir(directory):
         if filename.endswith(".tif"):
             new_list.append(os.path.join(directory, filename))
@@ -26,6 +31,10 @@ def extract_files_to_list():
 # extract_files_to_list()
 
 def import_polygons():
+    """
+    imports the 3x3km polygons of the DWD weather stations
+    :return:
+    """
     shape_list = []
 
     for h in range(0,19):
@@ -42,6 +51,10 @@ def import_polygons():
     return shape_list
 
 def eliminate_nanoverlap():
+    """
+    eliminates the scenes which would'nt match with all weather stations
+    :return:
+    """
     import_list = import_polygons()
     file_list = extract_files_to_list()
     tifs_selected = directory + "/selected"
