@@ -75,28 +75,37 @@ def eliminate_nanoverlap():
             pass
 
 
-# eliminate_nanoverlap()
+eliminate_nanoverlap()
 
 def eliminate_cloudy_data():
-    match_list = []
+    cloud_free = directory + "/selected/cloud_free"
+    if os.path.exists(cloud_free):
+        shutil.rmtree(cloud_free)
+    os.mkdir(directory + "/selected/cloud_free")
     selected_tifs = extract_files_to_list(path_to_folder=directory + "/selected")
     import_list = import_polygons()
     for tif in range(0, len(selected_tifs)):
         src1 = rio.open(selected_tifs[tif])
-        # src1 = rio.open(Modis_folder + Modis_file)
-        print(tif+1)
+        bool_list = []
+        #print(tif+1)
+        flag = 0
         for polygons in range(0, len(import_list)+1):
             out_image1, out_transform1 = rio.mask.mask(src1, [import_list[0][polygons]], all_touched=1, crop=True,
                                                        nodata=np.nan)
-            mean_team = np.mean(out_image1[0])
-            print(out_image1[0])
-            if mean_team < -40:
-                print("smaller -40")
-                break
+            min_temp = np.min(out_image1[0])
+            #print(out_image1[0])
+            #print(min_temp)
+            if min_temp < -40:
+                bool_list.append(False)
             else:
-                print("OK")
-            print(out_image1[0])
-            # print(np.mean(out_image1[0]))
+                bool_list.append(True)
+        #print(bool_list)
+        for boolean in bool_list:
+            if boolean == False:
+                flag = 1
+                break
+        if flag == 0:
+            shutil.copy(selected_tifs[tif], cloud_free)
 
 
 eliminate_cloudy_data()
