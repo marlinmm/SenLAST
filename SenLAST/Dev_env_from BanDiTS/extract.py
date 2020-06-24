@@ -74,39 +74,51 @@ def eliminate_nanoverlap():
         except ValueError:
             pass
 
-
 eliminate_nanoverlap()
 
+
 def eliminate_cloudy_data():
+    """
+    eliminates the scenes which are not cloud_free
+    :return:
+    """
+    # create new cloud_free directory, overwrite if already exits
     cloud_free = directory + "/selected/cloud_free"
     if os.path.exists(cloud_free):
         shutil.rmtree(cloud_free)
     os.mkdir(directory + "/selected/cloud_free")
     selected_tifs = extract_files_to_list(path_to_folder=directory + "/selected")
+
+    # import polygons from shapefile
     import_list = import_polygons()
+
+    # loop through all .tif files in folder
     for tif in range(0, len(selected_tifs)):
         src1 = rio.open(selected_tifs[tif])
         bool_list = []
-        #print(tif+1)
-        flag = 0
+        flag = 0   #set boolean flag to 0
+
+        # loop through all weatherstations for each .tif file
         for polygons in range(0, len(import_list)+1):
             out_image1, out_transform1 = rio.mask.mask(src1, [import_list[0][polygons]], all_touched=1, crop=True,
                                                        nodata=np.nan)
+
+            # extract minimal temperature at all stations for each .tif file to eliminate error values
             min_temp = np.min(out_image1[0])
-            #print(out_image1[0])
-            #print(min_temp)
+
+            # create boolean values for error values and store in list
             if min_temp < -40:
                 bool_list.append(False)
             else:
                 bool_list.append(True)
-        #print(bool_list)
+
+        # check the list for flags of error values and only save tif files without any error values at station locations
         for boolean in bool_list:
             if boolean == False:
                 flag = 1
                 break
         if flag == 0:
             shutil.copy(selected_tifs[tif], cloud_free)
-
 
 eliminate_cloudy_data()
 
