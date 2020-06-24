@@ -28,7 +28,7 @@ def extract_files_to_list(path_to_folder):
             continue
     return new_list
 
-
+### this function needs to be generalized ###
 def import_polygons():
     """
     imports the 3x3km polygons of the DWD weather stations
