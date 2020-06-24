@@ -9,10 +9,10 @@ import shutil
 start_time = datetime.now()
 
 ## Jonas Folder:
-# directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
+directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
 
 ## Marlin Folder:
-directory = "F:/GEO411_data/Sentinel_Daten"
+# directory = "F:/GEO411_data/Sentinel_Daten"
 
 def extract_files_to_list(path_to_folder):
     """
@@ -38,9 +38,9 @@ def import_polygons():
 
     for h in range(0,19):
         ## Shapefile Marlin:
-        shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+        # shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
         ## Shapefile Jonas:
-        # shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+        shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
 
         inputshape = "Stationen_Thüringen_Umland_3x3box.shp"
         shapefile = fiona.open(shapefolder+inputshape, "r")
@@ -75,10 +75,22 @@ def eliminate_nanoverlap():
             pass
 
 
-eliminate_nanoverlap()
+# eliminate_nanoverlap()
 
 def eliminate_cloudy_data():
-    print("...")
+    match_list = []
+    selected_tifs = extract_files_to_list(path_to_folder=directory + "/selected")
+    import_list = import_polygons()
+    for tif in range(0, len(selected_tifs)):
+        src1 = rio.open(selected_tifs[tif])
+        # src1 = rio.open(Modis_folder + Modis_file)
+        for polygons in range(0, len(import_list)+1):
+            out_image1, out_transform1 = rio.mask.mask(src1, [import_list[0][polygons]], all_touched=1, crop=True,
+                                                       nodata=np.nan)
+            print(out_image1[0])
+            print(np.mean(out_image1[0]))
+
+eliminate_cloudy_data()
 
 statistics_time = datetime.now()
 print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
