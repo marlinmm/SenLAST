@@ -23,7 +23,6 @@ def extract_files_to_list():
             continue
     return new_list
 
-# extract_files_to_list()
 
 def import_polygons():
     shape_list = []
@@ -41,6 +40,7 @@ def import_polygons():
         shape_list.append(shapes)
     return shape_list
 
+
 def eliminate_nanoverlap():
     import_list = import_polygons()
     file_list = extract_files_to_list()
@@ -48,7 +48,6 @@ def eliminate_nanoverlap():
     if os.path.exists(tifs_selected):
         shutil.rmtree(tifs_selected)
     os.mkdir(directory + "/selected")
-
 
     for i in range(0, len(file_list)):
         # Select between MODIS and SENTINEL
@@ -58,14 +57,10 @@ def eliminate_nanoverlap():
             for j in range(0, len(import_list)+1):
                 out_image1, out_transform1 = rio.mask.mask(src1, [import_list[0][j]], all_touched=0, crop=True,
                                                                 nodata=np.nan)
-            # print(i)
-            # print(type(file_list[i]))
-            # print(type(tifs_selected))
             shutil.copy(file_list[i], tifs_selected)
-
-
         except ValueError:
             pass
+
 
 eliminate_nanoverlap()
 
