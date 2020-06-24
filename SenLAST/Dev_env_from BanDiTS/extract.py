@@ -9,21 +9,21 @@ import shutil
 start_time = datetime.now()
 
 ## Jonas Folder:
-directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
+# directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
 
 ## Marlin Folder:
-# directory = "F:/GEO411_data/Sentinel_Daten"
+directory = "F:/GEO411_data/Sentinel_Daten"
 
-def extract_files_to_list():
+def extract_files_to_list(path_to_folder):
     """
     finds all .tif-files in the corresponding directory
     :return:
     """
     new_list = []
 
-    for filename in os.listdir(directory):
+    for filename in os.listdir(path_to_folder):
         if filename.endswith(".tif"):
-            new_list.append(os.path.join(directory, filename))
+            new_list.append(os.path.join(path_to_folder, filename))
         else:
             continue
     return new_list
@@ -38,9 +38,9 @@ def import_polygons():
 
     for h in range(0,19):
         ## Shapefile Marlin:
-        # shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+        shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
         ## Shapefile Jonas:
-        shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+        # shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
 
         inputshape = "Stationen_Thüringen_Umland_3x3box.shp"
         shapefile = fiona.open(shapefolder+inputshape, "r")
@@ -56,7 +56,7 @@ def eliminate_nanoverlap():
     :return:
     """
     import_list = import_polygons()
-    file_list = extract_files_to_list()
+    file_list = extract_files_to_list(path_to_folder=directory)
     tifs_selected = directory + "/selected"
     if os.path.exists(tifs_selected):
         shutil.rmtree(tifs_selected)
@@ -69,7 +69,7 @@ def eliminate_nanoverlap():
         try:
             for j in range(0, len(import_list)+1):
                 out_image1, out_transform1 = rio.mask.mask(src1, [import_list[0][j]], all_touched=0, crop=True,
-                                                                nodata=np.nan)
+                                                           nodata=np.nan)
             shutil.copy(file_list[i], tifs_selected)
         except ValueError:
             pass
@@ -77,5 +77,9 @@ def eliminate_nanoverlap():
 
 eliminate_nanoverlap()
 
+def eliminate_cloudy_data():
+    print("...")
+
 statistics_time = datetime.now()
 print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
+
