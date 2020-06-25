@@ -121,7 +121,7 @@ def eliminate_cloudy_data():
                 flag = 1
                 break
         if flag == 0:
-            shutil.copy(selected_tifs[j], cloud_free)
+            shutil.copy(selected_tifs[i], cloud_free)
 
 eliminate_cloudy_data()
 
