@@ -77,7 +77,7 @@ def eliminate_nanoverlap():
         except ValueError:
             pass
 
-eliminate_nanoverlap()
+# eliminate_nanoverlap()
 
 
 def eliminate_cloudy_data():
