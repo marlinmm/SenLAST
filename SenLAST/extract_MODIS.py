@@ -56,7 +56,7 @@ def import_polygons(shape_path):
     return shape_list
 
 
-def eliminate_cloudy_data():
+def eliminate_MODIS_cloudy_data():
     """
     eliminates the scenes which are not cloud_free
     :return:

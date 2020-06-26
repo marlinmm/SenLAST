@@ -80,7 +80,7 @@ def eliminate_nanoverlap():
 # eliminate_nanoverlap()
 
 
-def eliminate_cloudy_data():
+def eliminate_SENTINEL_cloudy_data():
     """
     eliminates the scenes which are not cloud_free
     :return:
