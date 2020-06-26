@@ -13,17 +13,17 @@ start_time = datetime.now()
 
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
-directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
+# directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
 ## Marlin Folder:
-# directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
+directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
-# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-# shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
-## Shapefile Jonas:
-shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
 shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+## Shapefile Jonas:
+# shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+# shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
 
 shape_path = shapefolder + shapefile
 
@@ -82,18 +82,14 @@ def eliminate_MODIS_cloudy_data():
             out_image1, out_transform1 = rio.mask.mask(src1, [import_list[0][j]], all_touched=1, crop=True,
                                                        nodata=np.nan)
 
-            # extract minimal temperature at all stations for each .tif file to eliminate error values
-            min_temp = np.min(out_image1[0])
-            #print(min_temp)
-            #print(np.isnan(min_temp))
+            # extract nanmean temperature at all stations for each .tif file to eliminate error values
+            mean_temp = np.nanmean(out_image1[0])
+
             # create boolean values for error values and store in list (-40° is lowest remotely realistic temperature)
-            if min_temp < -40 or np.isnan(min_temp) == True:
-                #print("A")
+            if mean_temp < -40 or np.isnan(mean_temp) == True:
                 bool_list.append(False)
             else:
-                #print("B")
                 bool_list.append(True)
-        print(bool_list)
 
         # check the list for flags of error values and only save tif files without any error values at station locations
         for boolean in bool_list:
@@ -107,4 +103,3 @@ eliminate_MODIS_cloudy_data()
 
 statistics_time = datetime.now()
 print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
-
