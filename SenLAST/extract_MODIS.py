@@ -103,7 +103,7 @@ def eliminate_MODIS_cloudy_data():
         if flag == 0:
             shutil.copy(selected_tifs[i], cloud_free)
 
-eliminate_cloudy_data()
+eliminate_MODIS_cloudy_data()
 
 statistics_time = datetime.now()
 print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
