@@ -13,11 +13,6 @@ directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 ## Marlin Folder:
 # directory = "F:/GEO411_data/Sentinel_Daten"
 
-# Test
-# filename = "S3A_LST_2018-07-28_20h24m_057_NIGHT_1km_utm32_etrs89.tif"
-# print(filename[8:18])
-
-
 SENTINEL_timestamp_list = []
 MODIS_doy_list = []
 MODIS_timestamp_list = []
@@ -55,7 +50,6 @@ def extract_MODIS_timestamp(directory2, year):
 
     # print(MODIS_doy_list)
     print(MODIS_timestamp_list)
-
 
 extract_MODIS_timestamp(directory2, 2019)
 
