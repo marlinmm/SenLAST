@@ -60,6 +60,7 @@ def extract_MODIS_timestamp(directory2, year):
 extract_MODIS_timestamp(directory2, 2019)
 
 ## Compare the temporal overlap between SENTINEL and MODIS Data
+## For more information see: https://stackoverflow.com/questions/52464978/how-do-i-print-elements-of-one-list-that-are-in-another-list
 c = set(SENTINEL_timestamp_list) & set(MODIS_timestamp_list)
 overlap_list = []
 print("SENTINEL/MODIS SCENES WITH TEMPORAL OVERLAP:")
