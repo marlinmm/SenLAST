@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 from datetime import date
+import shutil
 
 
 start_time = datetime.now()
@@ -125,5 +126,10 @@ def select_SENTINEL_scenes():
         for j, tiff in enumerate(new_list):
             if overlap_list[i] in new_list[j]:
                 print("Yes")
+                final_tifs_selected = directory + "/selected"
+                if os.path.exists(final_tifs_selected):
+                    shutil.rmtree(final_tifs_selected)
+                    os.mkdir(directory + "/selected")
+                    shutil.copy(new_list[i], final_tifs_selected)
 
 select_SENTINEL_scenes()
