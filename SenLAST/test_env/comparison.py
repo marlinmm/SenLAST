@@ -11,7 +11,8 @@ start_time = datetime.now()
 directory1 = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2019/06_2019_Juni/S3A"
 directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 ## Marlin Folder:
-# directory = "F:/GEO411_data/Sentinel_Daten"
+# directory1 = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free"
+# directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
 
 SENTINEL_timestamp_list = []
 MODIS_doy_list = []
