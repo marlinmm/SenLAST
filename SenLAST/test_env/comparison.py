@@ -9,25 +9,25 @@ start_time = datetime.now()
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
 # directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
-directory1 = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2019/06_2019_Juni/S3A"
-directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+# directory1 = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2019/06_2019_Juni/S3A"
+# directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 ## Marlin Folder:
-# directory1 = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free"
-# directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
+directory1 = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free"
+directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
 
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
-directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
+# directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
 ## Marlin Folder:
-# directory = "F:/GEO411_data/Sentinel_Daten"
+directory = "F:/GEO411_data/Sentinel_Daten"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
-# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-# shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
-## Shapefile Jonas:
-shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
 shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
+## Shapefile Jonas:
+# shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+# shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
 
 shape_path = shapefolder + shapefile
 
@@ -122,14 +122,14 @@ def extract_files_to_list(path_to_folder):
 
 def select_SENTINEL_scenes():
     new_list = extract_files_to_list(path_to_folder=directory)
-    final_tifs_selected = directory + "/final_selected"
+    final_tifs_selected = directory + "/selected/cloud_free/final_selected"
     if os.path.exists(final_tifs_selected):
         shutil.rmtree(final_tifs_selected)
-    os.mkdir(directory + "/final_selected")
+    os.mkdir(directory + "/selected/cloud_free/final_selected")
     for i, element in enumerate(overlap_list):
         for j, tiff in enumerate(new_list):
             if overlap_list[i] in new_list[j]:
-                print("Yes")
-                shutil.copy(new_list[i], final_tifs_selected)
+                print(new_list[j])
+                shutil.copy(new_list[j], final_tifs_selected)
 
 select_SENTINEL_scenes()
