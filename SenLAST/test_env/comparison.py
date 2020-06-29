@@ -14,6 +14,22 @@ directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 # directory1 = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free"
 # directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
 
+### ----- TIFF Data ----- ###
+## Jonas Folder:
+directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
+## Marlin Folder:
+# directory = "F:/GEO411_data/Sentinel_Daten"
+
+### ----- Shapefile Data ----- ###
+## Shapefile Marlin:
+# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+# shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
+## Shapefile Jonas:
+shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
+
+shape_path = shapefolder + shapefile
+
 SENTINEL_timestamp_list = []
 MODIS_doy_list = []
 MODIS_timestamp_list = []
@@ -84,5 +100,30 @@ extract_MODIS_timestamp_all_years(directory2)
 c = set(SENTINEL_timestamp_list) & set(MODIS_timestamp_list)
 overlap_list = list(c)
 print("SENTINEL/MODIS SCENES WITH TEMPORAL OVERLAP:")
-print(overlap_list.sort())
+print(overlap_list)
 # print('\n'.join(str(i) for i in c))
+
+
+def extract_files_to_list(path_to_folder):
+    """
+    finds all .tif-files in the corresponding directory
+    :return:
+    """
+    new_list = []
+
+    for filename in os.listdir(path_to_folder):
+        if filename.endswith(".tif"):
+            new_list.append(os.path.join(path_to_folder, filename))
+        else:
+            continue
+    return new_list
+
+
+def select_SENTINEL_scenes():
+    for i, element in enumerate(overlap_list):
+        res = [ele for ele in overlap_list if (ele in extract_files_to_list(path_to_folder=directory))]
+
+        print(res)
+        print("Does string contain any list element : " + str(bool(res)))
+
+select_SENTINEL_scenes()
