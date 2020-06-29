@@ -49,9 +49,9 @@ def import_polygons(shape_path):
     :return:
     """
     shape_list = []
-    acitve_shapefile = fiona.open(shape_path, "r")
-    for i in range(0,len(list(acitve_shapefile))-1):
-        shapes = [feature["geometry"] for feature in acitve_shapefile]
+    active_shapefile = fiona.open(shape_path, "r")
+    for i in range(0,len(list(active_shapefile))-1):
+        shapes = [feature["geometry"] for feature in active_shapefile]
         shape_list.append(shapes)
     return shape_list
 
