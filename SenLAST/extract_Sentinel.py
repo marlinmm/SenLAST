@@ -50,7 +50,7 @@ def import_polygons(shape_path):
     """
     shape_list = []
     active_shapefile = fiona.open(shape_path, "r")
-    for i in range(0,len(list(active_shapefile))-1):
+    for i in range(0,len(list(active_shapefile))):
         shapes = [feature["geometry"] for feature in active_shapefile]
         shape_list.append(shapes)
     return shape_list
