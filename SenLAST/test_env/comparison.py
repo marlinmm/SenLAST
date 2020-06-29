@@ -138,14 +138,17 @@ def select_SENTINEL_scenes():
 
 # select_SENTINEL_scenes()
 
-def reconversion(overlap_list):
+def reconversion():
     overlap_doy_list = []
     for a, doy in enumerate(overlap_list):
-        date = pd.to_datetime(overlap_list, format=format)
-        new_year_day = pd.Timestamp(year=date.year, month=1, day=1)
-        return (date - new_year_day).days + 1
+        modis_date = pd.to_datetime(overlap_list[a], format='%Y-%m-%d')
+        # print(modis_date)
+        new_year_day = pd.Timestamp(year=2019, month=1, day=1)
+        # print(new_year_day)
+        overlap_doy_list.append((modis_date - new_year_day).days + 1)
+        print(overlap_doy_list)
 
-# reconversion(overlap_list)
+reconversion()
 
 def select_MODIS_scenes():
     new_list = extract_files_to_list(path_to_folder=directory)
@@ -160,4 +163,4 @@ def select_MODIS_scenes():
                 shutil.copy(new_list[j], final_tifs_selected)
 
 
-select_MODIS_scenes()
+# select_MODIS_scenes()
