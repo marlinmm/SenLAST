@@ -13,17 +13,17 @@ start_time = datetime.now()
 
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
-directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
+# directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
 ## Marlin Folder:
-# directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
+directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
-# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-# shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
-## Shapefile Jonas:
-shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
 shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+## Shapefile Jonas:
+# shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+# shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
 
 shape_path = shapefolder + shapefile
 
@@ -49,9 +49,9 @@ def import_polygons(shape_path):
     :return:
     """
     shape_list = []
-    acitve_shapefile = fiona.open(shape_path, "r")
-    for i in range(0,len(list(acitve_shapefile))-1):
-        shapes = [feature["geometry"] for feature in acitve_shapefile]
+    active_shapefile = fiona.open(shape_path, "r")
+    for i in range(0,len(list(active_shapefile))-1):
+        shapes = [feature["geometry"] for feature in active_shapefile]
         shape_list.append(shapes)
     return shape_list
 
@@ -99,7 +99,7 @@ def eliminate_MODIS_cloudy_data():
         if flag == 0:
             shutil.copy(selected_tifs[i], cloud_free)
 
-eliminate_MODIS_cloudy_data()
+# eliminate_MODIS_cloudy_data()
 
 statistics_time = datetime.now()
 print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
