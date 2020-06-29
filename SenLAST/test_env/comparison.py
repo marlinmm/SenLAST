@@ -122,7 +122,6 @@ def extract_files_to_list(path_to_folder):
 
 def select_SENTINEL_scenes():
     new_list = extract_files_to_list(path_to_folder=directory)
-    print(len(new_list))
     final_tifs_selected = directory + "/final_selected"
     if os.path.exists(final_tifs_selected):
         shutil.rmtree(final_tifs_selected)
