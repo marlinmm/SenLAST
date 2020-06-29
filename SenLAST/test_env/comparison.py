@@ -120,10 +120,10 @@ def extract_files_to_list(path_to_folder):
 
 
 def select_SENTINEL_scenes():
+    new_list = extract_files_to_list(path_to_folder=directory)
     for i, element in enumerate(overlap_list):
-        res = [ele for ele in overlap_list if (ele in extract_files_to_list(path_to_folder=directory))]
-
-        print(res)
-        print("Does string contain any list element : " + str(bool(res)))
+        for j, tiff in enumerate(new_list):
+            if overlap_list[i] in new_list[j]:
+                print("Yes")
 
 select_SENTINEL_scenes()
