@@ -13,17 +13,17 @@ start_time = datetime.now()
 
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
-# directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
+directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
 ## Marlin Folder:
-directory = "F:/GEO411_data/Sentinel_Daten"
+# directory = "F:/GEO411_data/Sentinel_Daten"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
-shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
+# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+# shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
 ## Shapefile Jonas:
-# shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
-#shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
+shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
 
 shape_path = shapefolder + shapefile
 
