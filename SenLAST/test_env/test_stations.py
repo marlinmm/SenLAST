@@ -83,17 +83,20 @@ def find_best_stations():
             # extract nanmean temperature at all stations for each .tif file to eliminate error values
             mean_temp = np.nanmean(out_image1[0])
 
-            single_station_list.append(mean_temp)
+
 
             # create boolean values for error values and store in list (-40° is lowest remotely realistic temperature)
             if mean_temp < -40 or np.isnan(mean_temp) == True:
-                bool_list.append(False)
+                 pass
             else:
-                bool_list.append(True)
+                single_station_list.append(mean_temp)
 
 
 
         station_list.append(single_station_list)
+
+    for i, stations in enumerate(station_list):
+        print(len(station_list[i]))
 
     print(station_list)
     print(len(station_list))
