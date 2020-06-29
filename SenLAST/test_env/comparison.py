@@ -19,7 +19,7 @@ directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
 ## Jonas Folder:
 # directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
 ## Marlin Folder:
-directory = "F:/GEO411_data/Sentinel_Daten"
+directory = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free/"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
@@ -122,10 +122,10 @@ def extract_files_to_list(path_to_folder):
 
 def select_SENTINEL_scenes():
     new_list = extract_files_to_list(path_to_folder=directory)
-    final_tifs_selected = directory + "/selected/cloud_free/final_selected"
+    final_tifs_selected = directory + "/final_selected"
     if os.path.exists(final_tifs_selected):
         shutil.rmtree(final_tifs_selected)
-    os.mkdir(directory + "/selected/cloud_free/final_selected")
+    os.mkdir(directory + "/final_selected")
     for i, element in enumerate(overlap_list):
         for j, tiff in enumerate(new_list):
             if overlap_list[i] in new_list[j]:
