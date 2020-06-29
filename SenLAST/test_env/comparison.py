@@ -2,32 +2,34 @@ from datetime import datetime
 import os
 from datetime import date
 import shutil
+import pandas as pd
 
 
 start_time = datetime.now()
 
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
-# directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
+directory1 = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten/selected/cloud_free"
 # directory1 = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Sentinel 3 Daten Uni Jena/Sentinel 3 Daten Uni Jena/2019/06_2019_Juni/S3A"
-# directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 ## Marlin Folder:
-directory1 = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free"
-directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
+# directory1 = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free"
+# directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
 
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
 # directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
+directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 ## Marlin Folder:
-directory = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free/"
+# directory = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free/"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
-shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
-## Shapefile Jonas:
-# shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
 # shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
+## Shapefile Jonas:
+shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefile = "Stationen_Thüringen_Umland_3x3box.shp"
 
 shape_path = shapefolder + shapefile
 
@@ -37,7 +39,7 @@ MODIS_timestamp_list = []
 
 def extract_SENTINEL_timestamp(directory1):
     """
-    extracts the acquisition date of SENTINEL scenes into a new list
+    extracts the acquisition date of SENTINEL scenes sorted earlier on into a new list
     :return:
     """
 
@@ -45,29 +47,30 @@ def extract_SENTINEL_timestamp(directory1):
         timestamp = filename[8:18]
         SENTINEL_timestamp_list.append(os.path.join(timestamp))
 
+    print("Sentinel_list:")
     print(SENTINEL_timestamp_list)
 
 extract_SENTINEL_timestamp(directory1)
 
 
-def extract_MODIS_timestamp(directory2, year):
-    """
-    extracts the acquisition date of MODIS scenes into a new list
-    ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
-    :return:
-    """
-
-    for filename in os.listdir(directory2):
-        timestamp = filename[13:16]
-        MODIS_doy_list.append(os.path.join(timestamp))
-        for doy in range(len(MODIS_doy_list)):
-            doy = date.fromordinal(date(year, 1, 1).toordinal() + int(timestamp)-1)
-            doy = str(doy)
-        # print(str(doy))
-        MODIS_timestamp_list.append(doy)
-
-    # print(MODIS_doy_list)
-    print(MODIS_timestamp_list)
+# def extract_MODIS_timestamp(directory2, year):
+#     """
+#     extracts the acquisition date of MODIS scenes into a new list
+#     ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
+#     :return:
+#     """
+#
+#     for filename in os.listdir(directory2):
+#         timestamp = filename[13:16]
+#         MODIS_doy_list.append(os.path.join(timestamp))
+#         for doy in range(len(MODIS_doy_list)):
+#             doy = date.fromordinal(date(year, 1, 1).toordinal() + int(timestamp)-1)
+#             doy = str(doy)
+#         # print(str(doy))
+#         MODIS_timestamp_list.append(doy)
+#
+#     # print(MODIS_doy_list)
+#     print(MODIS_timestamp_list)
 
 
 #extract_MODIS_timestamp(directory2, 2020)
@@ -91,6 +94,7 @@ def extract_MODIS_timestamp_all_years(directory2):
             MODIS_timestamp_list.append(doy)
 
     # print(MODIS_doy_list)
+    print("Modis_list:")
     print(MODIS_timestamp_list)
 
 
@@ -122,14 +126,38 @@ def extract_files_to_list(path_to_folder):
 
 def select_SENTINEL_scenes():
     new_list = extract_files_to_list(path_to_folder=directory)
-    final_tifs_selected = directory + "/final_selected"
+    final_tifs_selected = directory + "/final_sentinel_selected"
     if os.path.exists(final_tifs_selected):
         shutil.rmtree(final_tifs_selected)
-    os.mkdir(directory + "/final_selected")
+    os.mkdir(directory + "/final_sentinel_selected")
     for i, element in enumerate(overlap_list):
         for j, tiff in enumerate(new_list):
             if overlap_list[i] in new_list[j]:
                 print(new_list[j])
                 shutil.copy(new_list[j], final_tifs_selected)
 
-select_SENTINEL_scenes()
+# select_SENTINEL_scenes()
+
+def reconversion(overlap_list):
+    overlap_doy_list = []
+    for a, doy in enumerate(overlap_list):
+        date = pd.to_datetime(overlap_list, format=format)
+        new_year_day = pd.Timestamp(year=date.year, month=1, day=1)
+        return (date - new_year_day).days + 1
+
+# reconversion(overlap_list)
+
+def select_MODIS_scenes():
+    new_list = extract_files_to_list(path_to_folder=directory)
+    final_tifs_selected = directory + "/final_modis_selected"
+    if os.path.exists(final_tifs_selected):
+        shutil.rmtree(final_tifs_selected)
+    os.mkdir(directory + "/final_modis_selected")
+    for i, element in enumerate(overlap_list):
+        for j, tiff in enumerate(new_list):
+            if overlap_list[i] in new_list[j]:
+                print(new_list[j])
+                shutil.copy(new_list[j], final_tifs_selected)
+
+
+select_MODIS_scenes()
