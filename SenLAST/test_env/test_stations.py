@@ -12,17 +12,17 @@ start_time = datetime.now()
 
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
-# directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
+directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 ## Marlin Folder:
-directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
+# directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
-shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+# shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
 ## Shapefile Jonas:
-#shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
-#shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
 
 shape_path = shapefolder + shapefile
 
@@ -67,14 +67,15 @@ def find_best_stations():
     import_list = import_polygons(shape_path=shape_path)
     station_list = []
     # loop through all .tif files in folder
-    for i, tifs in enumerate(selected_tifs):
-        src1 = rio.open(selected_tifs[i])
-        bool_list = []
-        flag = 0   #set boolean flag to 0
 
-        # loop through all weatherstations for each .tif file
+    for j, polygons in enumerate(import_list):
         single_station_list = []
-        for j, polygons in enumerate(import_list):
+        for i, tifs in enumerate(selected_tifs):
+            src1 = rio.open(selected_tifs[i])
+            bool_list = []
+            flag = 0  # set boolean flag to 0
+
+            # loop through all weatherstations for each .tif file
             out_image1, out_transform1 = rio.mask.mask(src1, [import_list[0][j]], all_touched=1, crop=True,
                                                        nodata=np.nan)
 
@@ -88,6 +89,8 @@ def find_best_stations():
                 bool_list.append(False)
             else:
                 bool_list.append(True)
+
+
 
         station_list.append(single_station_list)
 
