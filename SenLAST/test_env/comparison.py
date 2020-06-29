@@ -21,7 +21,8 @@ directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
 # directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
 # directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 ## Marlin Folder:
-directory = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free/"
+#directory = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free/"
+directory = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free/"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
@@ -36,6 +37,7 @@ shape_path = shapefolder + shapefile
 SENTINEL_timestamp_list = []
 MODIS_doy_list = []
 MODIS_timestamp_list = []
+overlap_doy_list = []
 
 def extract_SENTINEL_timestamp(directory1):
     """
@@ -147,9 +149,8 @@ def reconversion():
         new_year_day = pd.Timestamp(year=int(modis_date_year), month=1, day=1)
         # print(new_year_day)
         overlap_doy_list.append((modis_date - new_year_day).days + 1)
-    print(overlap_doy_list)
+    return overlap_doy_list
 
-reconversion()
 
 def select_MODIS_scenes():
     new_list = extract_files_to_list(path_to_folder=directory)
@@ -157,11 +158,15 @@ def select_MODIS_scenes():
     if os.path.exists(final_tifs_selected):
         shutil.rmtree(final_tifs_selected)
     os.mkdir(directory + "/final_modis_selected")
-    for i, element in enumerate(overlap_list):
+    overlap_doy_list = reconversion()
+    print(overlap_doy_list)
+    for i, element in enumerate(overlap_doy_list):
         for j, tiff in enumerate(new_list):
-            if overlap_list[i] in new_list[j]:
+            #print(overlap_doy_list[i])
+            if str(overlap_doy_list[i]) in new_list[j]:
+                print(overlap_doy_list[i])
                 print(new_list[j])
                 shutil.copy(new_list[j], final_tifs_selected)
 
 
-# select_MODIS_scenes()
+select_MODIS_scenes()
