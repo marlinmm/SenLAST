@@ -122,14 +122,14 @@ def extract_files_to_list(path_to_folder):
 
 def select_SENTINEL_scenes():
     new_list = extract_files_to_list(path_to_folder=directory)
+    final_tifs_selected = directory + "/final_selected"
+    if os.path.exists(final_tifs_selected):
+        shutil.rmtree(final_tifs_selected)
+    os.mkdir(directory + "/final_selected")
     for i, element in enumerate(overlap_list):
         for j, tiff in enumerate(new_list):
             if overlap_list[i] in new_list[j]:
                 print("Yes")
-                final_tifs_selected = directory + "/selected"
-                if os.path.exists(final_tifs_selected):
-                    shutil.rmtree(final_tifs_selected)
-                    os.mkdir(directory + "/selected")
-                    shutil.copy(new_list[i], final_tifs_selected)
+                shutil.copy(new_list[i], final_tifs_selected)
 
 select_SENTINEL_scenes()
