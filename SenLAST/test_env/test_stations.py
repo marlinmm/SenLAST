@@ -15,17 +15,17 @@ start_time = datetime.now()
 
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
-# directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
+directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
 ## Marlin Folder:
-directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
+# directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
-shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
+# shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
 ## Shapefile Jonas:
-#shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
-#shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
 
 shape_path = shapefolder + shapefile
 
@@ -44,8 +44,9 @@ def import_polygons(shape_path):
 
 
 def find_best_stations():
-    selected_tifs = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
-    import_list = import_polygons(shape_path)
+    # selected_tifs = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
+    selected_tifs = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+    import_list = import_polygons(shape_path=shape_path)
     station_list = []
     for i, tifs in enumerate(selected_tifs):
         src1 = rio.open(selected_tifs[i])
@@ -73,3 +74,4 @@ def find_best_stations():
 
 
 find_best_stations()
+
