@@ -147,8 +147,11 @@ def reconversion():
         modis_date = pd.to_datetime(overlap_list[a], format='%Y-%m-%d')
         modis_date_year = str(modis_date)[0:4]
         new_year_day = pd.Timestamp(year=int(modis_date_year), month=1, day=1)
-        # print(new_year_day)
-        overlap_doy_list.append((modis_date - new_year_day).days + 1)
+        doy_temp = str((modis_date - new_year_day).days + 1)
+        if len(doy_temp) == 2:
+            doy_temp = "0" + doy_temp
+        overlap_doy_list.append(doy_temp)
+
     return overlap_doy_list
 
 
@@ -163,9 +166,9 @@ def select_MODIS_scenes():
     for i, element in enumerate(overlap_doy_list):
         for j, tiff in enumerate(new_list):
             #print(overlap_doy_list[i])
-            if str(overlap_doy_list[i]) in new_list[j]:
+            if overlap_doy_list[i] in str(new_list[j]):
                 print(overlap_doy_list[i])
-                print(new_list[j])
+                print(str(new_list[j])[63:66])
                 shutil.copy(new_list[j], final_tifs_selected)
 
 
