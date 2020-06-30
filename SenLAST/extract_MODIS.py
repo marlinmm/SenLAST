@@ -14,6 +14,8 @@ start_time = datetime.now()
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
 # directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
+# global
+directory = ""
 ## Marlin Folder:
 directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
 
