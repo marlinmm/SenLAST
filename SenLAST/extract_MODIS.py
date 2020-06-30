@@ -15,17 +15,17 @@ start_time = datetime.now()
 ## Jonas Folder:
 # directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
 # global
-directory = ""
+directory = "F:/Modis/MODIS_all"
 ## Marlin Folder:
-directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
+# directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
 
 ### ----- Shapefile Data ----- ###
 ## Shapefile Marlin:
-shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
-## Shapefile Jonas:
-# shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+# shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
 # shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+## Shapefile Jonas:
+shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
+shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
 
 shape_path = shapefolder + shapefile
 
@@ -101,7 +101,7 @@ def eliminate_MODIS_cloudy_data():
         if flag == 0:
             shutil.copy(selected_tifs[i], cloud_free)
 
-# eliminate_MODIS_cloudy_data()
+eliminate_MODIS_cloudy_data()
 
 statistics_time = datetime.now()
 print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")

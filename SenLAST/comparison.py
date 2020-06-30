@@ -10,7 +10,9 @@ start_time = datetime.now()
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
 directory1 = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten/selected/cloud_free"
-directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+# directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+directory2 = "F:/Modis/MODIS_all/cloud_free"
+
 ## Marlin Folder:
 # directory1 = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free"
 # directory2 = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
@@ -18,7 +20,8 @@ directory2 = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
 ### ----- TIFF Data ----- ###
 ## Jonas Folder:
 # directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
-directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+# directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+directory = "F:/Modis/MODIS_all/cloud_free"
 ## Marlin Folder:
 #directory = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free/"
 # directory = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free/"
@@ -65,7 +68,6 @@ def extract_MODIS_timestamp_all_years(directory2):
     print("Modis_list:")
     print(MODIS_timestamp_list)
 
-
 extract_MODIS_timestamp_all_years(directory2)
 
 ## Compare the temporal overlap between SENTINEL and MODIS Data
@@ -74,6 +76,7 @@ c = set(SENTINEL_timestamp_list) & set(MODIS_timestamp_list)
 overlap_list = list(c)
 print("SENTINEL/MODIS SCENES WITH TEMPORAL OVERLAP:")
 print(overlap_list)
+print(len(overlap_list))
 
 
 def extract_files_to_list(path_to_folder):
@@ -118,7 +121,7 @@ def reconversion():
 
     return overlap_doy_list
 
-reconversion()
+# reconversion()
 
 def select_MODIS_scenes():
     new_list = extract_files_to_list(path_to_folder=directory)
@@ -132,9 +135,10 @@ def select_MODIS_scenes():
         for j, tiff in enumerate(new_list):
             #print(overlap_doy_list[i])
             if overlap_doy_list[i] in str(new_list[j]):
-                print(overlap_doy_list[i])
-                print(str(new_list[j])[60:63])
+                # print(overlap_doy_list[i])
+                ### change index method to find method in string
+                # print(str(new_list[j] [32:35]))
                 shutil.copy(new_list[j], final_tifs_selected)
 
 
-# select_MODIS_scenes()
+select_MODIS_scenes()
