@@ -75,15 +75,15 @@ def extract_MODIS_timestamp(mod_directory):
     MODIS_timestamp_list = []
 
     for filename in os.listdir(mod_directory):
-        hour = filename[19:21]
+        hour = filename[35:37]
         hour = int(hour)
         hour_in_minutes = hour * 60
-        minutes = filename[22:24]
+        minutes = filename[37:39]
         minutes = int(minutes)
         ges_minutes = hour_in_minutes + minutes
         ges_minutes = str(ges_minutes)
         MODIS_timestamp_list.append(os.path.join(ges_minutes))
-    # print(SENTINEL_timestamp_list)
+    # print(MODIS_timestamp_list)
     return MODIS_timestamp_list
 
 ######################## COMPARISON FUNCTIONS ##########################
