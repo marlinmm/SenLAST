@@ -30,7 +30,7 @@ def extract_SENTINEL_timestamp(sen_directory):
         hour = filename[19:21]
         hour = int(hour)
         hour_in_minutes = hour*60
-        minutes = filename [22:24]
+        minutes = filename[22:24]
         minutes = int(minutes)
         ges_minutes = hour_in_minutes+minutes
         ges_minutes = str(ges_minutes)
