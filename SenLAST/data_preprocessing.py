@@ -5,17 +5,17 @@ import numpy as np
 import shutil
 from SenLAST.base_information import extract_files_to_list, import_polygons
 
-def eliminate_MODIS_cloudy_data(directory, shape_path):
+def eliminate_MODIS_cloudy_data(mod_directory, shape_path):
     """
     eliminates the scenes which are not cloud_free
     :return:
     """
     # create new cloud_free directory, overwrite if already exits
-    cloud_free = directory + "/cloud_free"
+    cloud_free = mod_directory + "/cloud_free"
     if os.path.exists(cloud_free):
         shutil.rmtree(cloud_free)
-    os.mkdir(directory + "/cloud_free")
-    selected_tifs = extract_files_to_list(path_to_folder=directory)
+    os.mkdir(mod_directory + "/cloud_free")
+    selected_tifs = extract_files_to_list(path_to_folder=mod_directory)
 
     # import polygons from shapefile
     import_list = import_polygons(shape_path=shape_path)
@@ -50,17 +50,17 @@ def eliminate_MODIS_cloudy_data(directory, shape_path):
 
 
 
-def eliminate_nanoverlap(directory, shape_path):
+def eliminate_nanoverlap(sen_directory, shape_path):
     """
     eliminates the scenes which would'nt match with all weather stations
     :return:
     """
     import_list = import_polygons(shape_path=shape_path)
-    file_list = extract_files_to_list(path_to_folder=directory)
-    tifs_selected = directory + "/selected"
+    file_list = extract_files_to_list(path_to_folder=sen_directory)
+    tifs_selected = sen_directory + "/selected"
     if os.path.exists(tifs_selected):
         shutil.rmtree(tifs_selected)
-    os.mkdir(directory + "/selected")
+    os.mkdir(sen_directory + "/selected")
 
     for i, files in enumerate(file_list):
         src1 = rio.open(file_list[i])
@@ -72,20 +72,20 @@ def eliminate_nanoverlap(directory, shape_path):
             pass
 
 
-def eliminate_SENTINEL_cloudy_data(directory, shape_path):
+def eliminate_SENTINEL_cloudy_data(sen_directory, shape_path):
     """
     eliminates the scenes which are not cloud_free
     :return:
     """
     # use this function to delete data which is not overlapping with ROI
-    eliminate_nanoverlap(directory=directory, shape_path=shape_path)
+    eliminate_nanoverlap(sen_directory=sen_directory, shape_path=shape_path)
 
     # create new cloud_free directory, overwrite if already exits
-    cloud_free = directory + "/selected/cloud_free"
+    cloud_free = sen_directory + "/selected/cloud_free"
     if os.path.exists(cloud_free):
         shutil.rmtree(cloud_free)
-    os.mkdir(directory + "/selected/cloud_free")
-    selected_tifs = extract_files_to_list(path_to_folder=directory + "/selected")
+    os.mkdir(sen_directory + "/selected/cloud_free")
+    selected_tifs = extract_files_to_list(path_to_folder=sen_directory + "/selected")
 
     # import polygons from shapefile
     import_list = import_polygons(shape_path=shape_path)
