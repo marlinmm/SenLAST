@@ -1,6 +1,7 @@
 ##############################     IMPORT OF REQUIRED MODULES    ###################################
 from datetime import datetime
 from SenLAST.data_preprocessing import eliminate_MODIS_cloudy_data, eliminate_SENTINEL_cloudy_data
+from SenLAST.comparison import select_MODIS_scenes, select_SENTINEL_scenes
 
 
 start_time = datetime.now()
@@ -36,8 +37,15 @@ def main():
 
     ####################### USER-DEPENDENT FILTER-FUNCTIONS TO BE USED #######################
 
-    eliminate_MODIS_cloudy_data(directory=MODIS_directory, shape_path=MODIS_shapefile)
-    eliminate_SENTINEL_cloudy_data(directory=Sentinel_directory, shape_path=Sentinel_shapefile)
+    ### extract correct Sentinel and MODIS data from all downloaded data ###
+    # eliminate_SENTINEL_cloudy_data(sen_directory=Sentinel_directory, shape_path=Sentinel_shapefile)
+    # eliminate_MODIS_cloudy_data(mod_directory=MODIS_directory, shape_path=MODIS_shapefile)
+
+
+    ### Sentinel selection needs to be run first, or MODIS folder will be deleted!!! ###
+    select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
