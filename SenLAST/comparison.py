@@ -4,27 +4,49 @@ import shutil
 import pandas as pd
 from SenLAST.base_information import extract_files_to_list
 
+######################## SENTINEL DATE & TIME EXTRACTION ########################
+
+def extract_SENTINEL_date(sen_directory):
+    """
+    extracts the acquisition date of SENTINEL scenes sorted earlier on into a new list
+    :return:
+    """
+    SENTINEL_date_list = []
+
+    for filename in os.listdir(sen_directory):
+        timestamp = filename[8:18]
+        SENTINEL_date_list.append(os.path.join(timestamp))
+    return SENTINEL_date_list
+
 
 def extract_SENTINEL_timestamp(sen_directory):
     """
-    extracts the acquisition date of SENTINEL scenes sorted earlier on into a new list
+    extracts the acquisition time of SENTINEL scenes sorted earlier on into a new list
     :return:
     """
     SENTINEL_timestamp_list = []
 
     for filename in os.listdir(sen_directory):
-        timestamp = filename[8:18]
-        SENTINEL_timestamp_list.append(os.path.join(timestamp))
+        hour = filename[19:21]
+        hour = int(hour)
+        hour_in_minutes = hour*60
+        minutes = filename [22:24]
+        minutes = int(minutes)
+        ges_minutes = hour_in_minutes+minutes
+        ges_minutes = str(ges_minutes)
+        SENTINEL_timestamp_list.append(os.path.join(ges_minutes))
+    # print(SENTINEL_timestamp_list)
     return SENTINEL_timestamp_list
 
+######################## MODIS DATE & TIME EXTRACTION ########################
 
-def extract_MODIS_timestamp(mod_directory):
+def extract_MODIS_date(mod_directory):
     """
     extracts the acquisition date of MODIS scenes into a new list
     ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
     :return:
     """
-    MODIS_timestamp_list = []
+    MODIS_date_list = []
     MODIS_doy_list = []
 
     # check if final folder already exists:
@@ -40,9 +62,31 @@ def extract_MODIS_timestamp(mod_directory):
             for doy in range(len(MODIS_doy_list)):
                 doy = date.fromordinal(date(years[i], 1, 1).toordinal() + int(timestamp)-1)
                 doy = str(doy)
-            MODIS_timestamp_list.append(doy)
+            MODIS_date_list.append(doy)
+    return MODIS_date_list
+
+
+def extract_MODIS_timestamp(mod_directory):
+    """
+    extracts the acquisition time of MODIS scenes into a new list
+    ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
+    :return:
+    """
+    MODIS_timestamp_list = []
+
+    for filename in os.listdir(mod_directory):
+        hour = filename[19:21]
+        hour = int(hour)
+        hour_in_minutes = hour * 60
+        minutes = filename[22:24]
+        minutes = int(minutes)
+        ges_minutes = hour_in_minutes + minutes
+        ges_minutes = str(ges_minutes)
+        MODIS_timestamp_list.append(os.path.join(ges_minutes))
+    # print(SENTINEL_timestamp_list)
     return MODIS_timestamp_list
 
+######################## COMPARISON FUNCTIONS ##########################
 
 def compare(mod_directory, sen_directory):
     ## Compare the temporal overlap between SENTINEL and MODIS Data
@@ -50,8 +94,8 @@ def compare(mod_directory, sen_directory):
     new_sen_directory = sen_directory + "/selected/cloud_free"
     new_mod_directory = mod_directory + "/cloud_free"
 
-    sentinel_data = extract_SENTINEL_timestamp(sen_directory=new_sen_directory)
-    modis_data = extract_MODIS_timestamp(mod_directory=new_mod_directory)
+    sentinel_data = extract_SENTINEL_date(sen_directory=new_sen_directory)
+    modis_data = extract_MODIS_date(mod_directory=new_mod_directory)
 
     c = set(sentinel_data) & set(modis_data)
     overlap_list = list(c)
