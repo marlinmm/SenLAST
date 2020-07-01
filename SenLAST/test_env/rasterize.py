@@ -1,5 +1,7 @@
 # All this stuff is sourced from here:
 # https://gist.github.com/perrygeo/721040f8545272832a42#file-pctcover-png
+### more info:
+### https://github.com/mapbox/rasterio/issues/232
 
 
 import rasterio
