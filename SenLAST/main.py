@@ -1,12 +1,6 @@
 ##############################     IMPORT OF REQUIRED MODULES    ###################################
-
 from datetime import datetime
-import os
-import rasterio as rio
-import rasterio.mask
-import numpy as np
-import fiona
-import shutil
+from SenLAST.data_preprocessing import eliminate_MODIS_cloudy_data, eliminate_SENTINEL_cloudy_data
 
 
 start_time = datetime.now()
@@ -14,48 +8,41 @@ start_time = datetime.now()
 def main():
     ###################################     INPUT    ########################################
 
-    ### ----- TIFF Data ----- ###
-    ## Jonas Folder:
-    # directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
-    # global
-    directory = ""
-    ## Marlin Folder:
-    directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
+    #### ----- TIFF Data ----- ####
+    ### Jonas base Folder:
+    ## MODIS:
+    # MODIS_directory = "F:/411/LST/GeoTIFF/Thuringia/scaled"
+    ## Sentinel:
+    # Sentinel_directory = ""
 
-    ### ----- Shapefile Data ----- ###
-    ## Shapefile Marlin:
-    shapefolder = "F:/GEO411_data/Daten_Sandra/new/"
-    shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
-    ## Shapefile Jonas:
-    # shapefolder = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/"
-    # shapefile = "Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+    ### Shapefiles:
+    ## MODIS Shapefile:
+    # MODIS_shapefile = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+    ## Sentinel Shapefile:
+    # Sentinel_shapefile = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/Stationen_Thüringen_Umland_3x3box.shp"
 
-    shape_path = shapefolder + shapefile
+
+    ### Marlin base Folder:
+    ## MODIS:
+    MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
+    ## Sentinel:
+    Sentinel_directory = "F:/GEO411_data/Sentinel_Daten"
+
+    ### Shapefiles:
+    ## MODIS Shapefile:
+    MODIS_shapefile = "F:/GEO411_data/Daten_Sandra/new/Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+    ## Sentinel Shapefile:
+    Sentinel_shapefile = "F:/GEO411_data/Daten_Sandra/new/Stationen_Thüringen_Umland_3x3box.shp"
 
     ####################### USER-DEPENDENT FILTER-FUNCTIONS TO BE USED #######################
 
-    extract_SENTINEL = ['example function']
-    extract_MODIS = ['example function']
-    comparison = ['example function']
-    test_stations = ['example function']
+    eliminate_MODIS_cloudy_data(directory=MODIS_directory, shape_path=MODIS_shapefile)
+    eliminate_SENTINEL_cloudy_data(directory=Sentinel_directory, shape_path=Sentinel_shapefile)
 
-    return directory, shape_path, extract_SENTINEL, extract_MODIS, comparison, test_stations
+    statistics_time = datetime.now()
+    print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
 
-def extract_S3_data(directory, shape_path, extract_SENTINEL):
-
-def extract_MODIS_data(directory, shape_path, extract_SENTINEL):
-
-def compare_data():
 
 if __name__ == '__main__':
+    main()
     start_time = datetime.now()
-    in_variables = main()
-
-    # call this function to execute extract_S3_data:
-    # extract_S3_data()
-
-    # call this function to execute extract_MODIS_data:
-    # extract_MODIS_data
-
-    # call this function to execute compare_data():
-    # compare_data()
