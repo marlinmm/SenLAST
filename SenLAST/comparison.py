@@ -5,6 +5,7 @@ import pandas as pd
 from SenLAST.base_information import extract_files_to_list
 import numpy as np
 
+
 ######################## SENTINEL DATE & TIME EXTRACTION ########################
 
 def extract_SENTINEL_date(sen_directory):
@@ -30,14 +31,15 @@ def extract_SENTINEL_timestamp(sen_directory):
     for filename in os.listdir(sen_directory):
         hour = filename[19:21]
         hour = int(hour)
-        hour_in_minutes = hour*60
+        hour_in_minutes = hour * 60
         minutes = filename[22:24]
         minutes = int(minutes)
-        ges_minutes = hour_in_minutes+minutes
+        ges_minutes = hour_in_minutes + minutes
         ges_minutes = str(ges_minutes)
         SENTINEL_timestamp_list.append(os.path.join(ges_minutes))
     # print(SENTINEL_timestamp_list)
     return SENTINEL_timestamp_list
+
 
 ######################## MODIS DATE & TIME EXTRACTION ########################
 
@@ -61,7 +63,7 @@ def extract_MODIS_date(mod_directory):
             timestamp = filename[13:16]
             MODIS_doy_list.append(os.path.join(timestamp))
             for doy in range(len(MODIS_doy_list)):
-                doy = date.fromordinal(date(years[i], 1, 1).toordinal() + int(timestamp)-1)
+                doy = date.fromordinal(date(years[i], 1, 1).toordinal() + int(timestamp) - 1)
                 doy = str(doy)
             MODIS_date_list.append(doy)
     return MODIS_date_list
@@ -87,6 +89,7 @@ def extract_MODIS_timestamp(mod_directory):
     # print(MODIS_timestamp_list)
     return MODIS_timestamp_list
 
+
 ######################## COMPARISON FUNCTIONS ##########################
 
 def compare_date(mod_directory, sen_directory):
@@ -103,9 +106,10 @@ def compare_date(mod_directory, sen_directory):
     c = set(sentinel_date_data) & set(modis_date_data)
     overlap_date_list = list(c)
     print(overlap_date_list)
-    # return overlap_date_list
+    return overlap_date_list
 
-def compare_timestamp(mod_directory, sen_directory):
+
+def compare_timestamp(mod_directory, sen_directory, start, end):
     """
     Compares the temporal (time) overlap between SENTINEL and MODIS Data
     - For more information see: https://stackoverflow.com/questions/52464978/how-do-i-print-elements-of-one-list-that-are-in-another-list
@@ -120,15 +124,18 @@ def compare_timestamp(mod_directory, sen_directory):
 
     for x in sentinel_timestamp_data:
         for y in modis_timestamp_data:
-            xa = int(x)+45
-            xb = int(x)-45
-            y =int(y)
+            xa = int(x) + end
+            xb = int(x) - start
+            y = int(y)
 
-            if y <= xa and y >= xb:
-                overlap_time_list.append("True")
-            else:
-                overlap_time_list.append("False")
-    print(overlap_time_list)
+            if xa >= y >= xb:
+                overlap_time_list.append(x)
+                short_list = list(set(overlap_time_list))
+                # hier müssen die gesamtminuten jetzt wieder in Stunden und Minuten zurückgerechnet werden
+                # neue Liste
+
+    print(short_list)
+    return short_list
 
 
 # def select_SENTINEL_scenes(mod_directory, sen_directory):
@@ -145,25 +152,24 @@ def compare_timestamp(mod_directory, sen_directory):
 #                 shutil.copy(new_list[j], final_tifs_selected)
 
 
-def select_SENTINEL_scenes(mod_directory, sen_directory):
+# Mit Zeitkomponenete
+# FUNKTIONIERT ALLES NOCH NICHT WEIL OBEN DIE MINUTEN NOCH NICHT WIEDER UMGERECHNET SIND !!!
+def select_SENTINEL_scenes(mod_directory, sen_directory, start, end):
     new_sen_directory = sen_directory + "/selected/cloud_free"
     new_list = extract_files_to_list(path_to_folder=new_sen_directory)
     overlap_date_list = compare_date(mod_directory=mod_directory, sen_directory=sen_directory)
-    overlap_time_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory)
+    short_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory, start=start, end=end)
     final_tifs_selected = new_sen_directory + "/final_sentinel_selected/"
     if os.path.exists(final_tifs_selected):
         shutil.rmtree(final_tifs_selected)
     os.mkdir(new_sen_directory + "/final_sentinel_selected/")
     for i, element in enumerate(overlap_date_list):
         for j, tiff in enumerate(new_list):
-            if overlap_date_list[i] in new_list[j]:
-                for k, booltime in enumerate(overlap_time_list):
-                    if overlap_time_list[k] == True:
-                        shutil.copy(new_list[j], final_tifs_selected)
+            for k, short in enumerate(short_list):
+                if overlap_date_list[i] in new_list[j]:
+                    if short_list[k] in new_list[j]: # Voraussetzung dafür ist die Umwandlung von Gesamtminuten in Stunden und Minuten für den Layernamen
+                        shutil.copy(new_list[i], final_tifs_selected)
 
-# funktioniert nur für den Fall, wenn overlap_time_list komplett false ist
-# funktioniert auch noch nicht wenn es unterschiedliche Tage sind - denk ich zumindest
-# ab hier: nachfolgenden MODIS-Funktionen sind noch nicht auf neue Methodik angepasst
 
 def reconversion(mod_directory, sen_directory):
     overlap_date_list = compare_date(mod_directory=mod_directory, sen_directory=sen_directory)
@@ -179,16 +185,35 @@ def reconversion(mod_directory, sen_directory):
     return overlap_doy_list
 
 
-def select_MODIS_scenes(mod_directory, sen_directory):
+# def select_MODIS_scenes(mod_directory, sen_directory):
+#     new_mod_directory = mod_directory + "/cloud_free"
+#     new_list = extract_files_to_list(path_to_folder=new_mod_directory)
+#     final_tifs_selected = new_mod_directory + "/final_modis_selected/"
+#     overlap_doy_list = reconversion(sen_directory=sen_directory, mod_directory=mod_directory)
+#     overlap_time_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory)
+#     if os.path.exists(final_tifs_selected):
+#         shutil.rmtree(final_tifs_selected)
+#     os.mkdir(new_mod_directory+ "/final_modis_selected/")
+#     for i, element in enumerate(overlap_doy_list):
+#         for j, tiff in enumerate(new_list):
+#             if overlap_doy_list[i] in str(new_list[j]):
+#                 ### change index method to find method in string
+#                 shutil.copy(new_list[j], final_tifs_selected)
+
+
+# Mit Zeitkomponente
+def select_MODIS_scenes(mod_directory, sen_directory, start, end):
     new_mod_directory = mod_directory + "/cloud_free"
     new_list = extract_files_to_list(path_to_folder=new_mod_directory)
     final_tifs_selected = new_mod_directory + "/final_modis_selected/"
     overlap_doy_list = reconversion(sen_directory=sen_directory, mod_directory=mod_directory)
+    short_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory, start=start, end=end)
     if os.path.exists(final_tifs_selected):
         shutil.rmtree(final_tifs_selected)
-    os.mkdir(new_mod_directory+ "/final_modis_selected/")
+    os.mkdir(new_mod_directory + "/final_modis_selected/")
     for i, element in enumerate(overlap_doy_list):
         for j, tiff in enumerate(new_list):
-            if overlap_doy_list[i] in str(new_list[j]):
-                ### change index method to find method in string
-                shutil.copy(new_list[j], final_tifs_selected)
+            for k, short in enumerate(short_list):
+                if overlap_doy_list[i] in str(new_list[j]):
+                    if short_list[k] in new_list[j]:  # Voraussetzung dafür ist die Umwandlung von Gesamtminuten in Stunden und Minuten für den Layernamen
+                        shutil.copy(new_list[i], final_tifs_selected)

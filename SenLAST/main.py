@@ -49,8 +49,8 @@ def main():
 
 
     ### Sentinel selection needs to be run first, or MODIS folder will be deleted!!! ###
-    select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
-    # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)
+    # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=0, end=0)
     # compare_date(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
     # compare_timestamp(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
 
