@@ -131,11 +131,14 @@ def compare_timestamp(mod_directory, sen_directory, start, end):
             if xa >= y >= xb:
                 overlap_time_list.append(x)
                 short_list = list(set(overlap_time_list))
-                # hier müssen die gesamtminuten jetzt wieder in Stunden und Minuten zurückgerechnet werden
-                # neue Liste
+                min_list = []
+                for t in short_list:
+                    # hr = int(t)/60
+                    min = int(t)%60
+                    min_list.append(min)
 
-    print(short_list)
-    return short_list
+    # print(min_list)
+    return min_list
 
 
 # def select_SENTINEL_scenes(mod_directory, sen_directory):
@@ -202,6 +205,7 @@ def reconversion(mod_directory, sen_directory):
 
 
 # Mit Zeitkomponente
+# FUNKTIONIERT SO NOCH ÜBERHAUPT NICHT WEIL ER ERST GARKEINEN ORDNER ANLEGT !!!
 def select_MODIS_scenes(mod_directory, sen_directory, start, end):
     new_mod_directory = mod_directory + "/cloud_free"
     new_list = extract_files_to_list(path_to_folder=new_mod_directory)
