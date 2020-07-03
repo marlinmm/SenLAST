@@ -26,6 +26,7 @@ def analyze_MODIS_temperature(mod_directory, shape_path):
             print(stations, ". weather station")
             mask = rio.mask.mask(src1, [import_list[0][j]], all_touched=True, crop=True, nodata=np.nan)
             Mod_temperature_array = mask[0][0]
+            print(Mod_temperature_array)
 
 
 def analyze_SENTINEL_temperature(sen_directory, shape_path):
@@ -49,4 +50,5 @@ def analyze_SENTINEL_temperature(sen_directory, shape_path):
             print(stations, ". weather station")
             mask = rio.mask.mask(src1, [import_list[0][j]], all_touched=True, crop=True, nodata=np.nan)
             Sen_temperature_array = mask[0][0]
+            print(Sen_temperature_array)
 
