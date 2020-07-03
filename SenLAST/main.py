@@ -49,10 +49,13 @@ def main():
 
 
     ### Sentinel selection needs to be run first, or MODIS folder will be deleted!!! ###
+    ### OLD AND WORKING WITHOUT TIME ###
+    # select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+
+    ### NEW AND NOT WORKING ###
     select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)
-    # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=0, end=0)
-    # compare_date(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
-    # compare_timestamp(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=0, end=0)
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
