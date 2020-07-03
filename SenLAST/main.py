@@ -3,6 +3,7 @@ from datetime import datetime
 from SenLAST.comparison import *
 from SenLAST.data_preprocessing import eliminate_MODIS_cloudy_data, eliminate_SENTINEL_cloudy_data
 from SenLAST.comparison import select_MODIS_scenes, select_SENTINEL_scenes
+from SenLAST.analysis import *
 
 
 start_time = datetime.now()
@@ -13,10 +14,12 @@ def main():
     #### ----- TIFF Data ----- ####
     ### Jonas base Folder:
     ## MODIS:
-    MODIS_directory = "F:/Test_MODIS/LST/GeoTIFF/Thuringia/scaled"
+    # MODIS_directory = "F:/Test_MODIS/LST/GeoTIFF/Thuringia/scaled"
+    MODIS_directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free"
     ## Sentinel:
     # Sentinel_directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
-    Sentinel_directory = "F:/Test_SENTINEL"
+    # Sentinel_directory = "F:/Test_SENTINEL"
+    Sentinel_directory = "F:/Test_SENTINEL/selected/cloud_free/final_sentinel_selected"
 
     ### Shapefiles:
     ## MODIS Shapefile:
@@ -39,7 +42,7 @@ def main():
     ## Sentinel Shapefile:
     # Sentinel_shapefile = "F:/GEO411_data/Daten_Sandra/new/Stationen_Thüringen_Umland_3x3box.shp"
 
-    ####################### USER-DEPENDENT FILTER-FUNCTIONS TO BE USED #######################
+    ####################### USER-DEPENDENT FUNCTIONS TO BE USED #######################
 
     ### Extract correct Sentinel and MODIS data from all downloaded data ###
     # extract_SENTINEL_timestamp(sen_directory=Sentinel_directory)
@@ -54,8 +57,13 @@ def main():
     # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
 
     ### NEW AND NOT WORKING ###
-    select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)
-    select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=0, end=0)
+    # select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)
+    # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=0, end=0)
+
+    ##### RASTER-ANALYSIS SECTION #####
+    analyze_SENTINEL_temperature(sen_directory=Sentinel_directory, shape_path=Sentinel_shapefile)
+    analyze_MODIS_temperature(mod_directory=MODIS_directory, shape_path=MODIS_shapefile)
+
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
