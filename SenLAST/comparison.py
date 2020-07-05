@@ -119,7 +119,6 @@ def select_SENTINEL_scenes(mod_directory, sen_directory):
         for j, tiff in enumerate(new_list):
             if overlap_list[i] in new_list[j]:
                 shutil.copy(new_list[j], final_tifs_selected)
-                print("fucke")
 
 
 def reconversion(mod_directory, sen_directory):

@@ -14,27 +14,27 @@ def main():
     #### ----- TIFF Data ----- ####
     ### Jonas base Folder:
     ## MODIS:
-    # MODIS_directory = "F:/Test_MODIS/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+    MODIS_directory = "F:/Test_MODIS/LST/GeoTIFF/Thuringia/scaled"
     # MODIS_directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free" # analysis.py, hier wieder final_selected path adden
     ## Sentinel:
     # Sentinel_directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
-    # Sentinel_directory = "F:/Test_SENTINEL"
+    Sentinel_directory = "F:/Test_SENTINEL"
     # Sentinel_directory = "F:/Test_SENTINEL/selected/cloud_free" # analysis.py, hier wieder final_selected path adden
 
     ### Shapefiles:
     ## MODIS Shapefile:
-    # MODIS_shapefile = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+    MODIS_shapefile = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/Stationen_Thüringen_Umland_3x3box_reprojected.shp"
     ## Sentinel Shapefile:
-    # Sentinel_shapefile = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/Stationen_Thüringen_Umland_3x3box.shp"
+    Sentinel_shapefile = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/Auszug_Daten_SandraBauer_MA/Auszug_Daten_SandraBauer_MA/Stationen_Thüringen_Umland_3x3box.shp"
 
 
     ### Marlin base Folder:
     ## MODIS:
     # MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
-    MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free/final_modis_selected" #analysis.py
+    # MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free/final_modis_selected" #analysis.py
     ## Sentinel:
     # Sentinel_directory = "F:/GEO411_data/Sentinel_Daten"
-    Sentinel_directory = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free/final_sentinel_selected" #analysis.py
+    # Sentinel_directory = "F:/GEO411_data/Sentinel_Daten/selected/cloud_free/final_sentinel_selected" #analysis.py
 
     ### Shapefiles:
     ## MODIS Shapefile:
@@ -54,15 +54,15 @@ def main():
 
     ### Sentinel selection needs to be run first, or MODIS folder will be deleted!!! ###
     ### OLD AND WORKING WITHOUT TIME ###
-    # select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
-    # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
 
     ### NEW AND NOT WORKING ###
     # select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)
     # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=0, end=0)
 
     ##### RASTER-ANALYSIS SECTION #####
-    analyze_SENTINEL_temperature(sen_directory=Sentinel_directory, shape_path=Sentinel_shapefile)
+    # analyze_SENTINEL_temperature(sen_directory=Sentinel_directory, shape_path=Sentinel_shapefile)
     # analyze_MODIS_temperature(mod_directory=MODIS_directory, shape_path=MODIS_shapefile)
 
 
