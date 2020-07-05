@@ -2,7 +2,7 @@
 from datetime import datetime
 from SenLAST.comparison import *
 from SenLAST.data_preprocessing import eliminate_MODIS_cloudy_data, eliminate_SENTINEL_cloudy_data
-from SenLAST.comparison import select_MODIS_scenes, select_SENTINEL_scenes
+from SenLAST.comparison import select_MODIS_scenes_day, select_MODIS_scenes_night, select_SENTINEL_scenes
 from SenLAST.analysis import *
 
 
@@ -55,7 +55,8 @@ def main():
     ### Sentinel selection needs to be run first, or MODIS folder will be deleted!!! ###
     ### OLD AND WORKING WITHOUT TIME ###
     select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
-    select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    select_MODIS_scenes_day(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    select_MODIS_scenes_night(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
 
     ### NEW AND NOT WORKING ###
     # select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)

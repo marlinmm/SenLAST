@@ -135,7 +135,7 @@ def reconversion(mod_directory, sen_directory):
     return overlap_doy_list
 
 
-def select_MODIS_scenes(mod_directory, sen_directory):
+def select_MODIS_scenes_day(mod_directory, sen_directory):
     new_mod_directory = mod_directory + "/cloud_free"
     new_list = extract_files_to_list(path_to_folder=new_mod_directory)
     final_tifs_selected = new_mod_directory + "/final_modis_selected/"
@@ -150,6 +150,24 @@ def select_MODIS_scenes(mod_directory, sen_directory):
                 shutil.copy(new_list[j], final_tifs_selected)
                 # print(overlap_doy_list[i][::-1])
                 # print(new_list[j][-61:-64:-1])
+
+
+def select_MODIS_scenes_night(mod_directory, sen_directory):
+    new_mod_directory = mod_directory + "/cloud_free"
+    new_list = extract_files_to_list(path_to_folder=new_mod_directory)
+    final_tifs_selected = new_mod_directory + "/final_modis_selected/"
+    overlap_doy_list = reconversion(sen_directory=sen_directory, mod_directory=mod_directory)
+    if os.path.exists(final_tifs_selected):
+        shutil.rmtree(final_tifs_selected)
+    os.mkdir(new_mod_directory+ "/final_modis_selected/")
+    for i, element in enumerate(overlap_doy_list):
+        for j, tiff in enumerate(new_list):
+            if overlap_doy_list[i][::-1] in str(new_list[j][-59:-62:-1]):
+                ### change index method to find method in string
+                shutil.copy(new_list[j], final_tifs_selected)
+                # print(overlap_doy_list[i][::-1])
+                # print(new_list[j][-61:-64:-1])
+
 
 ######################## COMPARISON FUNCTIONS - NEW AND STILL NOT WORKING ##########################
 
