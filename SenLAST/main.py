@@ -14,12 +14,12 @@ def main():
     #### ----- TIFF Data ----- ####
     ### Jonas base Folder:
     ## MODIS:
-    MODIS_directory = "F:/Test_MODIS/LST/GeoTIFF/Thuringia/scaled"
-    # MODIS_directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free" #v analysis.py
+    # MODIS_directory = "F:/Test_MODIS/LST/GeoTIFF/Thuringia/scaled/cloud_free"
+    MODIS_directory = "F:/411/LST/GeoTIFF/Thuringia/scaled/cloud_free" # analysis.py, hier wieder final_selected path adden
     ## Sentinel:
     # Sentinel_directory = "F:/Sentinel_3/S3_Daten-20200622T143538Z-001/S3_Daten"
-    Sentinel_directory = "F:/Test_SENTINEL"
-    # Sentinel_directory = "F:/Test_SENTINEL/selected/cloud_free/final_sentinel_selected" # analysis.py
+    # Sentinel_directory = "F:/Test_SENTINEL"
+    Sentinel_directory = "F:/Test_SENTINEL/selected/cloud_free" # analysis.py, hier wieder final_selected path adden
 
     ### Shapefiles:
     ## MODIS Shapefile:
@@ -57,11 +57,11 @@ def main():
     # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
 
     ### NEW AND NOT WORKING ###
-    select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)
-    select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=0, end=0)
+    # select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)
+    # select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=0, end=0)
 
     ##### RASTER-ANALYSIS SECTION #####
-    # analyze_SENTINEL_temperature(sen_directory=Sentinel_directory, shape_path=Sentinel_shapefile)
+    analyze_SENTINEL_temperature(sen_directory=Sentinel_directory, shape_path=Sentinel_shapefile)
     # analyze_MODIS_temperature(mod_directory=MODIS_directory, shape_path=MODIS_shapefile)
 
 
