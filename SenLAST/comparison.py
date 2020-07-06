@@ -3,7 +3,6 @@ from datetime import date
 import shutil
 import pandas as pd
 from SenLAST.base_information import extract_files_to_list
-import numpy as np
 
 
 ######################## SENTINEL DATE & TIME EXTRACTION ########################
@@ -44,6 +43,32 @@ def extract_SENTINEL_timestamp(sen_directory):
 
 ######################## MODIS DATE & TIME EXTRACTION ########################
 
+# def extract_MODIS_date(mod_directory):
+#     """
+#     extracts the acquisition date of MODIS scenes into a new list
+#     ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
+#     :return:
+#     """
+#     MODIS_date_list = []
+#     MODIS_doy_list = []
+#
+#     # check if final folder already exists:
+#     # final_tifs_selected = mod_directory + "/final_modis_selected"
+#     # if os.path.exists(final_tifs_selected):
+#     #     shutil.rmtree(final_tifs_selected)
+#
+#     years = [2018, 2019, 2020]
+#     for i, year in enumerate(years):
+#         for filename in os.listdir(mod_directory):
+#             timestamp = filename[13:16]
+#             MODIS_doy_list.append(os.path.join(timestamp))
+#             for doy in range(len(MODIS_doy_list)):
+#                 doy = date.fromordinal(date(years[i], 1, 1).toordinal() + int(timestamp) - 1)
+#                 doy = str(doy)
+#             MODIS_date_list.append(doy)
+#     return MODIS_date_list
+
+
 def extract_MODIS_date(mod_directory):
     """
     extracts the acquisition date of MODIS scenes into a new list
@@ -58,15 +83,14 @@ def extract_MODIS_date(mod_directory):
     # if os.path.exists(final_tifs_selected):
     #     shutil.rmtree(final_tifs_selected)
 
-    years = [2018, 2019, 2020]
-    for i, year in enumerate(years):
-        for filename in os.listdir(mod_directory):
-            timestamp = filename[13:16]
-            MODIS_doy_list.append(os.path.join(timestamp))
-            for doy in range(len(MODIS_doy_list)):
-                doy = date.fromordinal(date(years[i], 1, 1).toordinal() + int(timestamp) - 1)
-                doy = str(doy)
-            MODIS_date_list.append(doy)
+    for filename in os.listdir(mod_directory):
+        year = filename[9:13]
+        timestamp = filename[13:16]
+        MODIS_doy_list.append(os.path.join(timestamp))
+        for doy in range(len(MODIS_doy_list)):
+            doy = date.fromordinal(date(int(year), 1, 1).toordinal() + int(timestamp) - 1)
+            doy = str(doy)
+        MODIS_date_list.append(doy)
     return MODIS_date_list
 
 
