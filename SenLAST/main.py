@@ -1,9 +1,10 @@
 ##############################     IMPORT OF REQUIRED MODULES    ###################################
 from datetime import datetime
 from SenLAST.comparison import *
-from SenLAST.data_preprocessing import eliminate_MODIS_cloudy_data, eliminate_SENTINEL_cloudy_data
-from SenLAST.comparison import select_MODIS_scenes, select_SENTINEL_scenes
+from SenLAST.data_preprocessing import *
+from SenLAST.comparison import *
 from SenLAST.analysis import *
+from SenLAST.base_information import *
 
 
 start_time = datetime.now()
@@ -31,6 +32,7 @@ def main():
     ### Marlin base Folder:
     ## MODIS:
     MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
+    MODIS_time_directory = "F:/GEO411_data/MODIS_Daten/time_layer" # time layer
     # MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free/final_modis_selected" #analysis.py
     ## Sentinel:
     Sentinel_directory = "F:/GEO411_data/Sentinel_Daten"
@@ -54,9 +56,11 @@ def main():
 
     ### Sentinel selection needs to be run first, or MODIS folder will be deleted!!! ###
     ### OLD AND WORKING WITHOUT TIME ###
-    select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
-    select_MODIS_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    # select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
+    # select_MODIS_time_scenes(mod_time_directory=MODIS_time_directory, sen_directory=Sentinel_directory)
+    # select_MODIS_data_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory)
 
+    rename_files(mod_directory=MODIS_directory, mod_time_directory=MODIS_time_directory, shape_path=MODIS_shapefile)
 
     ### NEW AND NOT WORKING ###
     # select_SENTINEL_scenes(mod_directory=MODIS_directory, sen_directory=Sentinel_directory, start=90, end=90)
