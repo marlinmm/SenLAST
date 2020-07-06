@@ -159,7 +159,7 @@ def reconversion(mod_directory, sen_directory):
     return overlap_doy_list
 
 
-def select_MODIS_scenes(mod_directory, sen_directory):
+def select_MODIS_data_scenes(mod_directory, sen_directory):
     new_mod_directory = mod_directory + "/cloud_free"
     new_list = extract_files_to_list(path_to_folder=new_mod_directory)
     final_tifs_selected = mod_directory + "/final_modis_selected/"
@@ -169,9 +169,30 @@ def select_MODIS_scenes(mod_directory, sen_directory):
     os.mkdir(mod_directory + "/final_modis_selected/")
     for i, element in enumerate(overlap_doy_list):
         for j, tiff in enumerate(new_list):
-            if overlap_doy_list[i][::-1] in str(new_list[j][-61:-64:-1]) or overlap_doy_list[i][::-1] in str(new_list[j][-63:-66:-1]):
-                ### change index method to find method in string
-                shutil.copy(new_list[j], final_tifs_selected)
+            if "Day" in str(new_list[j]):
+                if overlap_doy_list[i][::-1] in str(new_list[j][-61:-64:-1]):
+                    shutil.copy(new_list[j], final_tifs_selected)
+            if "Night" in str(new_list[j]):
+                if overlap_doy_list[i][::-1] in str(new_list[j][-63:-66:-1]):
+                    shutil.copy(new_list[j], final_tifs_selected)
+
+
+def select_MODIS_time_scenes(mod_time_directory, sen_directory):
+    new_mod_directory = mod_time_directory + "/cloud_free"
+    new_list = extract_files_to_list(path_to_folder=new_mod_directory)
+    final_tifs_selected = mod_time_directory + "/final_modis_selected/"
+    overlap_doy_list = reconversion(sen_directory=sen_directory, mod_directory=mod_time_directory)
+    if os.path.exists(final_tifs_selected):
+        shutil.rmtree(final_tifs_selected)
+    os.mkdir(mod_time_directory + "/final_modis_selected/")
+    for i, element in enumerate(overlap_doy_list):
+        for j, tiff in enumerate(new_list):
+            if "Day" in str(new_list[j]):
+                if overlap_doy_list[i][::-1] in str(new_list[j][-55:-58:-1]):
+                    shutil.copy(new_list[j], final_tifs_selected)
+            if "Night" in str(new_list[j]):
+                if overlap_doy_list[i][::-1] in str(new_list[j][-57:-60:-1]):
+                    shutil.copy(new_list[j], final_tifs_selected)
 
 
 ######################## COMPARISON FUNCTIONS - NEW AND STILL NOT WORKING ##########################
