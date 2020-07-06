@@ -214,7 +214,7 @@ def select_MODIS_time_scenes(mod_time_directory, sen_directory):
 #     return overlap_date_list
 #
 #
-# def compare_timestamp(mod_directory, sen_directory, start, end):
+# def compare_timestamp(mod_directory, sen_directory, interval):
 #     """
 #     Compares the temporal (time) overlap between SENTINEL and MODIS Data
 #     - For more information see: https://stackoverflow.com/questions/52464978/how-do-i-print-elements-of-one-list-that-are-in-another-list
@@ -233,8 +233,8 @@ def select_MODIS_time_scenes(mod_time_directory, sen_directory):
 #
 #     for x in sentinel_timestamp_data:
 #         for y in modis_timestamp_data:
-#             xa = int(x) + end
-#             xb = int(x) - start
+#             xa = int(x) + interval
+#             xb = int(x) - interval
 #             y = int(y)
 #
 #             if xa >= y >= xb:
@@ -259,13 +259,13 @@ def select_MODIS_time_scenes(mod_time_directory, sen_directory):
 #
 # # Mit Zeitkomponenete
 # # FUNKTIONIERT ALLES NOCH NICHT WEIL OBEN DIE MINUTEN NOCH NICHT WIEDER UMGERECHNET SIND !!!
-# def select_SENTINEL_scenes(mod_directory, sen_directory, start, end):
+# def select_SENTINEL_scenes(mod_directory, sen_directory, interval):
 #     new_sen_directory = sen_directory + "/selected/cloud_free"
 #     new_list = extract_files_to_list(path_to_folder=new_sen_directory)
 #     print(new_list)
 #     overlap_date_list = compare_date(mod_directory=mod_directory, sen_directory=sen_directory)
-#     min_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory, start=start, end=end)
-#     all_minutes_overlap_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory, start=start, end=end)
+#     min_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory, interval=interval)
+#     all_minutes_overlap_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory, interval=interval)
 #     final_tifs_selected = new_sen_directory + "/final_sentinel_selected/"
 #     if os.path.exists(final_tifs_selected):
 #         shutil.rmtree(final_tifs_selected)
@@ -295,12 +295,12 @@ def select_MODIS_time_scenes(mod_time_directory, sen_directory):
 #
 # # Mit Zeitkomponente
 # # FUNKTIONIERT SO NOCH ÜBERHAUPT NICHT WEIL ER ERST GARKEINEN ORDNER ANLEGT !!!
-# def select_MODIS_scenes(mod_directory, sen_directory, start, end):
+# def select_MODIS_scenes(mod_directory, sen_directory, interval):
 #     new_mod_directory = mod_directory + "/cloud_free"
 #     new_list = extract_files_to_list(path_to_folder=new_mod_directory)
 #     final_tifs_selected = new_mod_directory + "/final_modis_selected/"
 #     overlap_doy_list = reconversion(sen_directory=sen_directory, mod_directory=mod_directory)
-#     short_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory, start=start, end=end)
+#     short_list = compare_timestamp(mod_directory=mod_directory, sen_directory=sen_directory, interval=interval)
 #     if os.path.exists(final_tifs_selected):
 #         shutil.rmtree(final_tifs_selected)
 #     os.mkdir(new_mod_directory + "/final_modis_selected/")
