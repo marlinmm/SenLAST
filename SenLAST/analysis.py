@@ -13,24 +13,25 @@ def analyze_MODIS_temperature(mod_directory, shape_path):
     returns one temperature array for each station
     """
     import_list = import_polygons(shape_path=shape_path)
-    sentinel_file_list = extract_files_to_list(path_to_folder=mod_directory)
-    final_mean = []
-    print("#################### SENTINEL RESULTS ####################")
+    modis_file_list = extract_files_to_list(path_to_folder=mod_directory)
+    Mod_final_mean = []
+
+    print("#################### MODIS RESULTS ####################")
 
     for i, files in enumerate(import_list):
         scenes = i+1
         print(scenes, ". weather station")
-        for j, polygons in enumerate(sentinel_file_list):
+        for j, polygons in enumerate(modis_file_list):
             stations = j+1
             print(stations, ". scene")
-            src1 = rio.open(sentinel_file_list[j])
+            src1 = rio.open(modis_file_list[j])
             mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
-            Sen_temperature_array = mask[0][0]
-            mean_Sen = np.nanmean(Sen_temperature_array)
-            print(Sen_temperature_array)
-            print(mean_Sen)
-            final_mean.append(mean_Sen)
-        print(np.nanmean(final_mean))
+            Mod_temperature_array = mask[0][0]
+            mean_Mod = np.nanmean(Mod_temperature_array)
+            print(Mod_temperature_array)
+            print(mean_Mod)
+            Mod_final_mean.append(mean_Mod)
+        print(np.nanmean(Mod_final_mean))
 
 
 def analyze_SENTINEL_temperature(sen_directory, shape_path):
@@ -43,7 +44,8 @@ def analyze_SENTINEL_temperature(sen_directory, shape_path):
     """
     import_list = import_polygons(shape_path=shape_path)
     sentinel_file_list = extract_files_to_list(path_to_folder=sen_directory)
-    final_mean = []
+    Sen_final_mean = []
+
     print("#################### SENTINEL RESULTS ####################")
 
     for i, files in enumerate(import_list):
@@ -58,5 +60,5 @@ def analyze_SENTINEL_temperature(sen_directory, shape_path):
             mean_Sen = np.nanmean(Sen_temperature_array)
             print(Sen_temperature_array)
             print(mean_Sen)
-            final_mean.append(mean_Sen)
-        print(np.nanmean(final_mean))
+            Sen_final_mean.append(mean_Sen)
+        print(np.nanmean(Sen_final_mean))
