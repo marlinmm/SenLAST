@@ -1,19 +1,19 @@
 import numpy as np
 import csv
-from SenLAST.comparison import extract_SENTINEL_date, extract_SENTINEL_timestamp, extract_MODIS_date, extract_MODIS_timestamp
+from SenLAST.comparison import *
 from SenLAST.base_information import import_polygons
 
 #satellite_data = "C:/Users/marli/Google Drive/Studium/Master/2.Semester/GEO411/Praxis/Datenpaare/All/"
 csv_folder = "F:/GEO411_data/DWD_result_all/"
 
-MODIS_directory = "F:/GEO411_data/test/small/mod"
+MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download/final_modis_selected"
 Sentinel_directory = "F:/GEO411_data/test/small/sen"
 
 sen_date = extract_SENTINEL_date(sen_directory=Sentinel_directory)
 sen_time = extract_SENTINEL_timestamp(sen_directory=Sentinel_directory)
 
 mod_date = extract_MODIS_date(mod_directory=MODIS_directory)
-mod_time = extract_MODIS_timestamp(mod_directory=MODIS_directory)
+mod_time = extract_MODIS_timestamp_new(mod_directory=MODIS_directory)
 
 print(sen_date)
 print(sen_time)
