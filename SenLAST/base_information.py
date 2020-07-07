@@ -32,9 +32,9 @@ def import_polygons(shape_path):
     return shape_list
 
 
-def extract_time_value_MODIS(mod_directory, shape_path):
+def extract_time_value_MODIS(mod_time_directory, shape_path):
     # create new cloud_free directory, overwrite if already exits
-    selected_tifs = extract_files_to_list(path_to_folder=mod_directory)
+    selected_tifs = extract_files_to_list(path_to_folder=mod_time_directory)
 
     # import polygons from shapefile
     import_list = import_polygons(shape_path=shape_path)
@@ -70,7 +70,7 @@ def extract_time_value_MODIS(mod_directory, shape_path):
 def rename_files(mod_directory, mod_time_directory,  shape_path):
     new_mod_time_directory = mod_time_directory + "/final_modis_selected"
     new_mod_directory = mod_directory + "/final_modis_selected"
-    time_list = extract_time_value_MODIS(mod_directory=new_mod_time_directory, shape_path=shape_path)
+    time_list = extract_time_value_MODIS(mod_time_directory=new_mod_time_directory, shape_path=shape_path)
     selected_tifs = extract_files_to_list(path_to_folder=new_mod_directory)
     for i, tifs in enumerate(selected_tifs):
         #Marlin Index:
