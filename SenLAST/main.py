@@ -13,7 +13,26 @@ start_time = datetime.now()
 def main():
     ###################################     INPUT    ########################################
 
+    #### ----- TIFF Data ----- ####
 
+    ### Base Folder:
+    Base_Folder = "F:/GEO411_data/Processing/"
+
+    ## MODIS ##
+    MODIS_cloud_free_directory = Base_Folder + "MODIS/cloud_free"
+    MODIS_time_overlap_directory = Base_Folder + "MODIS/time_overlap"
+
+    ## SENTINEL ##
+    SENTINEL_cloud_free_directory = Base_Folder + "Sentinel/cloud_free"
+    SENTINEL_time_overlap_directory = Base_Folder + "Sentinel/time_overlap"
+
+    ## DWD ##
+    SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel"
+    MODIS_DWD_directory = Base_Folder + "DWD/MODIS"
+
+    ## SHAPEFILES ##
+    SENTINEL_Shapefile_directory = Base_Folder + "Shapefiles/Stationen_Thüringen_Umland_3x3box.shp"
+    MODIS_Shapefile_directory = Base_Folder + "Shapefiles/Stationen_Thüringen_Umland_3x3box_reprojected.shp"
 
     ####################### USER-DEPENDENT FUNCTIONS TO BE USED #######################
 
