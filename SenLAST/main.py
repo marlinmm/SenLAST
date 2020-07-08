@@ -5,6 +5,7 @@ from SenLAST.data_preprocessing import *
 from SenLAST.comparison import *
 from SenLAST.analysis import *
 from SenLAST.import_dwd_data import *
+from SenLAST.base_information import *
 
 
 start_time = datetime.now()
@@ -35,6 +36,7 @@ def main():
     ## MODIS:
     # MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download"
     MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free"
+    MODIS_time_directory = "F:/GEO411_data/MODIS_Daten/time_layer/cloud_free"
     # MODIS_directory = "F:/GEO411_data/MODIS_Daten/MODIS_download/cloud_free/final_modis_selected" #analysis.py
     ## Sentinel:
     # Sentinel_directory = "F:/GEO411_data/Sentinel_Daten"
@@ -43,7 +45,7 @@ def main():
 
     ### Shapefiles:
     ## MODIS Shapefile:
-    # MODIS_shapefile = "F:/GEO411_data/Daten_Sandra/new/Stationen_Thüringen_Umland_3x3box_reprojected.shp"
+    MODIS_shapefile = "F:/GEO411_data/Daten_Sandra/new/Stationen_Thüringen_Umland_3x3box_reprojected.shp"
     ## Sentinel Shapefile:
     # Sentinel_shapefile = "F:/GEO411_data/Daten_Sandra/new/Stationen_Thüringen_Umland_3x3box.shp"
 
@@ -74,10 +76,12 @@ def main():
     # analyze_SENTINEL_temperature(sen_directory=Sentinel_directory, shape_path=Sentinel_shapefile)
     # analyze_MODIS_temperature(mod_directory=MODIS_directory, shape_path=MODIS_shapefile)
 
+    # rename_files(mod_directory=MODIS_directory, mod_time_directory=MODIS_time_directory, shape_path=MODIS_shapefile)
+
 
     ##### EXTRACT DWD DATA #####
-    #import_DWD_data_Sentinel(sen_directory=Sentinel_directory, csv_directory=csv_directory)
-    import_DWD_data_MODIS(mod_directory=MODIS_directory, csv_directory=csv_directory)
+    import_DWD_data_Sentinel(sen_directory=Sentinel_directory, csv_directory=csv_directory)
+    #import_DWD_data_MODIS(mod_directory=MODIS_directory, csv_directory=csv_directory)
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
