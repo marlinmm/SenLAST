@@ -1,6 +1,7 @@
 import os
 import fiona
 import rasterio as rio
+import rasterio.mask
 import numpy as np
 
 
@@ -34,7 +35,7 @@ def import_polygons(shape_path):
 
 def extract_time_value_MODIS(mod_time_directory, shape_path):
     # create new cloud_free directory, overwrite if already exits
-    selected_tifs = extract_files_to_list(path_to_folder=mod_time_directory)
+    selected_tifs = extract_files_to_list(path_to_folder=mod_time_directory, datatype=".tif")
 
     # import polygons from shapefile
     import_list = import_polygons(shape_path=shape_path)
@@ -66,12 +67,11 @@ def extract_time_value_MODIS(mod_time_directory, shape_path):
     return all_time_list
 
 
-
 def rename_files(mod_directory, mod_time_directory,  shape_path):
-    new_mod_time_directory = mod_time_directory + "/final_modis_selected"
-    new_mod_directory = mod_directory + "/final_modis_selected"
+    new_mod_time_directory = mod_time_directory
+    new_mod_directory = mod_directory
     time_list = extract_time_value_MODIS(mod_time_directory=new_mod_time_directory, shape_path=shape_path)
-    selected_tifs = extract_files_to_list(path_to_folder=new_mod_directory)
+    selected_tifs = extract_files_to_list(path_to_folder=new_mod_directory, datatype=".tif")
     for i, tifs in enumerate(selected_tifs):
         #Marlin Index:
         name = tifs[0:95]
