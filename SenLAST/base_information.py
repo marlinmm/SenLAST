@@ -4,7 +4,7 @@ import rasterio as rio
 import numpy as np
 
 
-def extract_files_to_list(path_to_folder):
+def extract_files_to_list(path_to_folder, datatype):
     """
     finds all .tif-files in the corresponding directory
     :return:
@@ -12,7 +12,7 @@ def extract_files_to_list(path_to_folder):
     new_list = []
 
     for filename in os.listdir(path_to_folder):
-        if filename.endswith(".tif"):
+        if filename.endswith(datatype):
             new_list.append(os.path.join(path_to_folder, filename))
         else:
             continue
