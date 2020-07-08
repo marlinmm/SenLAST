@@ -5,7 +5,7 @@ import plotly.express as px
 # csv_path = "C:/Users/jz199/Desktop/DWD_result_all/"
 csv_path = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/"
 # Marlin Path
-# csv_path = ""
+# csv_path = "C:/Users/marli/Downloads/"
 
 # Filename
 csv_file = "Datenpaare.csv"
