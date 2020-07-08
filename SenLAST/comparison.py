@@ -115,6 +115,28 @@ def extract_MODIS_timestamp(mod_directory):
     return MODIS_timestamp_list
 
 
+def extract_MODIS_timestamp_new(mod_directory):
+    """
+    extracts the acquisition time of MODIS scenes into a new list
+    ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
+    :return:
+    """
+    MODIS_timestamp_list = []
+
+    for filename in os.listdir(mod_directory):
+        hour = filename[35:37]
+
+        hour = int(hour)
+        hour_in_minutes = hour * 60
+        minutes = filename[38:40]
+        minutes = int(minutes)
+        ges_minutes = hour_in_minutes + minutes
+        ges_minutes = str(ges_minutes)
+        MODIS_timestamp_list.append(os.path.join(ges_minutes))
+    # print(MODIS_timestamp_list)
+    return MODIS_timestamp_list
+
+
 ######################## COMPARISON FUNCTIONS - OLD AND WORKING ##########################
 
 def compare(mod_directory, sen_directory):
