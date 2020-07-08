@@ -15,7 +15,7 @@ def analyze_SENTINEL_temperature(sen_directory, shape_path):
     returns one temperature array for each station if a[0][0]
     """
     import_list = import_polygons(shape_path=shape_path)
-    sentinel_file_list = extract_files_to_list(path_to_folder=sen_directory)
+    sentinel_file_list = extract_files_to_list(path_to_folder=sen_directory, datatype= ".tif")
 
     print("#################### SENTINEL RESULTS ####################")
 
@@ -83,7 +83,7 @@ def analyze_MODIS_temperature(mod_directory, shape_path):
     returns one temperature array for each station
     """
     import_list = import_polygons(shape_path=shape_path)
-    modis_file_list = extract_files_to_list(path_to_folder=mod_directory)
+    modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
 
 
     print("#################### MODIS RESULTS ####################")
