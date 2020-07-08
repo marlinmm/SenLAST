@@ -155,7 +155,7 @@ def compare(mod_directory, sen_directory):
 
 def select_SENTINEL_scenes(mod_directory, sen_directory):
     new_sen_directory = sen_directory + "/selected/cloud_free"
-    new_list = extract_files_to_list(path_to_folder=new_sen_directory)
+    new_list = extract_files_to_list(path_to_folder=new_sen_directory, datatype=".tif")
     overlap_list = compare(mod_directory=mod_directory, sen_directory=sen_directory)
     final_tifs_selected = sen_directory + "/final_sentinel_selected/"
     if os.path.exists(final_tifs_selected):
@@ -183,7 +183,7 @@ def reconversion(mod_directory, sen_directory):
 
 def select_MODIS_data_scenes(mod_directory, sen_directory):
     new_mod_directory = mod_directory + "/cloud_free"
-    new_list = extract_files_to_list(path_to_folder=new_mod_directory)
+    new_list = extract_files_to_list(path_to_folder=new_mod_directory, datatype=".tif")
     final_tifs_selected = mod_directory + "/final_modis_selected/"
     overlap_doy_list = reconversion(sen_directory=sen_directory, mod_directory=mod_directory)
     if os.path.exists(final_tifs_selected):
@@ -201,7 +201,7 @@ def select_MODIS_data_scenes(mod_directory, sen_directory):
 
 def select_MODIS_time_scenes(mod_time_directory, sen_directory):
     new_mod_directory = mod_time_directory + "/cloud_free"
-    new_list = extract_files_to_list(path_to_folder=new_mod_directory)
+    new_list = extract_files_to_list(path_to_folder=new_mod_directory, datatype=".tif")
     final_tifs_selected = mod_time_directory + "/final_modis_selected/"
     overlap_doy_list = reconversion(sen_directory=sen_directory, mod_directory=mod_time_directory)
     if os.path.exists(final_tifs_selected):
