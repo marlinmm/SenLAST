@@ -26,6 +26,11 @@ def main():
     SENTINEL_cloud_free_directory = Base_Folder + "Sentinel/cloud_free"
     SENTINEL_time_overlap_directory = Base_Folder + "Sentinel/time_overlap"
 
+    ## Datapairs ##
+    # Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare"
+    Sentinel_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/Sentinel"
+    MODIS_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/MODIS"
+
     ## DWD ##
     SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel"
     MODIS_DWD_directory = Base_Folder + "DWD/MODIS"
@@ -36,7 +41,13 @@ def main():
 
     ####################### USER-DEPENDENT FUNCTIONS TO BE USED #######################
 
-
+    ##### RASTER-ANALYSIS SECTION #####
+    analyze_SENTINEL_temperature(sen_directory=Sentinel_Datapair_directory, sen_shape_path=SENTINEL_Shapefile_directory)
+    # analyze_MODIS_temperature(mod_directory=MODIS_Datapair_directory, mod_shape_path=MODIS_Shapefile_directory)
+    # testplot(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
+    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory)
+    # mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
+    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory)
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
