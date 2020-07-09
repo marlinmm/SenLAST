@@ -3,10 +3,6 @@ import csv
 from SenLAST.comparison import *
 from SenLAST.base_information import *
 
-# csv_folder = "F:/GEO411_data/DWD_result_all/"
-#
-# MODIS_directory = "F:/GEO411_data/MODIS_Daten/hour_match"
-# Sentinel_directory = "F:/GEO411_data/Sentinel_Daten/hour_match"
 
 def import_DWD_data_Sentinel(sen_directory, csv_directory):
     sen_date = extract_SENTINEL_date(sen_directory=sen_directory)
@@ -41,7 +37,7 @@ def import_DWD_data_Sentinel(sen_directory, csv_directory):
             wt = csv.writer(new_csvfile, quoting=csv.QUOTE_ALL)
             wt.writerows(value_list)
 
-##### rename cloudfree data!!!!!!!! ######
+
 def import_DWD_data_MODIS(mod_directory, csv_directory):
     mod_date = extract_MODIS_date(mod_directory=mod_directory)
     mod_time = extract_MODIS_timestamp(mod_directory=mod_directory)
