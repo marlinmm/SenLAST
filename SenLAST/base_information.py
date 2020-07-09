@@ -74,7 +74,7 @@ def rename_files(mod_directory, mod_time_directory,  shape_path):
     selected_tifs = extract_files_to_list(path_to_folder=new_mod_directory, datatype=".tif")
     for i, tifs in enumerate(selected_tifs):
         #Marlin Index:
-        name = tifs[0:95]
+        name = tifs[0:124]
         # Jonas Index:
         #name = tifs[0:hier dein Index]
         print(name)
