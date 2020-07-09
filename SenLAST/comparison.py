@@ -77,10 +77,10 @@ def extract_MODIS_timestamp(mod_directory):
     MODIS_timestamp_list = []
 
     for filename in os.listdir(mod_directory):
-        hour = filename[35:37]
+        hour = filename[54:56]
         hour = int(hour)
         hour_in_minutes = hour * 60
-        minutes = filename[37:39]
+        minutes = filename[57:59]
         minutes = int(minutes)
         ges_minutes = hour_in_minutes + minutes
         ges_minutes = str(ges_minutes)
