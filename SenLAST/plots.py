@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.express as px
+from SenLAST.analysis import *
 
 # Jonas Path
 # csv_path = "C:/Users/jz199/Desktop/DWD_result_all/"
@@ -49,3 +50,28 @@ print(df)
 # fig.show()
 
 ###################################################################
+
+def testplot(mod_directory, sen_directory, sen_shape_path, mod_shape_path):
+    import plotly.graph_objects as go
+    stations = ['Bad Berka', 'Dachwig', 'Erfurt-Weimar', 'Eschwege', 'Hof', 'Kleiner Inselberg', 'Kronach',
+                'Bad Lobenstein', 'Martinroda', 'Meiningen', 'Neuhaus a.R.', 'Plauen', 'Schmücke', 'Schwarzburg',
+                'Sontra', 'Waltershausen', 'Weimar-S.', 'Lichtentanne', 'Olbersleben', 'Krölpa-Rdorf']
+
+    fig = go.Figure(data=[
+        go.Bar(name='S3 Mean Temperature (°C)', x=stations, y=analyze_SENTINEL_temperature(sen_directory=sen_directory, sen_shape_path=sen_shape_path)),
+        go.Bar(name='MODIS Mean Temperature (°C)', x=stations, y=analyze_MODIS_temperature(mod_directory=mod_directory, mod_shape_path=mod_shape_path))
+    ])
+    # Change the bar mode
+    fig.update_layout(barmode='group')
+    fig.show()
+
+def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path):
+    diff_list = []
+    a = analyze_SENTINEL_temperature(sen_directory, sen_shape_path)
+    b = analyze_MODIS_temperature(mod_directory, mod_shape_path)
+    print(a)
+    print(b)
+    zip_object = zip(a, b)
+    for list1_i, list2_i in zip_object:
+        diff_list.append(list1_i - list2_i)
+    print(diff_list)
