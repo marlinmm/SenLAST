@@ -6,6 +6,7 @@ from SenLAST.comparison import *
 from SenLAST.analysis import *
 from SenLAST.import_dwd_data import *
 from SenLAST.base_information import *
+from SenLAST.plots import *
 
 
 start_time = datetime.now()
@@ -30,6 +31,9 @@ def main():
     # Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare"
     Sentinel_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/Sentinel"
     MODIS_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/MODIS"
+    ### For allstations_alldata function use the following directories
+    # Sentinel_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/Sentinel/2018_09_30"
+    # MODIS_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/MODIS/2018_09_30"
 
     ## DWD ##
     SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel"
@@ -42,12 +46,15 @@ def main():
     ####################### USER-DEPENDENT FUNCTIONS TO BE USED #######################
 
     ##### RASTER-ANALYSIS SECTION #####
-    analyze_SENTINEL_temperature(sen_directory=Sentinel_Datapair_directory, sen_shape_path=SENTINEL_Shapefile_directory)
+    # analyze_SENTINEL_temperature(sen_directory=Sentinel_Datapair_directory, sen_shape_path=SENTINEL_Shapefile_directory)
     # analyze_MODIS_temperature(mod_directory=MODIS_Datapair_directory, mod_shape_path=MODIS_Shapefile_directory)
-    # testplot(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
-    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory)
-    # mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
-    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory)
+    # SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
+    mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="",
+             sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="")
+    # SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+    #                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+    #                 daytime_MODIS="Day")
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
