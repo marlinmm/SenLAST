@@ -36,8 +36,8 @@ def main():
     # MODIS_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/MODIS/2018_09_30"
 
     ## DWD ##
-    SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel"
-    MODIS_DWD_directory = Base_Folder + "DWD/MODIS"
+    SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel/"
+    MODIS_DWD_directory = Base_Folder + "DWD/MODIS/"
 
     ## SHAPEFILES ##
     SENTINEL_Shapefile_directory = Base_Folder + "Shapefiles/Stationen_Thüringen_Umland_3x3box.shp"
@@ -50,8 +50,8 @@ def main():
     # analyze_MODIS_temperature(mod_directory=MODIS_Datapair_directory, mod_shape_path=MODIS_Shapefile_directory)
     # SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
     #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
-    mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
-             sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
+    # mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
     # barchart_mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
     #                    daytime_S3="",
     #                    sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
