@@ -50,11 +50,11 @@ def main():
     # analyze_MODIS_temperature(mod_directory=MODIS_Datapair_directory, mod_shape_path=MODIS_Shapefile_directory)
     # SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
     #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
-    mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="",
-             sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="")
-    # SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
-    #                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-    #                 daytime_MODIS="Day")
+    # mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
+    SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+                    sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+                    daytime_MODIS="Day")
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")

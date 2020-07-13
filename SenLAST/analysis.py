@@ -51,7 +51,7 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
-                print(Sen_temperature_array)
+                # print(Sen_temperature_array)
 
                 ## Calculate mean ##
                 mean_Sen = np.nanmean(Sen_temperature_array)
@@ -128,7 +128,7 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
-                print(Mod_temperature_array)
+                # print(Mod_temperature_array)
 
                 ## Mittelwert berechnen ##
                 mean_Mod = np.nanmean(Mod_temperature_array)
