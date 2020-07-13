@@ -60,6 +60,9 @@ def main():
     #                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
     #                 daytime_MODIS="Day")
 
+    analyze_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
+                      mod_shape_path=MODIS_Shapefile_directory)
+
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
 
