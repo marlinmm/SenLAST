@@ -101,9 +101,15 @@ def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, dayt
     print(a)
     print("MODIS = ")
     print(b)
+    ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
+    # SENTINEL_1d = reduce(lambda x, y: x + y, a)
+    # MODIS_1d = reduce(lambda x, y: x + y, b)
+    # print(SENTINEL_1d)
+    # print(MODIS_1d)
     zip_object = zip(a, b)
+    # zip_object = zip(SENTINEL_1d, MODIS_1d)
     for list1_i, list2_i in zip_object:
-        diff_list.append(list1_i - list2_i)
+        diff_list.append(abs(list1_i - list2_i))
     print("Difference S3-MODIS = ")
     print(diff_list)
     print("mean difference = ")
@@ -155,7 +161,6 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
     fig.show()
 
 
-
 ########################################################################################################################
 
 def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
@@ -164,10 +169,10 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
     print(SENTINEL)
     print(MODIS)
     ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
-    # SENTINEL_1d = reduce(lambda x,y :x+y, SENTINEL)
-    # MODIS_1d = reduce(lambda x,y :x+y, MODIS)
-    # print(SENTINEL_1d)
-    # print(MODIS_1d)
+    SENTINEL_1d = reduce(lambda x,y : x+y, SENTINEL)
+    MODIS_1d = reduce(lambda x,y : x+y, MODIS)
+    print(SENTINEL_1d)
+    print(MODIS_1d)
 
     fig = go.Figure(data=go.Scatter(
         x=MODIS,
