@@ -194,20 +194,21 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path):
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     print(csv_list)
 
-    MOD_data_list = analyze_MODIS_temperature(mod_directory=mod_directory, mod_shape_path=mod_shape_path, daytime_MODIS="Day")
+    # MOD_data_list = analyze_MODIS_temperature(mod_directory=mod_directory, mod_shape_path=mod_shape_path, daytime_MODIS="Day")
 
-    print(MOD_data_list[2])
-    print(len(MOD_data_list))
+    # print(MOD_data_list[2])
+    # print(len(MOD_data_list))
     df = pd.read_csv(csv_list[0], delimiter=",")
     print(df)
     print(df["TT_10"])
-    print(len(df["TT_10"]))
+    # print(len(df["TT_10"]))
 
-    #for file in csv_list:
-    #    # Read csv data
-    #    df = pd.read_csv(file, delimiter=",")
-    #
-    #    print(df)
+    for file in csv_list:
+       # Read csv data
+       df = pd.read_csv(file, delimiter=",")
+
+       print(df)
+       print(df["TT_10"])
 
 
 ###############################################################################################
