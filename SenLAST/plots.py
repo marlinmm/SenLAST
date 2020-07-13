@@ -1,5 +1,7 @@
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+from functools import reduce
 from SenLAST.analysis import *
 
 
@@ -51,7 +53,6 @@ def datapairs():
 ########################################################################################################################
 
 def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
-    import plotly.graph_objects as go
     stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
@@ -96,21 +97,68 @@ def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, dayt
     diff_list = []
     a = analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3)
     b = analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS)
+    print("Sentinel = ")
     print(a)
+    print("MODIS = ")
     print(b)
     zip_object = zip(a, b)
     for list1_i, list2_i in zip_object:
         diff_list.append(list1_i - list2_i)
+    print("Difference S3-MODIS = ")
     print(diff_list)
-    print(np.max(diff_list))
-    print(np.min(diff_list))
+    print("mean difference = ")
     print(np.mean(diff_list))
+    # print("median difference = ")
+    # print(np.median(diff_list))
+
+    return diff_list
+
+
+def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
+    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
+                'Meiningen',
+                'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
+                'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
+
+
+    fig = go.Figure(data=[
+        go.Bar(name='', x=stations,
+               y=mean_diff(sen_directory=sen_directory, mod_directory=mod_directory,
+                                              sen_shape_path=sen_shape_path, mod_shape_path=mod_shape_path,
+                                              daytime_S3=daytime_S3, daytime_MODIS=daytime_MODIS)),
+    ])
+    fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
+    fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
+    fig.update_layout(
+        title='Mean night temperature difference (°C) for every investigated station (S3-MODIS)',
+        titlefont_size=30,
+        xaxis=dict(
+            title='Stations',
+            titlefont_size=20,
+            tickfont_size=14,
+        ),
+        yaxis=dict(
+            title='Mean night temperature difference (°C)',
+            titlefont_size=20,
+            tickfont_size=14,
+        ),
+        legend=dict(
+            x=0,
+            y=1.0,
+            bgcolor='rgba(255, 255, 255, 0)',
+            bordercolor='rgba(255, 255, 255, 0)'
+        ),
+        barmode='group',
+        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        bargroupgap=0.1  # gap between bars of the same location coordinate.
+    )
+    fig.show()
+
+
 
 ########################################################################################################################
 
 def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
-    import plotly.graph_objects as go
-    from functools import reduce
     SENTINEL = analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3)
     MODIS = analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS)
     print(SENTINEL)
@@ -132,15 +180,15 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
         ),
     ))
     fig.update_layout(
-        title='MODIS/S3-Mean night temperature correlation',
+        title='MODIS/S3-Mean day temperature correlation',
         titlefont_size=28,
         xaxis=dict(
-            title='Mean MODIS night temperature (°C)',
+            title='Mean MODIS day temperature (°C)',
             titlefont_size=20,
             tickfont_size=14,
         ),
         yaxis=dict(
-            title='Mean SENTINEL night temperature (°C)',
+            title='Mean SENTINEL day temperature (°C)',
             titlefont_size=20,
             tickfont_size=14,
         ))
@@ -150,7 +198,6 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
 ########################################################################################################################
 
 def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
-    import plotly.graph_objects as go
     stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']

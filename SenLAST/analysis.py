@@ -28,6 +28,8 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
     print("#################### SENTINEL RESULTS ####################")
 
     Sen_station_mean = []
+    Sen_station_median = []
+    Sen_station_stdev = []
 
     for i, polygons in enumerate(import_list):
 
@@ -63,11 +65,13 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
                 median_Sen = np.nanmedian(Sen_temperature_array)
                 # print("Median =" + " " + str(median_Sen))
                 Sen_final_median.append(median_Sen)
+                Station_median = np.nanmedian(Sen_final_median)
 
                 ## Calculate stdev ##
                 stdev_Sen = np.nanstd(Sen_temperature_array)
                 # print("Stdev =" + " " + str(stdev_Sen))
                 Sen_final_stdev.append(stdev_Sen)
+                Station_stdev = np.nanmedian(Sen_final_stdev)
 
                 ## Calculate variance ##
                 var_Sen = np.nanvar(Sen_temperature_array)
@@ -87,11 +91,16 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
             else:
                 pass
         print("Station " + str(i + 1) + " mean for all scenes =" + " " + str(Station_mean))
+        # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
+        # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
         Sen_station_mean.append(Station_mean)
+        Sen_station_median.append(Station_median)
+        Sen_station_stdev.append(Station_stdev)
+
         # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
         # Sen_station_mean.append(Sen_final_mean)
 
-    return Sen_station_mean
+    return Sen_station_median
 
 
 def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
@@ -104,6 +113,8 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
     modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
 
     Mod_station_mean = []
+    Mod_station_median = []
+    Mod_station_stdev = []
 
     print("#################### MODIS RESULTS ####################")
 
@@ -140,11 +151,13 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
                 median_Mod = np.nanmedian(Mod_temperature_array)
                 # print("Median =" + " " + str(median_Mod))
                 Mod_final_median.append(median_Mod)
+                Station_median = np.nanmedian(Mod_final_median)
 
                 ## Calculate stdev ##
                 stdev_Mod = np.nanstd(Mod_temperature_array)
                 # print("Stdev =" + " " + str(stdev_Mod))
                 Mod_final_stdev.append(stdev_Mod)
+                Station_stdev = np.nanmedian(Mod_final_stdev)
 
                 ## Calculate variance ##
                 var_Mod = np.nanvar(Mod_temperature_array)
@@ -164,11 +177,16 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
             else:
                 pass
         print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
+        # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
+        # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
         Mod_station_mean.append(Station_mean)
+        Mod_station_median.append(Station_median)
+        Mod_station_stdev.append(Station_stdev)
+
         # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
         # Mod_station_mean.append(Mod_final_mean)
 
-    return Mod_station_mean
+    return Mod_station_median
 
 
 ###############################################################################################
