@@ -2,6 +2,7 @@ import os
 import rasterio as rio
 import rasterio.mask
 import numpy as np
+import pandas as pd
 import shutil
 from SenLAST.base_information import extract_files_to_list, import_polygons
 
