@@ -2,6 +2,7 @@ import os
 import rasterio as rio
 import rasterio.mask
 import numpy as np
+import pandas as pd
 import shutil
 from SenLAST.base_information import extract_files_to_list, import_polygons
 
@@ -104,6 +105,7 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
     modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
 
     Mod_station_mean = []
+    Mod_station_time_series = []
 
     print("#################### MODIS RESULTS ####################")
 
@@ -163,12 +165,38 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
 
             else:
                 pass
-        print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
-        Mod_station_mean.append(Station_mean)
+        # print(Mod_final_mean)
+        # print(len(Mod_final_mean))
+        # print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
+        # Mod_station_mean.append(Station_mean)
         # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
         # Mod_station_mean.append(Mod_final_mean)
+        Mod_station_time_series.append(Mod_final_mean)
+    # return Mod_station_mean
+    return Mod_station_time_series
 
-    return Mod_station_mean
+
+def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path):
+    csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
+    print(csv_list)
+
+    MOD_data_list = analyze_MODIS_temperature(mod_directory=mod_directory, mod_shape_path=mod_shape_path, daytime_MODIS="Day")
+
+    print(MOD_data_list[2])
+    print(len(MOD_data_list))
+    df = pd.read_csv(csv_list[0], delimiter=",")
+    print(df)
+    print(df["TT_10"])
+    print(len(df["TT_10"]))
+
+    #for file in csv_list:
+    #    # Read csv data
+    #    df = pd.read_csv(file, delimiter=",")
+    #
+    #    print(df)
+
+
+
 
 
 ###############################################################################################
