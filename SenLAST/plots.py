@@ -102,12 +102,12 @@ def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, dayt
     print("MODIS = ")
     print(b)
     ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
-    # SENTINEL_1d = reduce(lambda x, y: x + y, a)
-    # MODIS_1d = reduce(lambda x, y: x + y, b)
-    # print(SENTINEL_1d)
-    # print(MODIS_1d)
-    zip_object = zip(a, b)
-    # zip_object = zip(SENTINEL_1d, MODIS_1d)
+    SENTINEL_1d = reduce(lambda x, y: x + y, a)
+    MODIS_1d = reduce(lambda x, y: x + y, b)
+    print(SENTINEL_1d)
+    print(MODIS_1d)
+    # zip_object = zip(a, b)
+    zip_object = zip(SENTINEL_1d, MODIS_1d)
     for list1_i, list2_i in zip_object:
         diff_list.append(abs(list1_i - list2_i))
     print("Difference S3-MODIS = ")
