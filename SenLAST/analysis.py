@@ -119,6 +119,8 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
     Mod_station_median = []
     Mod_station_stdev = []
 
+    Mod_station_time_series = []
+
     print("#################### MODIS RESULTS ####################")
 
     for i, polygons in enumerate(import_list):
@@ -179,41 +181,49 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
 
             else:
                 pass
-        print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
-        # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
-        # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
-        # Mod_station_mean.append(Station_mean)
-        # Mod_station_median.append(Station_median)
-        # Mod_station_stdev.append(Station_stdev)
+                Mod_station_time_series.append(Mod_final_mean)
 
-        # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
-        # Mod_station_mean.append(Mod_final_mean)
-        Mod_station_median.append(Mod_final_median)
+                ### activate this for old functionality ###
+                # print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
+                # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
+                # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
 
-    # return Mod_station_mean
-    return Mod_station_median
+                # Mod_station_mean.append(Station_mean)
+                # Mod_station_median.append(Station_median)
+                # Mod_station_stdev.append(Station_stdev)
+
+                # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
+                # Mod_station_mean.append(Mod_final_mean)
+
+            # return Mod_station_mean
+
+            return Mod_station_time_series
 
 
 def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path):
+    # pd.set_option("display.max_rows", None, "display.max_columns", None)
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     print(csv_list)
+    test_list = []
 
-    # MOD_data_list = analyze_MODIS_temperature(mod_directory=mod_directory, mod_shape_path=mod_shape_path, daytime_MODIS="Day")
-
-    # print(MOD_data_list[2])
+    MOD_data_list = analyze_MODIS_temperature(mod_directory=mod_directory, mod_shape_path=mod_shape_path,
+                                              daytime_MODIS="Day")
+    # print(MOD_data_list)
     # print(len(MOD_data_list))
-    df = pd.read_csv(csv_list[0], delimiter=",")
-    print(df)
-    print(df["TT_10"])
-    # print(len(df["TT_10"]))
+    for i, file in enumerate(csv_list):
+        # Read csv data
+        df = pd.read_csv(file, delimiter=",")
+        s = df["TT_10"]
+        print(s)
+        print(MOD_data_list[i])
+        print(len(MOD_data_list))
 
-    for file in csv_list:
-       # Read csv data
-       df = pd.read_csv(file, delimiter=",")
-
-       print(df)
-       print(df["TT_10"])
-
+        # print(s)
+    #     test_list.append(s)
+    # print(test_list)
+    # print("lalalalala")
+    # print(test_list[0])
+    # print(np.mean(test_list[0][0]))
 
 ###############################################################################################
 
