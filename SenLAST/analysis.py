@@ -4,6 +4,8 @@ import rasterio.mask
 import numpy as np
 import pandas as pd
 import shutil
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
 from SenLAST.base_information import extract_files_to_list, import_polygons
 
 # List of station names
@@ -222,11 +224,11 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path):
 
 
 def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter):
-    import matplotlib.pyplot as plt
     # pd.set_option("display.max_rows", None, "display.max_columns", None)
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     MOD_data_list = extract_MODIS_temp_list(mod_directory=mod_directory, mod_shape_path=mod_shape_path)
 
+    print("######################## MODIS ########################")
     for i, file in enumerate(csv_list):
         # Read csv data
         df = pd.read_csv(file, delimiter=",")
@@ -241,6 +243,21 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
             DWD_variable = "DWD temperature 5cm (°C)"
         if DWD_temp_parameter == "TT_10":
             DWD_variable = "DWD temperature 2m (°C)"
+
+        # Fit linear model
+        Mod_DWD_correlation_list = np.array(MOD_data_list[i]).reshape(-1, 1)
+        model = LinearRegression()
+        model.fit(Mod_DWD_correlation_list, temp_2m)
+        model = LinearRegression().fit(Mod_DWD_correlation_list, temp_2m)
+        r_sq = model.score(Mod_DWD_correlation_list, temp_2m)
+
+        print("")
+        print(station_names[i])
+        print('R2:', r_sq)
+        print('Y-intercept:', model.intercept_)
+        print('Coefficient:', model.coef_)
+
+        # Plot scatterplot for each station
         fig, ax = plt.subplots()
         ax.set_title('MODIS/DWD temperature correlation (' + station_names[i] + ")")
         ax.set_xlabel('MODIS temperature (°C)')
@@ -281,17 +298,15 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path):
 
 
 def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter):
-    import matplotlib.pyplot as plt
     # pd.set_option("display.max_rows", None, "display.max_columns", None)
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
 
+    print("######################## SENTINEL ########################")
     for i, file in enumerate(csv_list):
         # Read csv data
         df = pd.read_csv(file, delimiter=",")
-        print(df)
         temp_2m = df[DWD_temp_parameter]
-        print(temp_2m)
 
         tmp = temp_2m[temp_2m == -999]  # .index.item()
         if len(tmp) > 0:
@@ -302,11 +317,26 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
             DWD_variable = "DWD temperature 5cm (°C)"
         if DWD_temp_parameter == "TT_10":
             DWD_variable = "DWD temperature 2m (°C)"
+
+        # Fit linear model
+        Sen_DWD_correlation_list = np.array(Sen_data_list[i]).reshape(-1, 1)
+        model = LinearRegression()
+        model.fit(Sen_DWD_correlation_list, temp_2m)
+        model = LinearRegression().fit(Sen_DWD_correlation_list, temp_2m)
+        r_sq = model.score(Sen_DWD_correlation_list, temp_2m)
+
+        print("")
+        print(station_names[i])
+        print('R2:', r_sq)
+        print('Y-intercept:', model.intercept_)
+        print('Coefficient:', model.coef_)
+
+        # Plot scatterplot for each station
         fig, ax = plt.subplots()
         ax.set_title('Sentinel-3/DWD temperature correlation (' + station_names[i] + ")")
         ax.set_xlabel('Sentinel-3 temperature (°C)')
         ax.set_ylabel(DWD_variable)
         plt.plot(Sen_data_list[i], temp_2m, 'o')
-        #m, b = np.polyfit(MOD_data_list[i], temp_2m, 1)
-        #plt.plot(MOD_data_list[i], m * temp_2m + b)
+        # m, b = np.polyfit(Sen_data_list[i], temp_2m, 1)
+        # plt.plot(Sen_data_list[i], m * temp_2m + b)
         plt.show()
