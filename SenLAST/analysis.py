@@ -254,7 +254,9 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
         print("")
         print(station_names[i])
         print('R2:', r_sq)
+        intercept = model.intercept_
         print('Y-intercept:', model.intercept_)
+        coefficient = model.coef_
         print('Coefficient:', model.coef_)
 
         # Plot scatterplot for each station
@@ -262,9 +264,9 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
         ax.set_title('MODIS/DWD temperature correlation (' + station_names[i] + ")")
         ax.set_xlabel('MODIS temperature (°C)')
         ax.set_ylabel(DWD_variable)
+        abline_values = [coefficient * i + intercept for i in Mod_DWD_correlation_list]
+        plt.plot(Mod_DWD_correlation_list, abline_values, ("#FFA500"))
         plt.plot(MOD_data_list[i], temp_2m, 'o')
-        #m, b = np.polyfit(MOD_data_list[i], temp_2m, 1)
-        #plt.plot(MOD_data_list[i], m * temp_2m + b)
         plt.show()
 
 
@@ -328,7 +330,9 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
         print("")
         print(station_names[i])
         print('R2:', r_sq)
+        intercept = model.intercept_
         print('Y-intercept:', model.intercept_)
+        coefficient = model.coef_
         print('Coefficient:', model.coef_)
 
         # Plot scatterplot for each station
@@ -336,7 +340,7 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
         ax.set_title('Sentinel-3/DWD temperature correlation (' + station_names[i] + ")")
         ax.set_xlabel('Sentinel-3 temperature (°C)')
         ax.set_ylabel(DWD_variable)
+        abline_values = [coefficient * i + intercept for i in Sen_DWD_correlation_list]
+        plt.plot(Sen_DWD_correlation_list, abline_values, ("#FFA500"))
         plt.plot(Sen_data_list[i], temp_2m, 'o')
-        # m, b = np.polyfit(Sen_data_list[i], temp_2m, 1)
-        # plt.plot(Sen_data_list[i], m * temp_2m + b)
         plt.show()
