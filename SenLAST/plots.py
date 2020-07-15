@@ -56,7 +56,6 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
     stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
-
     fig = go.Figure(data=[
         go.Bar(name='S3 Mean Night Temperature (°C)', x=stations, y=analyze_SENTINEL_temperature(sen_directory=sen_directory,
                                                                                            sen_shape_path=sen_shape_path,
@@ -161,6 +160,7 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
     fig.show()
 
 
+
 ########################################################################################################################
 
 def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
@@ -254,6 +254,86 @@ def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_
         ),
         barmode='group',
         bargap=0.5,  # gap between bars of adjacent location coordinates.
+        bargroupgap=0.1  # gap between bars of the same location coordinate.
+    )
+    fig.show()
+
+
+def SenDWD_barchart(sen_directory, sen_shape_path, path_to_csv, DWD_temp_parameter):
+    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
+                'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
+                'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
+    DWD_2m, Sen = analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter="TT_10")
+    DWD_5cm, Sen = analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter="TM5_10")
+    print(Sen)
+    print(DWD_2m)
+    fig = go.Figure(data=[
+        go.Bar(name='S3 Mean Station Temperature (°C)', x=stations, y=Sen),
+        go.Bar(name='DWD Mean Station Temperature 2m (°C)', x=stations, y=DWD_2m),
+        go.Bar(name='DWD Mean Station Temperature 5cm (°C)', x=stations, y=DWD_5cm)
+    ])
+    # Change the bar mode
+    fig.update_layout(
+        title='Mean S3/DWD temperature (n = 130 scenes)',
+        titlefont_size=28,
+        xaxis=dict(
+            title='Stations',
+            titlefont_size=20,
+            tickfont_size=14,
+        ),
+        yaxis=dict(
+            title='Mean temperature (°C)',
+            titlefont_size=20,
+            tickfont_size=14,
+        ),
+        legend=dict(
+            x=0.87,
+            y=1.0,
+            bgcolor='rgba(255, 255, 255, 0)',
+            bordercolor='rgba(255, 255, 255, 0)'
+        ),
+        barmode='group',
+        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        bargroupgap=0.1  # gap between bars of the same location coordinate.
+    )
+    fig.show()
+
+
+def ModDWD_barchart(mod_directory, mod_shape_path, path_to_csv):
+    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
+                'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
+                'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
+    DWD_2m, MOD = analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter="TT_10")
+    DWD_5cm, MOD = analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter="TM5_10")
+    print(MOD)
+    print(DWD_2m)
+    fig = go.Figure(data=[
+        go.Bar(name='MODIS Mean Station Temperature (°C)', x=stations, y=MOD),
+        go.Bar(name='DWD Mean Station Temperature 2m (°C)', x=stations, y=DWD_2m),
+        go.Bar(name='DWD Mean Station Temperature 5cm (°C)', x=stations, y=DWD_5cm)
+    ])
+    # Change the bar mode
+    fig.update_layout(
+        title='Mean MODIS/DWD temperature (n = 262 scenes)',
+        titlefont_size=28,
+        xaxis=dict(
+            title='Stations',
+            titlefont_size=20,
+            tickfont_size=14,
+        ),
+        yaxis=dict(
+            title='Mean temperature (°C)',
+            titlefont_size=20,
+            tickfont_size=14,
+        ),
+        legend=dict(
+            x=0.87,
+            y=1.0,
+            bgcolor='rgba(255, 255, 255, 0)',
+            bordercolor='rgba(255, 255, 255, 0)'
+        ),
+        barmode='group',
+        bargap=0.15,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
     fig.show()
