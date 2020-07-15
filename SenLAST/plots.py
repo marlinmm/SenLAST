@@ -260,7 +260,6 @@ def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_
 
 
 def plot_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter):
-    # pd.set_option("display.max_rows", None, "display.max_columns", None)
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     MOD_data_list = extract_MODIS_temp_list(mod_directory=mod_directory, mod_shape_path=mod_shape_path)
 
@@ -270,7 +269,7 @@ def plot_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_paramete
         df = pd.read_csv(file, delimiter=",")
         temp_2m = df[DWD_temp_parameter]
 
-        tmp = temp_2m[temp_2m == -999]  # .index.item()
+        tmp = temp_2m[temp_2m == -999]
         if len(tmp) > 0:
             for j, value in enumerate(tmp):
                 temp_2m = temp_2m.drop([tmp.index[j]])
@@ -307,7 +306,6 @@ def plot_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_paramete
 
 
 def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter):
-    # pd.set_option("display.max_rows", None, "display.max_columns", None)
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
     DWD_mean_list = []
@@ -318,7 +316,7 @@ def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_param
         df = pd.read_csv(file, delimiter=",")
         temp_2m = df[DWD_temp_parameter]
 
-        tmp = temp_2m[temp_2m == -999]  # .index.item()
+        tmp = temp_2m[temp_2m == -999]
         if len(tmp) > 0:
             for j, value in enumerate(tmp):
                 temp_2m = temp_2m.drop([tmp.index[j]])
@@ -392,7 +390,7 @@ def SenDWD_barchart(sen_directory, sen_shape_path, path_to_csv, DWD_temp_paramet
             bordercolor='rgba(255, 255, 255, 0)'
         ),
         barmode='group',
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        bargap=0.3,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
     fig.show()
@@ -432,7 +430,7 @@ def ModDWD_barchart(mod_directory, mod_shape_path, path_to_csv):
             bordercolor='rgba(255, 255, 255, 0)'
         ),
         barmode='group',
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        bargap=0.3,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
     fig.show()
