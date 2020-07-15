@@ -90,20 +90,20 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
                 Sen_final_range.append(range_Sen)
 
             else:
-                pass
+                 pass
         print("Station " + str(i + 1) + " mean for all scenes =" + " " + str(Station_mean))
         # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
         # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
-        # Sen_station_mean.append(Station_mean)
+        Sen_station_mean.append(Station_mean)
         # Sen_station_median.append(Station_median)
         # Sen_station_stdev.append(Station_stdev)
 
         # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
         # Sen_station_mean.append(Sen_final_mean)
-        Sen_station_median.append(Sen_final_median)
+        # Sen_station_median.append(Sen_final_median)
 
-    # return Sen_station_mean
-    return Sen_station_median
+    return Sen_station_mean
+    # return Sen_station_median
 
 
 def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
@@ -114,12 +114,11 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
     """
     import_list = import_polygons(shape_path=mod_shape_path)
     modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
+    print(len(modis_file_list))
 
     Mod_station_mean = []
     Mod_station_median = []
     Mod_station_stdev = []
-
-    Mod_station_time_series = []
 
     print("#################### MODIS RESULTS ####################")
 
@@ -181,47 +180,133 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
 
             else:
                 pass
-                Mod_station_time_series.append(Mod_final_mean)
 
-                ### activate this for old functionality ###
-                # print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
-                # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
-                # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
+        ### activate this for old functionality ###
+        # print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
+        # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
+        # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
 
-                # Mod_station_mean.append(Station_mean)
-                # Mod_station_median.append(Station_median)
-                # Mod_station_stdev.append(Station_stdev)
+        Mod_station_mean.append(Station_mean)
+        # Mod_station_median.append(Station_median)
+        # Mod_station_stdev.append(Station_stdev)
 
-                # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
-                # Mod_station_mean.append(Mod_final_mean)
+        # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
+        # Mod_station_mean.append(Mod_final_mean)
 
-            # return Mod_station_mean
-
-            return Mod_station_time_series
+    return Mod_station_mean
 
 
-def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path):
+def extract_MODIS_temp_list(mod_directory, mod_shape_path):
+    """
+    returns the temperature value for each pixel of each station for each MODIS scene
+    :return:
+    returns one temperature array for each station
+    """
+    import_list = import_polygons(shape_path=mod_shape_path)
+    modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
+
+    Mod_station_time_series = []
+
+    for i, polygons in enumerate(import_list):
+        ## Initialize empty analysis lists
+        Mod_final_mean = []
+
+        for j, tifs in enumerate(modis_file_list):
+                src1 = rio.open(modis_file_list[j])
+                mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
+                Mod_temperature_array = mask[0][0]
+                mean_Mod = np.nanmean(Mod_temperature_array)
+                Mod_final_mean.append(mean_Mod)
+        Mod_station_time_series.append(Mod_final_mean)
+    return Mod_station_time_series
+
+
+def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter):
+    import matplotlib.pyplot as plt
     # pd.set_option("display.max_rows", None, "display.max_columns", None)
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
-    print(csv_list)
-    test_list = []
+    MOD_data_list = extract_MODIS_temp_list(mod_directory=mod_directory, mod_shape_path=mod_shape_path)
 
-    MOD_data_list = analyze_MODIS_temperature(mod_directory=mod_directory, mod_shape_path=mod_shape_path,
-                                              daytime_MODIS="Day")
-    # print(MOD_data_list)
-    # print(len(MOD_data_list))
     for i, file in enumerate(csv_list):
         # Read csv data
         df = pd.read_csv(file, delimiter=",")
-        s = df["TT_10"]
-        print(s)
-        print(MOD_data_list[i])
-        print(len(MOD_data_list))
+        temp_2m = df[DWD_temp_parameter]
 
-        # print(s)
-    #     test_list.append(s)
-    # print(test_list)
-    # print("lalalalala")
-    # print(test_list[0])
-    # print(np.mean(test_list[0][0]))
+        tmp = temp_2m[temp_2m == -999]  # .index.item()
+        if len(tmp) > 0:
+            for j, value in enumerate(tmp):
+                temp_2m = temp_2m.drop([tmp.index[j]])
+                MOD_data_list[i].pop(tmp.index[j])
+        if DWD_temp_parameter == "TM5_10":
+            DWD_variable = "DWD temperature 5cm (°C)"
+        if DWD_temp_parameter == "TT_10":
+            DWD_variable = "DWD temperature 2m (°C)"
+        fig, ax = plt.subplots()
+        ax.set_title('MODIS/DWD temperature correlation (' + station_names[i] + ")")
+        ax.set_xlabel('MODIS temperature (°C)')
+        ax.set_ylabel(DWD_variable)
+        plt.plot(MOD_data_list[i], temp_2m, 'o')
+        #m, b = np.polyfit(MOD_data_list[i], temp_2m, 1)
+        #plt.plot(MOD_data_list[i], m * temp_2m + b)
+        plt.show()
 
+
+def extract_MODIS_temp_list(sen_directory, sen_shape_path):
+    """
+    returns the temperature value for each pixel of each station for each SENTINEL scene
+    prints an array for the scenes according to the stations
+    :return:
+    returns three arrays (1st array displayed for each station is the temperature array)
+    returns one temperature array for each station if a[0][0]
+    """
+    import_list = import_polygons(shape_path=sen_shape_path)
+    sentinel_file_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
+
+    Sen_station_time_series = []
+
+    for i, polygons in enumerate(import_list):
+        ## Initialize empty analysis lists
+        Sen_final_mean = []
+
+        for j, tifs in enumerate(sentinel_file_list):
+                src1 = rio.open(sentinel_file_list[j])
+                mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
+                Sen_temperature_array = mask[0][0]
+
+                ## Calculate mean ##
+                mean_Sen = np.nanmean(Sen_temperature_array)
+                Sen_final_mean.append(mean_Sen)
+        Sen_station_time_series.append(Sen_final_mean)
+    return Sen_station_time_series
+
+
+def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter):
+    import matplotlib.pyplot as plt
+    # pd.set_option("display.max_rows", None, "display.max_columns", None)
+    csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
+    Sen_data_list = extract_MODIS_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
+
+    for i, file in enumerate(csv_list):
+        # Read csv data
+        df = pd.read_csv(file, delimiter=",")
+        print(df)
+        temp_2m = df[DWD_temp_parameter]
+        print(temp_2m)
+
+        tmp = temp_2m[temp_2m == -999]  # .index.item()
+        if len(tmp) > 0:
+            for j, value in enumerate(tmp):
+                temp_2m = temp_2m.drop([tmp.index[j]])
+                Sen_data_list[i].pop(tmp.index[j])
+        if DWD_temp_parameter == "TM5_10":
+            DWD_variable = "DWD temperature 5cm (°C)"
+        if DWD_temp_parameter == "TT_10":
+            DWD_variable = "DWD temperature 2m (°C)"
+        fig, ax = plt.subplots()
+        ax.set_title('Sentinel-3/DWD temperature correlation (' + station_names[i] + ")")
+        ax.set_xlabel('Sentinel-3 temperature (°C)')
+        ax.set_ylabel(DWD_variable)
+        plt.plot(Sen_data_list[i], temp_2m, 'o')
+        #m, b = np.polyfit(MOD_data_list[i], temp_2m, 1)
+        #plt.plot(MOD_data_list[i], m * temp_2m + b)
+        plt.show()
