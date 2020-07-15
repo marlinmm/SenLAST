@@ -198,9 +198,9 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
 
 def extract_MODIS_temp_list(mod_directory, mod_shape_path):
     """
-    returns the temperature value for each pixel of each station for each MODIS scene
+    returns list of lists
     :return:
-    returns one temperature array for each station
+    returns
     """
     import_list = import_polygons(shape_path=mod_shape_path)
     modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
@@ -251,7 +251,7 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
         plt.show()
 
 
-def extract_MODIS_temp_list(sen_directory, sen_shape_path):
+def extract_Sentinel_temp_list(sen_directory, sen_shape_path):
     """
     returns the temperature value for each pixel of each station for each SENTINEL scene
     prints an array for the scenes according to the stations
@@ -284,7 +284,7 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
     import matplotlib.pyplot as plt
     # pd.set_option("display.max_rows", None, "display.max_columns", None)
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
-    Sen_data_list = extract_MODIS_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
+    Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
 
     for i, file in enumerate(csv_list):
         # Read csv data
