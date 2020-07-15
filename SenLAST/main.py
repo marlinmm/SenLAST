@@ -64,6 +64,7 @@ def main():
     #                   mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TM5_10")
     analyze_Sentinel_DWD(path_to_csv=SENTINEL_DWD_directory, sen_directory=SENTINEL_cloud_free_directory,
                          sen_shape_path=SENTINEL_Shapefile_directory, DWD_temp_parameter="TM5_10")
+
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
 
