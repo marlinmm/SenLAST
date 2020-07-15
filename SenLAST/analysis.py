@@ -296,3 +296,7 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
         DWD_mean_list.append(np.mean(temp_2m))
     return DWD_mean_list, Mod_data_mean_list
 
+
+def count_month_occurances(path_to_satellite_data):
+    satellite_data = extract_files_to_list(path_to_folder=path_to_satellite_data, datatype=".csv")
+    #### hier weiter mit dem scheiß ####
