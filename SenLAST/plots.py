@@ -207,21 +207,34 @@ def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
 
-    # 2018-09-30
-    ground_temp = [14.8]
-    air_temp = [16.7]
+    # 2020-01-16
+    # TT_10 = [1.1, 1.7, 6.7, 3.5, -0.6, 6.5, 3.1, 2.2, 3.5, 1.4, 8.1, 6.7, 4.0, 5.2, 2.2, 3.6, -0.7, 4.2, 0.7, 4.7]
+    # TM5_10 = [-1.1, -1.3, 4.7, 1.4, -2.6, 4.1, 0.9, -0.2, 2.2, -0.8, 6.0, 3.5, 1.9, 1.7, -0.5, 1.6, -2.9, 2.4, -2.5, 0.4]
+
+    # 2020-03-27
+    # TT_10 = [9.0, 10.3, 8.1, 4.6, 12.8, 7.1, 10.9, 6.3, 4.3, 8.3, 6.3, 9.7, 11.2, 9.1, 10.2, 12.0, 13.3, 14.3, 9.3, 13.2]
+    # TM5_10 = [12.8, 15.7, 11.5, 10.4, 16.9, 11.9, 16.2, 8.5, 7.1, 12.8, 11.7, 13.0, 13.3, 15.1, 14.3, 15.7, 17.7, 17.1, 13.0, 16.1]
+
+    # 2019-07-17
+    TT_10 = [12.3, 14.6, 15.2, 11.4, 12.6, 12.9, 14.6, 12.2, 11.6, 14.1, 12.9, 13.3, 13.4, 15.0, 14.0, 14.4, 17.1, 14.1, 11.5, 12.5]
+    TM5_10 = [10.7, 11.7, 12.9, 9.0, 11.8, 11.8, 12.5, 10.1, 10.1, 12.1, 11.5, 10.7, 11.1, 13.6, 12.3, 12.0, 15.3, 12.7, 8.3, 10.2]
+
 
     fig = go.Figure(data=[
-        go.Bar(name='S3 Mean Night Temperature (°C)', x=stations, y=analyze_SENTINEL_temperature(sen_directory=sen_directory,
+        go.Bar(name='S3 Mean Temperature (°C)', x=stations, y=analyze_SENTINEL_temperature(sen_directory=sen_directory,
                                                                                            sen_shape_path=sen_shape_path,
                                                                                            daytime_S3=daytime_S3)),
-        go.Bar(name='MODIS Mean Night Temperature (°C)', x=stations, y=analyze_MODIS_temperature(mod_directory=mod_directory,
+        go.Bar(name='MODIS Mean Temperature (°C)', x=stations, y=analyze_MODIS_temperature(mod_directory=mod_directory,
                                                                                            mod_shape_path=mod_shape_path,
-                                                                                           daytime_MODIS=daytime_MODIS))
+                                                                                           daytime_MODIS=daytime_MODIS)),
+        go.Bar(name='DWD 2m Absolute Temperature (°C)', x=stations,
+               y=TT_10),
+        go.Bar(name='DWD 5cm Absolute Temperature (°C)', x=stations,
+               y=TM5_10)
     ])
     # Change the bar mode
     fig.update_layout(
-        title='Mean night temperature (n_S3 = 64 scenes; n_MODIS = 57 scenes)',
+        title='Temperature (17.07.19, 9pm) for investigated stations',
         titlefont_size=28,
         xaxis=dict(
             title='Stations',
@@ -229,7 +242,7 @@ def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_
             tickfont_size=14,
         ),
         yaxis=dict(
-            title='Mean night temperature (°C)',
+            title='Temperature (°C)',
             titlefont_size=20,
             tickfont_size=14,
         ),
@@ -240,7 +253,7 @@ def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_
             bordercolor='rgba(255, 255, 255, 0)'
         ),
         barmode='group',
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        bargap=0.5,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
     fig.show()
