@@ -199,7 +199,7 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
     return Mod_station_mean
 
 
-def extract_MODIS_temp_list(mod_directory, mod_shape_path):
+def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
     """
     returns list of lists
     :return:
@@ -215,6 +215,7 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path):
         Mod_final_mean = []
 
         for j, tifs in enumerate(modis_file_list):
+            #if daytime_MODIS in str(modis_file_list[j]):
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
@@ -224,7 +225,7 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path):
     return Mod_station_time_series
 
 
-def extract_Sentinel_temp_list(sen_directory, sen_shape_path):
+def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
     """
     returns the temperature value for each pixel of each station for each SENTINEL scene
     prints an array for the scenes according to the stations
@@ -242,6 +243,7 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path):
         Sen_final_mean = []
 
         for j, tifs in enumerate(sentinel_file_list):
+            # if daytime_S3 in str(sentinel_file_list[j]):
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
