@@ -15,7 +15,7 @@ def eliminate_MODIS_cloudy_data(mod_directory, shape_path):
     if os.path.exists(cloud_free):
         shutil.rmtree(cloud_free)
     os.mkdir(mod_directory + "/cloud_free")
-    selected_tifs = extract_files_to_list(path_to_folder=mod_directory)
+    selected_tifs = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
 
     # import polygons from shapefile
     import_list = import_polygons(shape_path=shape_path)
@@ -56,7 +56,7 @@ def eliminate_nanoverlap(sen_directory, shape_path):
     :return:
     """
     import_list = import_polygons(shape_path=shape_path)
-    file_list = extract_files_to_list(path_to_folder=sen_directory)
+    file_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
     tifs_selected = sen_directory + "/selected"
     if os.path.exists(tifs_selected):
         shutil.rmtree(tifs_selected)
@@ -85,7 +85,7 @@ def eliminate_SENTINEL_cloudy_data(sen_directory, shape_path):
     if os.path.exists(cloud_free):
         shutil.rmtree(cloud_free)
     os.mkdir(sen_directory + "/selected/cloud_free")
-    selected_tifs = extract_files_to_list(path_to_folder=sen_directory + "/selected")
+    selected_tifs = extract_files_to_list(path_to_folder=sen_directory + "/selected", datatype=".tif")
 
     # import polygons from shapefile
     import_list = import_polygons(shape_path=shape_path)
