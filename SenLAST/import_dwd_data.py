@@ -6,6 +6,9 @@ from SenLAST.base_information import *
 
 def import_DWD_data_Sentinel(sen_directory, csv_directory):
     sen_date = extract_SENTINEL_date(sen_directory=sen_directory)
+    print(sen_date)
+    sen_date.sort()
+    print(sen_date)
     sen_time = extract_SENTINEL_timestamp(sen_directory=sen_directory)
     sen_date_time = []
     csv_file_list = extract_files_to_list(path_to_folder=csv_directory, datatype=".csv")

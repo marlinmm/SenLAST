@@ -92,8 +92,6 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
                 # print("Range =" + " " + str(range_Sen))
                 Sen_final_range.append(range_Sen)
 
-            else:
-                 pass
         print("Station " + str(i + 1) + " mean for all scenes =" + " " + str(Station_mean))
         # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
         # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
@@ -180,9 +178,6 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
                 range_Mod = np.nanmax(Mod_temperature_array) - np.nanmin(Mod_temperature_array)
                 # print("Range =" + " " + str(range_Mod))
                 Mod_final_range.append(range_Mod)
-
-            else:
-                pass
 
         ### activate this for old functionality ###
         # print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))

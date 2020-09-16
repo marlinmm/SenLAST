@@ -18,6 +18,7 @@ def extract_SENTINEL_date(sen_directory):
     for filename in os.listdir(sen_directory):
         timestamp = filename[8:18]
         SENTINEL_date_list.append(os.path.join(timestamp))
+    # SENTINEL_date_list.sort()
     return SENTINEL_date_list
 
 

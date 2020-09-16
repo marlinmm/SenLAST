@@ -31,12 +31,14 @@ def main():
     # Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare"
     Sentinel_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/Sentinel"
     MODIS_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/MODIS"
+
     ### For allstations_alldata function use the following directories
     # Sentinel_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/Sentinel/2018_09_30"
     # MODIS_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/MODIS/2018_09_30"
 
     ## DWD ##
     SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel/"
+    # SENTINEL_DWD_directory = Base_Folder + "Juni_2020/Sentinel/DWD/"
     MODIS_DWD_directory = Base_Folder + "DWD/MODIS/"
 
     ## SHAPEFILES ##
@@ -46,6 +48,10 @@ def main():
     ####################### USER-DEPENDENT FUNCTIONS TO BE USED #######################
 
     ##### RASTER-ANALYSIS SECTION #####
+
+    rename_sentinel(sen_directory=SENTINEL_cloud_free_directory)
+
+    # import_DWD_data_Sentinel(sen_directory=SENTINEL_cloud_free_directory, csv_directory=SENTINEL_DWD_directory)
     # analyze_SENTINEL_temperature(sen_directory=Sentinel_Datapair_directory, sen_shape_path=SENTINEL_Shapefile_directory)
     # analyze_MODIS_temperature(mod_directory=MODIS_Datapair_directory, mod_shape_path=MODIS_Shapefile_directory)
     # SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
@@ -72,10 +78,10 @@ def main():
     #                   path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")
     # plot_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
     #                mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TT_10")
-    allstations_alldata(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
-                        daytime_S3="",
-                        sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-                        daytime_MODIS="")
+    # allstations_alldata(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
+    #                     daytime_S3="",
+    #                     sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+    #                     daytime_MODIS="")
     # count_all_occurences(satellite_directory=MODIS_cloud_free_directory)
 
     statistics_time = datetime.now()
