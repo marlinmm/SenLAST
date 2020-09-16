@@ -3,6 +3,7 @@ import fiona
 import rasterio as rio
 import rasterio.mask
 import numpy as np
+import shutil
 
 
 def extract_files_to_list(path_to_folder, datatype):
@@ -67,7 +68,7 @@ def extract_time_value_MODIS(mod_time_directory, shape_path):
     return all_time_list
 
 
-def rename_files(mod_directory, mod_time_directory,  shape_path):
+def rename_files(mod_directory, mod_time_directory, shape_path):
     new_mod_time_directory = mod_time_directory
     new_mod_directory = mod_directory
     time_list = extract_time_value_MODIS(mod_time_directory=new_mod_time_directory, shape_path=shape_path)
@@ -79,3 +80,13 @@ def rename_files(mod_directory, mod_time_directory,  shape_path):
         #name = tifs[0:hier dein Index]
         print(name)
         os.rename(tifs, name + time_list[i] + ".tif")
+
+def rename_sentinel(sen_directory):
+    sentinel_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
+    rename_folder = sen_directory + "/renamed/"
+    if not os.path.exists(rename_folder):
+        os.mkdir(rename_folder)
+    for i, tifs in enumerate(sentinel_list):
+        new_tif_name = tifs[tifs.index("S3")+8:len(tifs)-4] + "_" + tifs[tifs.index("S3"):tifs.index("S3")+3] + ".tif"
+        print(new_tif_name)
+        shutil.copy(tifs, rename_folder + new_tif_name)
