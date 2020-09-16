@@ -48,8 +48,8 @@ def main():
     ####################### USER-DEPENDENT FUNCTIONS TO BE USED #######################
 
     ##### RASTER-ANALYSIS SECTION #####
-
-    rename_sentinel(sen_directory=SENTINEL_cloud_free_directory)
+    "fdfsdfgfdsfgdfgh"
+    rename_sentinel(sen_directory=SENTINEL_time_overlap_directory)
 
     # import_DWD_data_Sentinel(sen_directory=SENTINEL_cloud_free_directory, csv_directory=SENTINEL_DWD_directory)
     # analyze_SENTINEL_temperature(sen_directory=Sentinel_Datapair_directory, sen_shape_path=SENTINEL_Shapefile_directory)
