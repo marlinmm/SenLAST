@@ -92,19 +92,19 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
                 # print("Range =" + " " + str(range_Sen))
                 Sen_final_range.append(range_Sen)
 
-        print("Station " + str(i + 1) + " mean for all scenes =" + " " + str(Station_mean))
-        # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
+        # print("Station " + str(i + 1) + " mean for all scenes =" + " " + str(Station_mean))
+        print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
         # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
-        Sen_station_mean.append(Station_mean)
-        # Sen_station_median.append(Station_median)
+        # Sen_station_mean.append(Station_mean)
+        Sen_station_median.append(Station_median)
         # Sen_station_stdev.append(Station_stdev)
 
         # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
         # Sen_station_mean.append(Sen_final_mean)
         # Sen_station_median.append(Sen_final_median)
 
-    return Sen_station_mean
-    # return Sen_station_median
+    # return Sen_station_mean
+    return Sen_station_median
 
 
 def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
@@ -181,17 +181,18 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
 
         ### activate this for old functionality ###
         # print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
-        # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
+        print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
         # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
 
-        Mod_station_mean.append(Station_mean)
-        # Mod_station_median.append(Station_median)
+        # Mod_station_mean.append(Station_mean)
+        Mod_station_median.append(Station_median)
         # Mod_station_stdev.append(Station_stdev)
 
         # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
         # Mod_station_mean.append(Mod_final_mean)
 
-    return Mod_station_mean
+    # return Mod_station_mean
+    return Mod_station_median
 
 
 def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
