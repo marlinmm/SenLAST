@@ -138,18 +138,19 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
 
 ########################################################################################################################
 
-def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS, path_to_csv):
+
+def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS, stat_metric):#, path_to_csv):
     diff_list = []
+    a = calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_metric)
+    b = calculate_statics_MODIS(mod_directory, mod_shape_path, daytime_MODIS, stat_metric)
     # a = analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3)
-    # b = analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS)
-    # a = analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3)
-    a = analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS)
-    DWD_5cm, Sen = analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter="TT_10")
-    b = DWD_5cm
-    print("Sentinel = ")
-    print(a)
-    print("MODIS = ")
-    print(b)
+    # a = analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS)
+    # DWD_5cm, Sen = analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter="TT_10")
+    # b = DWD_5cm
+    # print("Sentinel = ")
+    # print(a)
+    # print("MODIS = ")
+    # print(b)
     ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
     # SENTINEL_1d = reduce(lambda x, y: x + y, a)
     # MODIS_1d = reduce(lambda x, y: x + y, b)
@@ -158,8 +159,8 @@ def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, dayt
     zip_object = zip(a, b)
     # zip_object = zip(SENTINEL_1d, MODIS_1d)
     for list1_i, list2_i in zip_object:
-        diff_list.append(abs(list1_i - list2_i))
-        # diff_list.append(list1_i - list2_i)
+        # diff_list.append(abs(list1_i - list2_i))
+        diff_list.append(list1_i - list2_i)
     print("Difference S3-MODIS = ")
     print(diff_list)
     print("mean difference = ")
@@ -171,7 +172,7 @@ def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, dayt
     return diff_list
 
 
-def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS, path_to_csv):
+def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS, stat_metric):#, path_to_csv):
     stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
                 'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
@@ -182,7 +183,7 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
         go.Bar(name='', x=stations,
                y=mean_diff(sen_directory=sen_directory, mod_directory=mod_directory,
                                               sen_shape_path=sen_shape_path, mod_shape_path=mod_shape_path,
-                                              daytime_S3=daytime_S3, daytime_MODIS=daytime_MODIS, path_to_csv=path_to_csv)),
+                                              daytime_S3=daytime_S3, daytime_MODIS=daytime_MODIS, stat_metric=stat_metric)),#, path_to_csv=path_to_csv)),
     ])
     fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
     fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
@@ -541,6 +542,4 @@ def SenMod_histogram(mod_directory, sen_directory, sen_shape_path, mod_shape_pat
         data=df, x="SLSTR minus MODIS Difference", kde=True)
     g.set_axis_labels(daytime_MODIS + "time SLSTR minus MODIS Difference", "Number")
     g.set_titles("{Histogram of " + daytime_MODIS + "time Difference")
-
     plt.show()
-
