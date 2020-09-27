@@ -143,13 +143,11 @@ def calculate_statics_MODIS(mod_directory, mod_shape_path, day_night_string, sta
         Mod_final_variance = []
         Mod_final_percentile = []
         Mod_final_range = []
-        file_counter = 0
 
         print("{}.{}".format(i + 1, station_names[i]))
 
         for j, tifs in enumerate(modis_file_list):
             if day_night_string in str(modis_file_list[j]):
-                file_counter = file_counter + 1
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
@@ -207,11 +205,11 @@ def calculate_statics_MODIS(mod_directory, mod_shape_path, day_night_string, sta
             Mod_station_median.append(Mod_final_median)
 
     if stat_metric == "mean" or stat_metric == "values_mean":
-        return Mod_station_mean, file_counter
+        return Mod_station_mean
     if stat_metric == "median" or stat_metric == "values_median":
-        return Mod_station_median, file_counter
+        return Mod_station_median
     if stat_metric == "stdev":
-        return Mod_station_stdev, file_counter
+        return Mod_station_stdev
 
 
 def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
