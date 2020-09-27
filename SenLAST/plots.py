@@ -111,7 +111,7 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
                                          day_night_string=day_night_string, stat_metric=stat_metric))])
     # Change the bar mode
     fig.update_layout(
-        title= stat_metric.capitalize() + " " + day_night_string + "time temperature (n = " + str(counter) + " scenes)",
+        title= stat_metric.capitalize() + " " + day_night_string + "time Temperature (n = " + str(counter) + " scenes)",
         titlefont_size=36,
         xaxis=dict(
             title='Stations',
@@ -119,7 +119,7 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
             tickfont_size=26,
         ),
         yaxis=dict(
-            title=stat_metric.capitalize() + " " + day_night_string + "time temperature",
+            title=stat_metric.capitalize() + " " + day_night_string + "time Temperature",
             titlefont_size=32,
             tickfont_size=28,
         ),
@@ -221,40 +221,32 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
 
 ########################################################################################################################
 
-def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
-    SENTINEL = extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3)
-    MODIS = extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS)
-    print(SENTINEL)
-    print(MODIS)
+def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path, day_night_string):
+    SENTINEL = extract_Sentinel_temp_list(sen_directory, sen_shape_path, day_night_string)
+    MODIS = extract_MODIS_temp_list(mod_directory, mod_shape_path, day_night_string)
     ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
     SENTINEL_1d = reduce(lambda x, y: x + y, SENTINEL)
     MODIS_1d = reduce(lambda x, y: x + y, MODIS)
-    print(SENTINEL_1d)
-    print(len(SENTINEL_1d))
-    print(MODIS_1d)
-    print(len(MODIS_1d))
 
-    # regression
+    # Regression
     reg = LinearRegression().fit(np.vstack(MODIS_1d), SENTINEL_1d)
     reg_fit = reg.predict(np.vstack(MODIS_1d))
 
-    # fig = go.Figure(data=go.Scatter(x=MODIS_1d, y=SENTINEL_1d, mode='markers',
-    #                                   marker=dict(color='rgba(187, 67, 141, 1)', size=10, line_width=1)))
     fig = go.Figure()
     fig.add_trace(go.Scatter(name='line of best fit', x=MODIS_1d, y=reg_fit, mode='lines'))
     fig.add_trace(go.Scatter(name='X vs Y', x=MODIS_1d, y=SENTINEL_1d, mode='markers'))
     fig.update_traces(marker=dict(size=10),
                       selector=dict(mode='markers'))
     fig.update_layout(
-        title='Korrelation der mittleren Nacht-Temperatur (MODIS/S3)',
+        title="Correlation of the Mean " + day_night_string + "time Temperature (MODIS/S3)",
         titlefont_size=32,
         xaxis=dict(
-            title='Mittlere MODIS Nacht-Temperatur (°C)',
+            title="Mean MODIS " + day_night_string + "time Temperature (°C)",
             titlefont_size=32,
             tickfont_size=26,
         ),
         yaxis=dict(
-            title='Mittlere SENTINEL Nacht-Temperatur (°C)',
+            title="Mean Sentinel " + day_night_string + "time Temperature (°C)",
             titlefont_size=32,
             tickfont_size=26,
         ))
