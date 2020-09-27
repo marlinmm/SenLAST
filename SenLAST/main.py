@@ -8,8 +8,8 @@ from SenLAST.import_dwd_data import *
 from SenLAST.base_information import *
 from SenLAST.plots import *
 
-
 start_time = datetime.now()
+
 
 def main():
     ###################################     INPUT    ########################################
@@ -47,46 +47,11 @@ def main():
 
     ####################### USER-DEPENDENT FUNCTIONS TO BE USED #######################
 
-    ##### RASTER-ANALYSIS SECTION #####
-
-    # rename_sentinel(sen_directory=SENTINEL_time_overlap_directory)
-
-    # import_DWD_data_Sentinel(sen_directory=SENTINEL_cloud_free_directory, csv_directory=SENTINEL_DWD_directory)
-    # analyze_SENTINEL_temperature(sen_directory=Sentinel_Datapair_directory, sen_shape_path=SENTINEL_Shapefile_directory)
-    # analyze_MODIS_temperature(mod_directory=MODIS_Datapair_directory, mod_shape_path=MODIS_Shapefile_directory)
-    # SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
-    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
-    # mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
-    #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
-    # barchart_mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
-    #                    daytime_S3="DAY",
-    #                    sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-    #                    daytime_MODIS="Day")
-    # SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+    ### Functions working with overworked stuff: ###
+    # SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
     #                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-    #                 daytime_MODIS="Day")
+    #                 stat_metric="mean", day_night_string="Night")
 
-    SenMod_histogram(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
-                    sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-                    daytime_MODIS="Day")
-
-    # analyze_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
-    #                   mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TT_10")
-    # analyze_Sentinel_DWD(path_to_csv=SENTINEL_DWD_directory, sen_directory=SENTINEL_cloud_free_directory,
-    #                      sen_shape_path=SENTINEL_Shapefile_directory, DWD_temp_parameter="TT_10")
-    # SenDWD_barchart(sen_directory=SENTINEL_cloud_free_directory, sen_shape_path=SENTINEL_Shapefile_directory,
-    #                 path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")
-    # ModDWD_barchart(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
-    #                 mod_shape_path=MODIS_Shapefile_directory)
-    # plot_Sentinel_DWD(sen_directory=SENTINEL_cloud_free_directory, sen_shape_path=SENTINEL_Shapefile_directory,
-    #                   path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")
-    # plot_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
-    #                mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TT_10")
-    # allstations_alldata(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
-    #                     daytime_S3="",
-    #                     sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-    #                     daytime_MODIS="")
-    # count_all_occurences(satellite_directory=MODIS_cloud_free_directory)
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
@@ -95,3 +60,47 @@ def main():
 if __name__ == '__main__':
     main()
     start_time = datetime.now()
+
+
+
+################# OLD FUNCTIONS #################
+#### RASTER-ANALYSIS SECTION #####
+
+# rename_sentinel(sen_directory=SENTINEL_time_overlap_directory)
+
+# import_DWD_data_Sentinel(sen_directory=SENTINEL_cloud_free_directory, csv_directory=SENTINEL_DWD_directory)
+# analyze_SENTINEL_temperature(sen_directory=Sentinel_Datapair_directory, sen_shape_path=SENTINEL_Shapefile_directory)
+# analyze_MODIS_temperature(mod_directory=MODIS_Datapair_directory, mod_shape_path=MODIS_Shapefile_directory)
+# SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+#          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
+# mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+#          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
+# barchart_mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
+#                    daytime_S3="NIGHT",
+#                    sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+#                    daytime_MODIS="Night", stat_metric="mean")
+# SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
+#                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+#                 daytime_MODIS="Day")
+
+# SenMod_histogram(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="NIGHT",
+#                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+#                 daytime_MODIS="Night")
+
+# analyze_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
+#                   mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TT_10")
+# analyze_Sentinel_DWD(path_to_csv=SENTINEL_DWD_directory, sen_directory=SENTINEL_cloud_free_directory,
+#                      sen_shape_path=SENTINEL_Shapefile_directory, DWD_temp_parameter="TT_10")
+# SenDWD_barchart(sen_directory=SENTINEL_cloud_free_directory, sen_shape_path=SENTINEL_Shapefile_directory,
+#                 path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")
+# ModDWD_barchart(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
+#                 mod_shape_path=MODIS_Shapefile_directory)
+# plot_Sentinel_DWD(sen_directory=SENTINEL_cloud_free_directory, sen_shape_path=SENTINEL_Shapefile_directory,
+#                   path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")
+# plot_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
+#                mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TT_10")
+# allstations_alldata(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
+#                     daytime_S3="",
+#                     sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+#                     daytime_MODIS="")
+# count_all_occurences(satellite_directory=MODIS_cloud_free_directory)
