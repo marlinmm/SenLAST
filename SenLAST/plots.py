@@ -250,7 +250,6 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
             titlefont_size=32,
             tickfont_size=26,
         ))
-
     fig.show()
 
 
