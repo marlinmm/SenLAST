@@ -47,7 +47,7 @@ def extract_SENTINEL_timestamp(sen_directory):
 def extract_MODIS_date(mod_directory):
     """
     extracts the acquisition date of MODIS scenes into a new list
-    ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
+    for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
     :return:
     """
     MODIS_date_list = []
@@ -72,7 +72,7 @@ def extract_MODIS_date(mod_directory):
 def extract_MODIS_timestamp(mod_directory):
     """
     extracts the acquisition time of MODIS scenes into a new list
-    ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
+    for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
     :return:
     """
     MODIS_timestamp_list = []
@@ -93,7 +93,7 @@ def extract_MODIS_timestamp(mod_directory):
 def extract_MODIS_timestamp_new(mod_directory):
     """
     extracts the acquisition time of MODIS scenes into a new list
-    ## for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
+    for more information see: https://stackoverflow.com/questions/2427555/python-question-year-and-day-of-year-to-date
     :return:
     """
     MODIS_timestamp_list = []
