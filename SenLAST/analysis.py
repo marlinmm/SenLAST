@@ -10,24 +10,21 @@ import matplotlib.pyplot as plt
 from SenLAST.base_information import extract_files_to_list, import_polygons
 
 # List of station names
-station_names = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
-                'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
-                'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
+station_names = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
+                 'Meiningen', 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben',
+                 'Krölpa-Rdorf', 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
 
 
-def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
+def calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_metric):
     """
-    returns the temperature value for each pixel of each station for each SENTINEL scene
-    prints an array for the scenes according to the stations
+    :param sen_directory:
+    :param sen_shape_path:
+    :param daytime_S3:
+    :param stat_metric:
     :return:
-    returns three arrays (1st array displayed for each station is the temperature array)
-    returns one temperature array for each station if a[0][0]
     """
     import_list = import_polygons(shape_path=sen_shape_path)
     sentinel_file_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
-
-    print(import_list)
-    print(sentinel_file_list)
 
     print("#################### SENTINEL RESULTS ####################")
 
@@ -36,9 +33,6 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
     Sen_station_stdev = []
 
     for i, polygons in enumerate(import_list):
-
-        scenes = i + 1
-
         ## Initialize empty analysis lists
         Sen_final_mean = []
         Sen_final_median = []
@@ -47,71 +41,82 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
         Sen_final_percentile = []
         Sen_final_range = []
 
-        # print(scenes, ". weather station")
-        print("{}.{}".format(i +1, station_names[i]))
+        print("{}.{}".format(i + 1, station_names[i]))
 
         for j, tifs in enumerate(sentinel_file_list):
             if daytime_S3 in str(sentinel_file_list[j]):
-                stations = j + 1
-                # print(stations, ". scene")
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
-                # print(Sen_temperature_array)
+                if stat_metric == "mean":
+                    ## Calculate mean ##
+                    mean_Sen = np.nanmean(Sen_temperature_array)
+                    # print("Mean =" + " " + str(mean_Sen))
+                    Sen_final_mean.append(mean_Sen)
 
-                ## Calculate mean ##
-                mean_Sen = np.nanmean(Sen_temperature_array)
-                # print("Mean =" + " " + str(mean_Sen))
-                Sen_final_mean.append(mean_Sen)
-                Station_mean = np.nanmean(Sen_final_mean)
+                if stat_metric == "median":
+                    ## Calculate median ##
+                    median_Sen = np.nanmedian(Sen_temperature_array)
+                    # print("Median =" + " " + str(median_Sen))
+                    Sen_final_median.append(median_Sen)
 
-                ## Calculate median ##
-                median_Sen = np.nanmedian(Sen_temperature_array)
-                # print("Median =" + " " + str(median_Sen))
-                Sen_final_median.append(median_Sen)
-                Station_median = np.nanmedian(Sen_final_median)
+                if stat_metric == "stdev":
+                    ## Calculate stdev ##
+                    stdev_Sen = np.nanstd(Sen_temperature_array)
+                    # print("Stdev =" + " " + str(stdev_Sen))
+                    Sen_final_stdev.append(stdev_Sen)
 
-                ## Calculate stdev ##
-                stdev_Sen = np.nanstd(Sen_temperature_array)
-                # print("Stdev =" + " " + str(stdev_Sen))
-                Sen_final_stdev.append(stdev_Sen)
-                Station_stdev = np.nanmedian(Sen_final_stdev)
+                if stat_metric == "variance":
+                    ## Calculate variance ##
+                    var_Sen = np.nanvar(Sen_temperature_array)
+                    # print("Variance =" + " " + str(var_Sen))
+                    Sen_final_variance.append(var_Sen)
 
-                ## Calculate variance ##
-                var_Sen = np.nanvar(Sen_temperature_array)
-                # print("Variance =" + " " + str(var_Sen))
-                Sen_final_variance.append(var_Sen)
+                if stat_metric == "percentile":
+                    ## Calculate percentile ##
+                    percentile_Sen = np.nanpercentile(Sen_temperature_array, 10)
+                    # print("Percentile =" + " " + str(percentile_Sen))
+                    Sen_final_percentile.append(percentile_Sen)
 
-                ## Calculate percentile ##
-                percentile_Sen = np.nanpercentile(Sen_temperature_array, 10)
-                # print("Percentile =" + " " + str(percentile_Sen))
-                Sen_final_percentile.append(percentile_Sen)
+                if stat_metric == "range":
+                    ## Calculate range ##
+                    range_Sen = np.nanmax(Sen_temperature_array) - np.nanmin(Sen_temperature_array)
+                    # print("Range =" + " " + str(range_Sen))
+                    Sen_final_range.append(range_Sen)
 
-                ## Calculate range ##
-                range_Sen = np.nanmax(Sen_temperature_array) - np.nanmin(Sen_temperature_array)
-                # print("Range =" + " " + str(range_Sen))
-                Sen_final_range.append(range_Sen)
+        if stat_metric == "mean":
+            Station_mean = np.nanmean(Sen_final_mean)
+            print("Station " + str(i + 1) + " mean for all scenes =" + " " + str(Station_mean))
+            Sen_station_mean.append(Station_mean)
+        if stat_metric == "median":
+            Station_median = np.nanmedian(Sen_final_median)
+            print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
+            Sen_station_median.append(Station_median)
+        if stat_metric == "stdev":
+            Station_stdev = np.nanmedian(Sen_final_stdev)
+            print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
+            Sen_station_stdev.append(Station_stdev)
+        if stat_metric == "values_mean":
+            Sen_station_mean.append(Sen_final_mean)
+        if stat_metric == "values_median":
+            Sen_station_median.append(Sen_final_median)
 
-        print("Station " + str(i + 1) + " mean for all scenes =" + " " + str(Station_mean))
-        # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
-        # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
-        Sen_station_mean.append(Station_mean)
-        # Sen_station_median.append(Station_median)
-        # Sen_station_stdev.append(Station_stdev)
-
-        # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
-        # Sen_station_mean.append(Sen_final_mean)
-        # Sen_station_median.append(Sen_final_median)
-
-    return Sen_station_mean
-    # return Sen_station_median
+    if stat_metric == "mean" or stat_metric == "values_mean":
+        return Sen_station_mean
+    if stat_metric == "median" or stat_metric == "values_median":
+        return Sen_station_median
+    if stat_metric == "stdev":
+        return Sen_station_stdev
 
 
-def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
+def calculate_statics_MODIS(mod_directory, mod_shape_path, daytime_MODIS, stat_metric):
     """
-    returns the temperature value for each pixel of each station for each MODIS scene
+
+    :param mod_directory:
+    :param mod_shape_path:
+    :param daytime_MODIS:
+    :param stat_metric:
     :return:
-    returns one temperature array for each station
     """
     import_list = import_polygons(shape_path=mod_shape_path)
     modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
@@ -124,8 +129,6 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
     print("#################### MODIS RESULTS ####################")
 
     for i, polygons in enumerate(import_list):
-        scenes = i+1
-
         ## Initialize empty analysis lists
         Mod_final_mean = []
         Mod_final_median = []
@@ -134,71 +137,81 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
         Mod_final_percentile = []
         Mod_final_range = []
 
-        # print(scenes, ". weather station")
         print("{}.{}".format(i + 1, station_names[i]))
 
         for j, tifs in enumerate(modis_file_list):
             if daytime_MODIS in str(modis_file_list[j]):
-                stations = j + 1
-                # print(stations, ". scene")
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
-                # print(Mod_temperature_array)
+                if stat_metric == "mean":
+                    ## Calculate mean ##
+                    mean_Mod = np.nanmean(Mod_temperature_array)
+                    # print("Mean =" + " " + str(mean_Mod))
+                    Mod_final_mean.append(mean_Mod)
 
-                ## Mittelwert berechnen ##
-                mean_Mod = np.nanmean(Mod_temperature_array)
-                # print("Mean =" + " " + str(mean_Mod))
-                Mod_final_mean.append(mean_Mod)
-                Station_mean = np.nanmean(Mod_final_mean)
+                if stat_metric == "median":
+                    ## Calculate median ##
+                    median_Mod = np.nanmedian(Mod_temperature_array)
+                    # print("Median =" + " " + str(median_Mod))
+                    Mod_final_median.append(median_Mod)
 
-                ## Median berechnen ##
-                median_Mod = np.nanmedian(Mod_temperature_array)
-                # print("Median =" + " " + str(median_Mod))
-                Mod_final_median.append(median_Mod)
-                Station_median = np.nanmedian(Mod_final_median)
+                if stat_metric == "stdev":
+                    ## Calculate stdev ##
+                    stdev_Mod = np.nanstd(Mod_temperature_array)
+                    # print("Stdev =" + " " + str(stdev_Mod))
+                    Mod_final_stdev.append(stdev_Mod)
 
-                ## Calculate stdev ##
-                stdev_Mod = np.nanstd(Mod_temperature_array)
-                # print("Stdev =" + " " + str(stdev_Mod))
-                Mod_final_stdev.append(stdev_Mod)
-                Station_stdev = np.nanmedian(Mod_final_stdev)
+                if stat_metric == "variance":
+                    ## Calculate variance ##
+                    var_Mod = np.nanvar(Mod_temperature_array)
+                    # print("Variance =" + " " + str(var_Mod))
+                    Mod_final_variance.append(var_Mod)
 
-                ## Calculate variance ##
-                var_Mod = np.nanvar(Mod_temperature_array)
-                # print("Variance =" + " " + str(var_Mod))
-                Mod_final_variance.append(var_Mod)
+                if stat_metric == "percentile":
+                    ## Calculate percentile ##
+                    percentile_Mod = np.nanpercentile(Mod_temperature_array, 10)
+                    # print("Percentile =" + " " + str(percentile_Mod))
+                    Mod_final_percentile.append(percentile_Mod)
 
-                ## Calculate percentile ##
-                percentile_Mod = np.nanpercentile(Mod_temperature_array, 10)
-                # print("Percentile =" + " " + str(percentile_Mod))
-                Mod_final_percentile.append(percentile_Mod)
+                if stat_metric == "range":
+                    ## Calculate range ##
+                    range_Mod = np.nanmax(Mod_temperature_array) - np.nanmin(Mod_temperature_array)
+                    # print("Range =" + " " + str(range_Mod))
+                    Mod_final_range.append(range_Mod)
 
-                ## Calculate range ##
-                range_Mod = np.nanmax(Mod_temperature_array) - np.nanmin(Mod_temperature_array)
-                # print("Range =" + " " + str(range_Mod))
-                Mod_final_range.append(range_Mod)
+        if stat_metric == "mean":
+            Station_mean = np.nanmean(Mod_final_mean)
+            print("Station " + str(i + 1) + " mean for all scenes =" + " " + str(Station_mean))
+            Mod_station_mean.append(Station_mean)
+        if stat_metric == "median":
+            Station_median = np.nanmedian(Mod_final_median)
+            print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
+            Mod_station_median.append(Station_median)
+        if stat_metric == "stdev":
+            Station_stdev = np.nanmedian(Mod_final_stdev)
+            print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
+            Mod_station_stdev.append(Station_stdev)
+        if stat_metric == "values_mean":
+            Mod_station_mean.append(Mod_final_mean)
+        if stat_metric == "values_median":
+            Mod_station_median.append(Mod_final_median)
 
-        ### activate this for old functionality ###
-        # print("Station " + str(i+1) + " mean for all scenes =" + " " + str(Station_mean))
-        # print("Station " + str(i + 1) + " median for all scenes =" + " " + str(Station_median))
-        # print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
-
-        Mod_station_mean.append(Station_mean)
-        # Mod_station_median.append(Station_median)
-        # Mod_station_stdev.append(Station_stdev)
-
-        # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
-        # Mod_station_mean.append(Mod_final_mean)
-
-    return Mod_station_mean
+    if stat_metric == "mean" or stat_metric == "values_mean":
+        return Mod_station_mean
+    if stat_metric == "median" or stat_metric == "values_median":
+        return Mod_station_median
+    if stat_metric == "stdev":
+        return Mod_station_stdev
 
 
 def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
     """
-    returns list of lists
+
+    :param mod_directory:
+    :param mod_shape_path:
+    :param daytime_MODIS:
     :return:
-    returns
     """
     import_list = import_polygons(shape_path=mod_shape_path)
     modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
@@ -222,11 +235,11 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
 
 def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
     """
-    returns the temperature value for each pixel of each station for each SENTINEL scene
-    prints an array for the scenes according to the stations
+
+    :param sen_directory:
+    :param sen_shape_path:
+    :param daytime_S3:
     :return:
-    returns three arrays (1st array displayed for each station is the temperature array)
-    returns one temperature array for each station if a[0][0]
     """
     import_list = import_polygons(shape_path=sen_shape_path)
     sentinel_file_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
@@ -251,6 +264,14 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
 
 
 def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter):
+    """
+
+    :param path_to_csv:
+    :param sen_directory:
+    :param sen_shape_path:
+    :param DWD_temp_parameter:
+    :return:
+    """
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
     DWD_mean_list = []
@@ -272,7 +293,15 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
     return DWD_mean_list, Sen_data_mean_list
 
 
-def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter,):
+def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter):
+    """
+
+    :param path_to_csv:
+    :param mod_directory:
+    :param mod_shape_path:
+    :param DWD_temp_parameter:
+    :return:
+    """
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     Mod_data_list = extract_MODIS_temp_list(mod_directory=mod_directory, mod_shape_path=mod_shape_path)
     DWD_mean_list = []
@@ -292,8 +321,3 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
         Mod_data_mean_list.append(np.mean(Mod_data_list[i]))
         DWD_mean_list.append(np.mean(temp_2m))
     return DWD_mean_list, Mod_data_mean_list
-
-
-def count_month_occurances(path_to_satellite_data):
-    satellite_data = extract_files_to_list(path_to_folder=path_to_satellite_data, datatype=".csv")
-    #### hier weiter mit dem scheiß ####
