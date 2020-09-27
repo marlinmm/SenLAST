@@ -81,6 +81,7 @@ def rename_files(mod_directory, mod_time_directory, shape_path):
         print(name)
         os.rename(tifs, name + time_list[i] + ".tif")
 
+
 def rename_sentinel(sen_directory):
     sentinel_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
     rename_folder = sen_directory + "/renamed/"
