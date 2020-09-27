@@ -44,6 +44,7 @@ def main():
     SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel/"
     # SENTINEL_DWD_directory = Base_Folder + "Juni_2020/Sentinel/DWD/"
     MODIS_DWD_directory = Base_Folder + "DWD/MODIS/"
+    Original_directory = Base_Folder + "DWD/Original/"
 
     ## SHAPEFILES ##
     SENTINEL_Shapefile_directory = Base_Folder + "Shapefiles/Stationen_Thüringen_Umland_3x3box.shp"
@@ -58,14 +59,16 @@ def main():
     # SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
     #                sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
     #                day_night_string="Night")
-    # mean_diff(mod_directory=MODIS_cloud_free_directory, sen_directory=SENTINEL_cloud_free_directory,
-    #           senmod_dir=Sentinel_Datapair_directory, mod_sen_dir=MODIS_Datapair_directory,
-    #           sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-    #           day_night_string="Day/Night", stat_metric="mean", DWD_temp_parameter="TT_10",
-    #           sen_DWD_dir=SENTINEL_DWD_directory, mod_DWD_dir=MODIS_DWD_directory, calculation="ModDWD")
 
-    import_DWD_data_Sentinel(sen_directory=Sentinel_Datapair_directory, csv_directory=SENTINEL_DWD_directory)
-    import_DWD_data_MODIS(mod_directory=MODIS_Datapair_directory, csv_directory=MODIS_DWD_directory)
+    #### ADD MEDIAN FUNCTION TO analyze_MOD/Sen_DWD!!!!! ######
+    barchart_mean_diff(mod_directory=MODIS_cloud_free_directory, sen_directory=SENTINEL_cloud_free_directory,
+              senmod_dir=Sentinel_Datapair_directory, mod_sen_dir=MODIS_Datapair_directory,
+              sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+              day_night_string="Day/Night", stat_metric="median", DWD_temp_parameter="TM5_10",
+              sen_DWD_dir=SENTINEL_DWD_directory, mod_DWD_dir=MODIS_DWD_directory, calculation="SenDWD")
+
+    # import_DWD_data_Sentinel(sen_directory=SENTINEL_cloud_free_directory, csv_directory=Original_directory)
+    # import_DWD_data_MODIS(mod_directory=MODIS_Datapair_directory, csv_directory=MODIS_DWD_directory)
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")

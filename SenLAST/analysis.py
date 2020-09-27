@@ -283,19 +283,20 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, day_night_string):
     return Sen_station_time_series
 
 
-def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter, day_night_string):
+def analyze_Sentinel_DWD(sen_DWD_dir, sen_directory, sen_shape_path, DWD_temp_parameter, day_night_string):
     """
 
-    :param path_to_csv:
+    :param day_night_string:
+    :param sen_DWD_dir:
     :param sen_directory:
     :param sen_shape_path:
     :param DWD_temp_parameter:
     :return:
     """
-    csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
+    csv_list = extract_files_to_list(path_to_folder=sen_DWD_dir, datatype=".csv")
     Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path,
                                                day_night_string=day_night_string)
-    DWD_mean_list = []
+    DWD_list = []
     Sen_data_mean_list = []
     print("######################## SENTINEL ########################")
     for i, file in enumerate(csv_list):
@@ -310,25 +311,25 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
                 Sen_data_list[i].pop(tmp.index[j])
 
         Sen_data_mean_list.append(np.mean(Sen_data_list[i]))
-        DWD_mean_list.append(np.mean(temp_2m))
-    return DWD_mean_list, Sen_data_mean_list
+        DWD_list.append(np.mean(temp_2m))
+    return DWD_list, Sen_data_mean_list
 
 
-def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter, day_night_string):
+def analyze_MODIS_DWD(mod_DWD_dir, mod_directory, mod_shape_path, DWD_temp_parameter, day_night_string):
     """
 
+    :param mod_DWD_dir:
     :param day_night_string:
-    :param path_to_csv:
     :param mod_directory:
     :param mod_shape_path:
     :param DWD_temp_parameter:
     :return:
     """
-    csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
+    csv_list = extract_files_to_list(path_to_folder=mod_DWD_dir, datatype=".csv")
 
     Mod_data_list = extract_MODIS_temp_list(mod_directory=mod_directory, mod_shape_path=mod_shape_path,
                                             day_night_string=day_night_string)
-    DWD_mean_list = []
+    DWD_list = []
     Mod_data_mean_list = []
     print("######################## MODIS ########################")
     for i, file in enumerate(csv_list):
@@ -342,5 +343,5 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
                 Mod_data_list[i].pop(tmp.index[j])
 
         Mod_data_mean_list.append(np.mean(Mod_data_list[i]))
-        DWD_mean_list.append(np.mean(temp_2m))
-    return DWD_mean_list, Mod_data_mean_list
+        DWD_list.append(np.mean(temp_2m))
+    return DWD_list, Mod_data_mean_list

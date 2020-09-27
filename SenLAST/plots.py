@@ -111,7 +111,7 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
                                          day_night_string=day_night_string, stat_metric=stat_metric))])
     # Change the bar mode
     fig.update_layout(
-        title= stat_metric.capitalize() + " " + day_night_string + "time Temperature (n = " + str(counter) + " scenes)",
+        title=stat_metric.capitalize() + " " + day_night_string + "time Temperature (n = " + str(counter) + " scenes)",
         titlefont_size=36,
         xaxis=dict(
             title='Stations',
@@ -147,71 +147,74 @@ def mean_diff(mod_directory, sen_directory, senmod_dir, mod_sen_dir,  sen_shape_
               stat_metric, DWD_temp_parameter, sen_DWD_dir, mod_DWD_dir, calculation):
     diff_list = []
 
+    # DAS HIER NOCH ANPASSEN AN DEN RICHTIGEN ORDNER!!!! #
     if calculation == "SenMod":
-        SenMod_mean_list, counter = calculate_statics_SENTINEL(senmod_dir, sen_shape_path, day_night_string, stat_metric)
+        SenMod_mean_list, counter = calculate_statics_SENTINEL(senmod_dir, sen_shape_path, day_night_string,
+                                                               stat_metric)
         ModSen_mean_list = calculate_statics_MODIS(mod_sen_dir, mod_shape_path, day_night_string, stat_metric)
-    if calculation == "SemDWD":
-        SenDWD_mean_list = calculate_statics_SENTINEL(sen_directory, sen_shape_path, day_night_string, stat_metric)
-        DWD_Sen_list, Sen_mean_list = analyze_MODIS_DWD(sen_DWD_dir, mod_directory, mod_shape_path, DWD_temp_parameter,
-                                                        day_night_string)
+        zip_object = zip(SenMod_mean_list, ModSen_mean_list)
+        for list1_i, list2_i in zip_object:
+            # diff_list.append(abs(list1_i - list2_i))
+            diff_list.append(list1_i - list2_i)
+
+    if calculation == "SenDWD":
+        # SenDWD_mean_list = calculate_statics_SENTINEL(sen_directory, sen_shape_path, day_night_string, stat_metric)
+        DWD_Sen_list, Sen_mean_list = analyze_Sentinel_DWD(sen_DWD_dir, sen_directory, sen_shape_path,
+                                                           DWD_temp_parameter, day_night_string)
+        zip_object = zip(Sen_mean_list, DWD_Sen_list)
+        for list1_i, list2_i in zip_object:
+            # diff_list.append(abs(list1_i - list2_i))
+            diff_list.append(list1_i - list2_i)
+
     if calculation == "ModDWD":
-        ModDWD_mean_list = calculate_statics_MODIS(mod_directory, mod_shape_path, day_night_string,
-                                                   stat_metric)
+        # ModDWD_mean_list = calculate_statics_MODIS(mod_directory, mod_shape_path, day_night_string,
+        #                                            stat_metric)
         DWD_Mod_list, Mod_mean_list = analyze_MODIS_DWD(mod_DWD_dir, mod_directory, mod_shape_path, DWD_temp_parameter,
                                                         day_night_string)
-
-    print(len(DWD_Mod_list))
-    # # b = DWD_5cm
-    # # print("Sentinel = ")
-    # # print(a)
-    # # print("MODIS = ")
-    # # print(b)
-    # ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
-    # # SENTINEL_1d = reduce(lambda x, y: x + y, a)
-    # # MODIS_1d = reduce(lambda x, y: x + y, b)
-    # # print(SENTINEL_1d)
-    # # print(MODIS_1d)
-    # zip_object = zip(a, b)
-    # # zip_object = zip(SENTINEL_1d, MODIS_1d)
-    # for list1_i, list2_i in zip_object:
-    #     # diff_list.append(abs(list1_i - list2_i))
-    #     diff_list.append(list1_i - list2_i)
-    # print("Difference S3-MODIS = ")
-    # print(diff_list)
-    # print("mean difference = ")
-    # print(np.mean(diff_list))
-    # print("median difference = ")
-    # print(np.median(diff_list))
-    # print(np.std(diff_list))
-    #
-    # return diff_list
+        zip_object = zip(Mod_mean_list, DWD_Mod_list)
+        for list1_i, list2_i in zip_object:
+            # diff_list.append(abs(list1_i - list2_i))
+            diff_list.append(list1_i - list2_i)
+    return diff_list
 
 
-def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS,
-                       stat_metric):  # , path_to_csv):
+def barchart_mean_diff(mod_directory, sen_directory, senmod_dir, mod_sen_dir,  sen_shape_path, mod_shape_path,
+                       day_night_string, stat_metric, DWD_temp_parameter, sen_DWD_dir, mod_DWD_dir, calculation):
     stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
                 'Meiningen', 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben',
                 'Krölpa-Rdorf', 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
 
     fig = go.Figure(data=[
         go.Bar(name='', x=stations,
-               y=mean_diff(sen_directory=sen_directory, mod_directory=mod_directory,
-                           sen_shape_path=sen_shape_path, mod_shape_path=mod_shape_path, daytime_S3=daytime_S3,
-                           daytime_MODIS=daytime_MODIS, stat_metric=stat_metric)),
-        # , path_to_csv=path_to_csv)),
-    ])
+               y=mean_diff(mod_directory, sen_directory, senmod_dir, mod_sen_dir, sen_shape_path, mod_shape_path,
+                           day_night_string, stat_metric, DWD_temp_parameter, sen_DWD_dir, mod_DWD_dir, calculation))])
+
+    name_of_calculation = ""
+    if calculation == "SenDWD":
+        name_of_calculation = " SLSTR and DWD data "
+    if calculation == "ModDWD":
+        name_of_calculation = " MODIS and DWD data "
+    if calculation == "SenMod":
+        name_of_calculation = " SLSTR and MODIS data "
+    dwd_height = ""
+    if DWD_temp_parameter == "TT_10":
+        dwd_height = "(2m) "
+    if DWD_temp_parameter == "TM5_10":
+        dwd_height = "(5cm) "
+
     fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
     fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
     fig.update_layout(
-        title='Mittlere Temperaturdifferenz von MODIS zu DWD-Daten (2m) (MODIS-DWD)',
-        titlefont_size=30,
+        title=stat_metric.capitalize() + " " + day_night_string + "time Temperature Difference of" + name_of_calculation
+        + dwd_height, titlefont_size=30,
         xaxis=dict(
-            title='Stationen',
+            title='Stations',
             titlefont_size=20,
             tickfont_size=14,
         ),
         yaxis=dict(
-            title='Mittlere Temperaturdifferenz von MODIS zu DWD-Daten (2m) (°C)',
+            title=stat_metric.capitalize() + " " + day_night_string + "time Temperature Difference of"
+                  + name_of_calculation + dwd_height + "(°C)",
             titlefont_size=20,
             tickfont_size=14,
         ),
