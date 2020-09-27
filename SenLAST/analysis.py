@@ -210,7 +210,7 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
         Mod_final_mean = []
 
         for j, tifs in enumerate(modis_file_list):
-            #if daytime_MODIS in str(modis_file_list[j]):
+            if daytime_MODIS in str(modis_file_list[j]):
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
@@ -238,7 +238,7 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
         Sen_final_mean = []
 
         for j, tifs in enumerate(sentinel_file_list):
-            # if daytime_S3 in str(sentinel_file_list[j]):
+            if daytime_S3 in str(sentinel_file_list[j]):
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
