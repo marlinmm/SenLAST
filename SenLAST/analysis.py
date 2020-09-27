@@ -15,11 +15,11 @@ station_names = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg'
                  'Krölpa-Rdorf', 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
 
 
-def calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_metric):
+def calculate_statics_SENTINEL(sen_directory, sen_shape_path, day_night_string, stat_metric):
     """
     :param sen_directory:
     :param sen_shape_path:
-    :param daytime_S3:
+    :param day_night_string:
     :param stat_metric: string
         Can be "mean", "median", "stdev", "values_mean" and "values_median"
     :return:
@@ -33,6 +33,11 @@ def calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_m
     Sen_station_median = []
     Sen_station_stdev = []
 
+    if day_night_string == "Day":
+        day_night_string = "DAY"
+    if day_night_string == "Night":
+        day_night_string = "NIGHT"
+
     for i, polygons in enumerate(import_list):
         ## Initialize empty analysis lists
         Sen_final_mean = []
@@ -41,11 +46,13 @@ def calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_m
         Sen_final_variance = []
         Sen_final_percentile = []
         Sen_final_range = []
+        file_counter = 0
 
         print("{}.{}".format(i + 1, station_names[i]))
 
         for j, tifs in enumerate(sentinel_file_list):
-            if daytime_S3 in str(sentinel_file_list[j]):
+            if day_night_string in str(sentinel_file_list[j]):
+                file_counter = file_counter + 1
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
@@ -101,28 +108,26 @@ def calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_m
             Sen_station_mean.append(Sen_final_mean)
         if stat_metric == "values_median":
             Sen_station_median.append(Sen_final_median)
-
     if stat_metric == "mean" or stat_metric == "values_mean":
-        return Sen_station_mean
+        return Sen_station_mean, file_counter
     if stat_metric == "median" or stat_metric == "values_median":
-        return Sen_station_median
+        return Sen_station_median, file_counter
     if stat_metric == "stdev":
-        return Sen_station_stdev
+        return Sen_station_stdev, file_counter
 
 
-def calculate_statics_MODIS(mod_directory, mod_shape_path, daytime_MODIS, stat_metric):
+def calculate_statics_MODIS(mod_directory, mod_shape_path, day_night_string, stat_metric):
     """
 
     :param mod_directory:
     :param mod_shape_path:
-    :param daytime_MODIS:
+    :param day_night_string:
     :param stat_metric: string
         Can be "mean", "median", "stdev", "values_mean" and "values_median"
     :return:
     """
     import_list = import_polygons(shape_path=mod_shape_path)
     modis_file_list = extract_files_to_list(path_to_folder=mod_directory, datatype=".tif")
-    print(len(modis_file_list))
 
     Mod_station_mean = []
     Mod_station_median = []
@@ -138,11 +143,13 @@ def calculate_statics_MODIS(mod_directory, mod_shape_path, daytime_MODIS, stat_m
         Mod_final_variance = []
         Mod_final_percentile = []
         Mod_final_range = []
+        file_counter = 0
 
         print("{}.{}".format(i + 1, station_names[i]))
 
         for j, tifs in enumerate(modis_file_list):
-            if daytime_MODIS in str(modis_file_list[j]):
+            if day_night_string in str(modis_file_list[j]):
+                file_counter = file_counter + 1
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
@@ -200,11 +207,11 @@ def calculate_statics_MODIS(mod_directory, mod_shape_path, daytime_MODIS, stat_m
             Mod_station_median.append(Mod_final_median)
 
     if stat_metric == "mean" or stat_metric == "values_mean":
-        return Mod_station_mean
+        return Mod_station_mean, file_counter
     if stat_metric == "median" or stat_metric == "values_median":
-        return Mod_station_median
+        return Mod_station_median, file_counter
     if stat_metric == "stdev":
-        return Mod_station_stdev
+        return Mod_station_stdev, file_counter
 
 
 def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
