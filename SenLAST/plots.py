@@ -515,3 +515,32 @@ def ModDWD_barchart(mod_directory, mod_shape_path, path_to_csv):
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
     fig.show()
+
+
+def SenMod_histogram(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
+    import seaborn as sns
+    import pandas as pd
+    SENTINEL = extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3)
+    MODIS = extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS)
+    SENTINEL_1d = reduce(lambda x, y: x+y, SENTINEL)
+    MODIS_1d = reduce(lambda x, y: x+y, MODIS)
+    print(SENTINEL_1d)
+    print(len(SENTINEL_1d))
+    print(MODIS_1d)
+    print(len(MODIS_1d))
+    difference = []
+    zip_object = zip(SENTINEL_1d, MODIS_1d)
+    for list1_i, list2_i in zip_object:
+        difference.append(list1_i - list2_i)
+    print(difference)
+    df = pd.DataFrame(difference, columns=["SLSTR minus MODIS Difference"])
+    print(df)
+    # sns.displot(data=df, x=df["SLSTR minus MODIS Difference"], kde=True)
+
+    g = sns.displot(
+        data=df, x="SLSTR minus MODIS Difference", kde=True)
+    g.set_axis_labels(daytime_MODIS + "time SLSTR minus MODIS Difference", "Number")
+    g.set_titles("{Histogram of " + daytime_MODIS + "time Difference")
+
+    plt.show()
+
