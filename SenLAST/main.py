@@ -32,6 +32,10 @@ def main():
     Sentinel_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/Sentinel"
     MODIS_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/MODIS"
 
+    ### S3A/S3B Comparison ###
+    Sentinel_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/S3A/Sentinel"
+    MODIS_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/S3A/MODIS"
+
     ### For allstations_alldata function use the following directories
     # Sentinel_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/Sentinel/2018_09_30"
     # MODIS_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/MODIS/2018_09_30"
@@ -48,12 +52,12 @@ def main():
     ####################### USER-DEPENDENT FUNCTIONS TO BE USED #######################
 
     ### Functions working with overworked stuff: ###
-    # SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
-    #                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-    #                 stat_metric="mean", day_night_string="Night")
-    SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
-                   sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-                   day_night_string="Night")
+    SenMod_DayNight(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
+                    sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+                    stat_metric="mean", day_night_string="Night")
+    # SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
+    #                sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+    #                day_night_string="Night")
 
     statistics_time = datetime.now()
     print("extract_files-time = ", statistics_time - start_time, "Hr:min:sec")
