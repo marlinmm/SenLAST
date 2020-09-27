@@ -20,7 +20,8 @@ def calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_m
     :param sen_directory:
     :param sen_shape_path:
     :param daytime_S3:
-    :param stat_metric:
+    :param stat_metric: string
+        Can be "mean", "median", "stdev", "values_mean" and "values_median"
     :return:
     """
     import_list = import_polygons(shape_path=sen_shape_path)
@@ -115,7 +116,8 @@ def calculate_statics_MODIS(mod_directory, mod_shape_path, daytime_MODIS, stat_m
     :param mod_directory:
     :param mod_shape_path:
     :param daytime_MODIS:
-    :param stat_metric:
+    :param stat_metric: string
+        Can be "mean", "median", "stdev", "values_mean" and "values_median"
     :return:
     """
     import_list = import_polygons(shape_path=mod_shape_path)
@@ -227,8 +229,17 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
+                ## Calculate pixel mean ##
                 mean_Mod = np.nanmean(Mod_temperature_array)
                 Mod_final_mean.append(mean_Mod)
+            if daytime_MODIS == "Day/Night":
+                src1 = rio.open(modis_file_list[j])
+                mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
+                Mod_temperature_array = mask[0][0]
+                ## Calculate pixel mean ##
+                mean_Mod = np.nanmean(Mod_temperature_array)
+                Mod_final_mean.append(mean_Mod)
+
         Mod_station_time_series.append(Mod_final_mean)
     return Mod_station_time_series
 
@@ -255,10 +266,18 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
-
-                ## Calculate mean ##
+                ## Calculate pixel mean ##
                 mean_Sen = np.nanmean(Sen_temperature_array)
                 Sen_final_mean.append(mean_Sen)
+
+            if daytime_S3 == "Day/Night":
+                src1 = rio.open(sentinel_file_list[j])
+                mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
+                Sen_temperature_array = mask[0][0]
+                ## Calculate pixel mean ##
+                mean_Sen = np.nanmean(Sen_temperature_array)
+                Sen_final_mean.append(mean_Sen)
+
         Sen_station_time_series.append(Sen_final_mean)
     return Sen_station_time_series
 
