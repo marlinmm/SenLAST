@@ -143,39 +143,48 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
 ########################################################################################################################
 
 
-def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS,
-              stat_metric):  # , path_to_csv):
+def mean_diff(mod_directory, sen_directory, senmod_dir, mod_sen_dir,  sen_shape_path, mod_shape_path, day_night_string,
+              stat_metric, DWD_temp_parameter, sen_DWD_dir, mod_DWD_dir, calculation):
     diff_list = []
 
-    a = calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_metric)
-    b = calculate_statics_MODIS(mod_directory, mod_shape_path, daytime_MODIS, stat_metric)
-    # a = analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3)
-    # a = analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS)
-    # DWD_5cm, Sen = analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter="TT_10")
-    # b = DWD_5cm
-    # print("Sentinel = ")
-    # print(a)
-    # print("MODIS = ")
-    # print(b)
-    ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
-    # SENTINEL_1d = reduce(lambda x, y: x + y, a)
-    # MODIS_1d = reduce(lambda x, y: x + y, b)
-    # print(SENTINEL_1d)
-    # print(MODIS_1d)
-    zip_object = zip(a, b)
-    # zip_object = zip(SENTINEL_1d, MODIS_1d)
-    for list1_i, list2_i in zip_object:
-        # diff_list.append(abs(list1_i - list2_i))
-        diff_list.append(list1_i - list2_i)
-    print("Difference S3-MODIS = ")
-    print(diff_list)
-    print("mean difference = ")
-    print(np.mean(diff_list))
-    print("median difference = ")
-    print(np.median(diff_list))
-    print(np.std(diff_list))
+    if calculation == "SenMod":
+        SenMod_mean_list, counter = calculate_statics_SENTINEL(senmod_dir, sen_shape_path, day_night_string, stat_metric)
+        ModSen_mean_list = calculate_statics_MODIS(mod_sen_dir, mod_shape_path, day_night_string, stat_metric)
+    if calculation == "SemDWD":
+        SenDWD_mean_list = calculate_statics_SENTINEL(sen_directory, sen_shape_path, day_night_string, stat_metric)
+        DWD_Sen_list, Sen_mean_list = analyze_MODIS_DWD(sen_DWD_dir, mod_directory, mod_shape_path, DWD_temp_parameter,
+                                                        day_night_string)
+    if calculation == "ModDWD":
+        ModDWD_mean_list = calculate_statics_MODIS(mod_directory, mod_shape_path, day_night_string,
+                                                   stat_metric)
+        DWD_Mod_list, Mod_mean_list = analyze_MODIS_DWD(mod_DWD_dir, mod_directory, mod_shape_path, DWD_temp_parameter,
+                                                        day_night_string)
 
-    return diff_list
+    print(len(DWD_Mod_list))
+    # # b = DWD_5cm
+    # # print("Sentinel = ")
+    # # print(a)
+    # # print("MODIS = ")
+    # # print(b)
+    # ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
+    # # SENTINEL_1d = reduce(lambda x, y: x + y, a)
+    # # MODIS_1d = reduce(lambda x, y: x + y, b)
+    # # print(SENTINEL_1d)
+    # # print(MODIS_1d)
+    # zip_object = zip(a, b)
+    # # zip_object = zip(SENTINEL_1d, MODIS_1d)
+    # for list1_i, list2_i in zip_object:
+    #     # diff_list.append(abs(list1_i - list2_i))
+    #     diff_list.append(list1_i - list2_i)
+    # print("Difference S3-MODIS = ")
+    # print(diff_list)
+    # print("mean difference = ")
+    # print(np.mean(diff_list))
+    # print("median difference = ")
+    # print(np.median(diff_list))
+    # print(np.std(diff_list))
+    #
+    # return diff_list
 
 
 def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS,

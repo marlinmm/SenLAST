@@ -51,7 +51,7 @@ def calculate_statics_SENTINEL(sen_directory, sen_shape_path, day_night_string, 
         print("{}.{}".format(i + 1, station_names[i]))
 
         for j, tifs in enumerate(sentinel_file_list):
-            if day_night_string in str(sentinel_file_list[j]):
+            if day_night_string in str(sentinel_file_list[j]) or day_night_string == "Day/Night":
                 file_counter = file_counter + 1
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
@@ -143,7 +143,7 @@ def calculate_statics_MODIS(mod_directory, mod_shape_path, day_night_string, sta
         print("{}.{}".format(i + 1, station_names[i]))
 
         for j, tifs in enumerate(modis_file_list):
-            if day_night_string in str(modis_file_list[j]):
+            if day_night_string in str(modis_file_list[j]) or day_night_string == "Day/Night":
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
@@ -221,20 +221,20 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path, day_night_string):
         Mod_final_mean = []
 
         for j, tifs in enumerate(modis_file_list):
-            if day_night_string in str(modis_file_list[j]):
+            if day_night_string in str(modis_file_list[j]) or day_night_string == "Day/Night":
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
                 ## Calculate pixel mean ##
                 mean_Mod = np.nanmean(Mod_temperature_array)
                 Mod_final_mean.append(mean_Mod)
-            if day_night_string == "Day/Night":
-                src1 = rio.open(modis_file_list[j])
-                mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
-                Mod_temperature_array = mask[0][0]
-                ## Calculate pixel mean ##
-                mean_Mod = np.nanmean(Mod_temperature_array)
-                Mod_final_mean.append(mean_Mod)
+            # if day_night_string == "Day/Night":
+            #     src1 = rio.open(modis_file_list[j])
+            #     mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
+            #     Mod_temperature_array = mask[0][0]
+            #     ## Calculate pixel mean ##
+            #     mean_Mod = np.nanmean(Mod_temperature_array)
+            #     Mod_final_mean.append(mean_Mod)
 
         Mod_station_time_series.append(Mod_final_mean)
     return Mod_station_time_series
@@ -263,7 +263,7 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, day_night_string):
         Sen_final_mean = []
 
         for j, tifs in enumerate(sentinel_file_list):
-            if day_night_string in str(sentinel_file_list[j]):
+            if day_night_string in str(sentinel_file_list[j]) or day_night_string == "Day/Night":
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
@@ -271,19 +271,19 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, day_night_string):
                 mean_Sen = np.nanmean(Sen_temperature_array)
                 Sen_final_mean.append(mean_Sen)
 
-            if day_night_string == "Day/Night":
-                src1 = rio.open(sentinel_file_list[j])
-                mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
-                Sen_temperature_array = mask[0][0]
-                ## Calculate pixel mean ##
-                mean_Sen = np.nanmean(Sen_temperature_array)
-                Sen_final_mean.append(mean_Sen)
+            # if day_night_string == "Day/Night":
+            #     src1 = rio.open(sentinel_file_list[j])
+            #     mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
+            #     Sen_temperature_array = mask[0][0]
+            #     ## Calculate pixel mean ##
+            #     mean_Sen = np.nanmean(Sen_temperature_array)
+            #     Sen_final_mean.append(mean_Sen)
 
         Sen_station_time_series.append(Sen_final_mean)
     return Sen_station_time_series
 
 
-def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter):
+def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter, day_night_string):
     """
 
     :param path_to_csv:
@@ -293,7 +293,8 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
     :return:
     """
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
-    Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
+    Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path,
+                                               day_night_string=day_night_string)
     DWD_mean_list = []
     Sen_data_mean_list = []
     print("######################## SENTINEL ########################")
@@ -313,9 +314,10 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
     return DWD_mean_list, Sen_data_mean_list
 
 
-def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter):
+def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter, day_night_string):
     """
 
+    :param day_night_string:
     :param path_to_csv:
     :param mod_directory:
     :param mod_shape_path:
@@ -323,7 +325,9 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
     :return:
     """
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
-    Mod_data_list = extract_MODIS_temp_list(mod_directory=mod_directory, mod_shape_path=mod_shape_path)
+
+    Mod_data_list = extract_MODIS_temp_list(mod_directory=mod_directory, mod_shape_path=mod_shape_path,
+                                            day_night_string=day_night_string)
     DWD_mean_list = []
     Mod_data_mean_list = []
     print("######################## MODIS ########################")
@@ -331,7 +335,6 @@ def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_param
         # Read csv data
         df = pd.read_csv(file, delimiter=",")
         temp_2m = df[DWD_temp_parameter]
-
         tmp = temp_2m[temp_2m == -999]
         if len(tmp) > 0:
             for j, value in enumerate(tmp):

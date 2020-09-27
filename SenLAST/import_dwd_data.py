@@ -36,7 +36,7 @@ def import_DWD_data_Sentinel(sen_directory, csv_directory):
             for date in sen_date_time:
                 matching = [s for s in station_list if date in s]
                 value_list.append(matching)
-        with open(file[0:len(file)-4] + "_Sentinel" + ".csv", "w", newline='') as new_csvfile:
+        with open(file[0:len(file)-13] + "_Sentinel_short" + ".csv", "w", newline='') as new_csvfile:
             wt = csv.writer(new_csvfile, quoting=csv.QUOTE_ALL)
             wt.writerows(value_list)
 
@@ -69,6 +69,6 @@ def import_DWD_data_MODIS(mod_directory, csv_directory):
             for date in mod_date_time:
                 matching = [s for s in station_list if date in s]
                 value_list.append(matching)
-        with open(file[0:len(file)-4] + "_MODIS" + ".csv", "w", newline='') as new_csvfile:
+        with open(file[0:len(file)-10] + "_MODIS_short" + ".csv", "w", newline='') as new_csvfile:
             wt = csv.writer(new_csvfile, quoting=csv.QUOTE_ALL)
             wt.writerows(value_list)
