@@ -104,13 +104,9 @@ def calculate_statics_SENTINEL(sen_directory, sen_shape_path, day_night_string, 
             Station_stdev = np.nanmedian(Sen_final_stdev)
             print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
             Sen_station_stdev.append(Station_stdev)
-        if stat_metric == "values_mean":
-            Sen_station_mean.append(Sen_final_mean)
-        if stat_metric == "values_median":
-            Sen_station_median.append(Sen_final_median)
-    if stat_metric == "mean" or stat_metric == "values_mean":
+    if stat_metric == "mean":
         return Sen_station_mean, file_counter
-    if stat_metric == "median" or stat_metric == "values_median":
+    if stat_metric == "median":
         return Sen_station_median, file_counter
     if stat_metric == "stdev":
         return Sen_station_stdev, file_counter
@@ -199,25 +195,20 @@ def calculate_statics_MODIS(mod_directory, mod_shape_path, day_night_string, sta
             Station_stdev = np.nanmedian(Mod_final_stdev)
             print("Station " + str(i + 1) + " stdev for all scenes =" + " " + str(Station_stdev))
             Mod_station_stdev.append(Station_stdev)
-        if stat_metric == "values_mean":
-            Mod_station_mean.append(Mod_final_mean)
-        if stat_metric == "values_median":
-            Mod_station_median.append(Mod_final_median)
-
-    if stat_metric == "mean" or stat_metric == "values_mean":
+    if stat_metric == "mean":
         return Mod_station_mean
-    if stat_metric == "median" or stat_metric == "values_median":
+    if stat_metric == "median":
         return Mod_station_median
     if stat_metric == "stdev":
         return Mod_station_stdev
 
 
-def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
+def extract_MODIS_temp_list(mod_directory, mod_shape_path, day_night_string):
     """
 
+    :param day_night_string:
     :param mod_directory:
     :param mod_shape_path:
-    :param daytime_MODIS:
     :return:
     """
     import_list = import_polygons(shape_path=mod_shape_path)
@@ -230,14 +221,14 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
         Mod_final_mean = []
 
         for j, tifs in enumerate(modis_file_list):
-            if daytime_MODIS in str(modis_file_list[j]):
+            if day_night_string in str(modis_file_list[j]):
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
                 ## Calculate pixel mean ##
                 mean_Mod = np.nanmean(Mod_temperature_array)
                 Mod_final_mean.append(mean_Mod)
-            if daytime_MODIS == "Day/Night":
+            if day_night_string == "Day/Night":
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
@@ -249,16 +240,21 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
     return Mod_station_time_series
 
 
-def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
+def extract_Sentinel_temp_list(sen_directory, sen_shape_path, day_night_string):
     """
 
+    :param day_night_string:
     :param sen_directory:
     :param sen_shape_path:
-    :param daytime_S3:
     :return:
     """
     import_list = import_polygons(shape_path=sen_shape_path)
     sentinel_file_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
+
+    if day_night_string == "Day":
+        day_night_string = "DAY"
+    if day_night_string == "Night":
+        day_night_string = "NIGHT"
 
     Sen_station_time_series = []
 
@@ -267,7 +263,7 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
         Sen_final_mean = []
 
         for j, tifs in enumerate(sentinel_file_list):
-            if daytime_S3 in str(sentinel_file_list[j]):
+            if day_night_string in str(sentinel_file_list[j]):
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
@@ -275,7 +271,7 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
                 mean_Sen = np.nanmean(Sen_temperature_array)
                 Sen_final_mean.append(mean_Sen)
 
-            if daytime_S3 == "Day/Night":
+            if day_night_string == "Day/Night":
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]
