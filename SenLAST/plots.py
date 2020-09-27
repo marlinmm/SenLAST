@@ -99,10 +99,10 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
     fig = go.Figure(data=[
-        go.Bar(name='Sen-3 SLSTR mittlere Nacht-Temperatur (°C)', x=stations, y=analyze_SENTINEL_temperature(sen_directory=sen_directory,
+        go.Bar(name='Sen-3 SLSTR mittlere Nacht-Temperatur (°C)', x=stations, y=calculate_statics_SENTINEL(sen_directory=sen_directory,
                                                                                            sen_shape_path=sen_shape_path,
                                                                                            daytime_S3=daytime_S3)),
-        go.Bar(name='Terra MODIS mittlere Nacht-Temperatur (°C)', x=stations, y=analyze_MODIS_temperature(mod_directory=mod_directory,
+        go.Bar(name='Terra MODIS mittlere Nacht-Temperatur (°C)', x=stations, y=calculate_statics_MODIS(mod_directory=mod_directory,
                                                                                            mod_shape_path=mod_shape_path,
                                                                                            daytime_MODIS=daytime_MODIS))
     ])
@@ -141,6 +141,7 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
 
 def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS, stat_metric):#, path_to_csv):
     diff_list = []
+
     a = calculate_statics_SENTINEL(sen_directory, sen_shape_path, daytime_S3, stat_metric)
     b = calculate_statics_MODIS(mod_directory, mod_shape_path, daytime_MODIS, stat_metric)
     # a = analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3)
