@@ -163,8 +163,7 @@ def station_height():
         ),
         barmode='group',
         xaxis_tickangle=45,
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
-        bargroupgap=0.1,  # gap between bars of the same location coordinate.
+        bargap=0.5,  # gap between bars of adjacent location coordinates.
     )
     fig.update_traces(marker_color='orange')
     fig.show()
