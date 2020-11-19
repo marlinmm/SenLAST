@@ -94,6 +94,82 @@ def count_all_occurences(satellite_directory):
 
 ########################################################################################################################
 
+land_cover_types_station = ["coniferous", "mixed forest", "agriculture", "urban", "industry"]
+
+land_cover_types_region = ["coniferous", "mixed forest", "agriculture", "urban", "deciduous"]
+
+
+def station_land_covers(place):
+    values_station = [3, 1, 12, 3, 1]
+    values_region = [3, 1, 13, 2, 1]
+
+    if place == "station":
+        plt.gca().axis("equal")
+        pie = plt.pie(values_station, startangle=0, autopct='%1.0f%%', pctdistance=0.9, radius=1.2)
+        labels = land_cover_types_station
+        plt.title('Land cover around the stations (500 m)', weight='bold', size=14)
+        plt.legend(pie[0], labels, bbox_to_anchor=(1, 0.5), loc="center right", fontsize=10,
+                   bbox_transform=plt.gcf().transFigure)
+        plt.subplots_adjust(left=0.0, bottom=0.1, right=0.85)
+
+        plt.show()
+        plt.clf()
+        plt.close()
+    else:
+        plt.gca().axis("equal")
+        pie = plt.pie(values_region, startangle=0, autopct='%1.0f%%', pctdistance=0.9, radius=1.2)
+        labels = land_cover_types_region
+        plt.title('Land Cover around the station (500 m)', weight='bold', size=14)
+        plt.legend(pie[0], labels, bbox_to_anchor=(1, 0.5), loc="center right", fontsize=10,
+                   bbox_transform=plt.gcf().transFigure)
+        plt.subplots_adjust(left=0.0, bottom=0.1, right=0.85)
+
+        plt.show()
+        plt.clf()
+        plt.close()
+
+
+def station_height():
+    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
+                'Meiningen',
+                'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
+                'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
+    altitude = [303, 170, 316, 732, 500, 427, 450, 845, 937, 277, 348, 328, 160, 289, 156, 565, 312, 386, 265, 353]
+    fig = go.Figure(data=[
+        go.Bar(name='Sen-3 SLSTR mittlere Nacht-Temperatur (°C)', x=stations,
+               y=altitude)])
+    fig.update_layout(
+        title='Station altitude (Height above mean sea level in m)',
+        titlefont_size=36,
+        xaxis=dict(
+            title='Stations',
+            titlefont_size=32,
+            tickfont_size=26,
+        ),
+        yaxis=dict(
+            title='Station altitude (m)',
+            titlefont_size=32,
+            tickfont_size=28,
+        ),
+        legend=dict(
+            x=0.82,
+            y=1.05,
+            bgcolor='rgba(0, 255, 255, 0)',
+            bordercolor='rgba(0, 255, 255, 0)',
+            font=dict(
+                size=16,
+                color="black"
+            ),
+        ),
+        barmode='group',
+        xaxis_tickangle=45,
+        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        bargroupgap=0.1,  # gap between bars of the same location coordinate.
+    )
+    fig.update_traces(marker_color='orange')
+    fig.show()
+
+
 def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
     stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
@@ -131,6 +207,7 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
             ),
         ),
         barmode='group',
+        xaxis_tickangle=45,
         bargap=0.15,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
@@ -206,6 +283,7 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
             bordercolor='rgba(255, 255, 255, 0)'
         ),
         barmode='group',
+        xaxis_tickangle=45,
         bargap=0.15,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
@@ -310,6 +388,7 @@ def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_
             bordercolor='rgba(255, 255, 255, 0)'
         ),
         barmode='group',
+        xaxis_tickangle=45,
         bargap=0.35,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
@@ -471,6 +550,7 @@ def SenDWD_barchart(sen_directory, sen_shape_path, path_to_csv, DWD_temp_paramet
             ),
         ),
         barmode='group',
+        xaxis_tickangle=45,
         bargap=0.3,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
@@ -511,6 +591,7 @@ def ModDWD_barchart(mod_directory, mod_shape_path, path_to_csv):
             bordercolor='rgba(255, 255, 255, 0)'
         ),
         barmode='group',
+        xaxis_tickangle=45,
         bargap=0.3,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )

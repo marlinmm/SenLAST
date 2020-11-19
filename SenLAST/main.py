@@ -29,8 +29,8 @@ def main():
 
     ## Datapairs ##
     # Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare"
-    Sentinel_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/Sentinel"
-    MODIS_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/MODIS"
+    Sentinel_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/S3B/Sentinel"
+    MODIS_Datapair_directory = Base_Folder + "Sen_MOD_Datenpaare/S3B/MODIS"
 
     ### For allstations_alldata function use the following directories
     # Sentinel_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/Sentinel/2018_09_30"
@@ -49,6 +49,10 @@ def main():
 
     ##### RASTER-ANALYSIS SECTION #####
 
+    # station_land_covers(place="station")
+
+    station_height()
+
     # rename_sentinel(sen_directory=SENTINEL_time_overlap_directory)
 
     # import_DWD_data_Sentinel(sen_directory=SENTINEL_cloud_free_directory, csv_directory=SENTINEL_DWD_directory)
@@ -66,9 +70,9 @@ def main():
     #                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
     #                 daytime_MODIS="Day")
 
-    SenMod_histogram(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="NIGHT",
-                    sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-                    daytime_MODIS="Night")
+    # SenMod_histogram(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="NIGHT",
+    #                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+    #                 daytime_MODIS="Night")
 
     # analyze_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
     #                   mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TT_10")
