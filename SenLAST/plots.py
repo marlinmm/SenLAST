@@ -53,49 +53,85 @@ def datapairs():
 # datapairs()
 
 
-def count_all_occurences(satellite_directory):
-    month_list = ["2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03", "2019-04",
-                  "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12", "2020-01", "2020-02",
-                  "2020-03", "2020-04", "2020-05"]
-    sen_dates = extract_MODIS_date(satellite_directory)
-    sat_dates2 = [elem[:7] for elem in sen_dates]
-    occurence_list = []
-    for element in month_list:
-        print(element)
-        occurences = sat_dates2.count(element)
-        occurence_list.append(occurences)
-    print(occurence_list)
+def count_all_occurences(satellite, satellite_directory):
+    month_list = ["2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02", "2019-03",
+                  "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10", "2019-11", "2019-12",
+                  "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06"]
+    if satellite == "Sentinel":
+        sen_dates = extract_SENTINEL_date(satellite_directory)
+        sat_dates2 = [elem[:7] for elem in sen_dates]
+        occurence_list = []
+        for element in month_list:
+            print(element)
+            occurences = sat_dates2.count(element)
+            occurence_list.append(occurences)
+        print(occurence_list)
 
+        fig = go.Figure(data=[
+            go.Bar(name='Anzahl der monatlichen MODIS Aufnahmen', x=month_list, y=occurence_list, text=occurence_list,
+                   textposition="outside"),
+        ])
+        # Change the bar mode
+        fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
+        fig.update_layout(
+            # title='Anzahl der monatlichen MODIS Aufnahmen',
+            titlefont_size=28,
+            xaxis=dict(
+                title='month',
+                titlefont_size=20,
+                tickfont_size=14,
+            ),
+            yaxis=dict(
+                title='number of scenes',
+                titlefont_size=20,
+                tickfont_size=14,
+                range=[0, 40]
+            ),
+            barmode='group',
+            bargap=0.25,  # gap between bars of adjacent location coordinates.
+            xaxis_tickangle=45,
+        )
 
-    fig = go.Figure(data=[
-        go.Bar(name='Anzahl der monatlichen MODIS Aufnahmen', x=month_list, y=occurence_list, text=occurence_list, textposition="outside"),
-    ])
-    # Change the bar mode
-    fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
-    fig.update_layout(
-        title='Anzahl der monatlichen MODIS Aufnahmen',
-        titlefont_size=28,
-        xaxis=dict(
-            title='Datum',
-            titlefont_size=20,
-            tickfont_size=14,
-        ),
-        yaxis=dict(
-            title='Anzahl der Aufnahmen',
-            titlefont_size=20,
-            tickfont_size=14,
-        ),
-        barmode='group',
-        bargap=0.25,  # gap between bars of adjacent location coordinates.
-        bargroupgap=0.1  # gap between bars of the same location coordinate.
-    )
+    if satellite == "Modis":
+        sen_dates = extract_MODIS_date(satellite_directory)
+        sat_dates2 = [elem[:7] for elem in sen_dates]
+        occurence_list = []
+        for element in month_list:
+            print(element)
+            occurences = sat_dates2.count(element)
+            occurence_list.append(occurences)
+        print(occurence_list)
+
+        fig = go.Figure(data=[
+            go.Bar(name='Anzahl der monatlichen MODIS Aufnahmen', x=month_list, y=occurence_list, text=occurence_list, textposition="outside"),
+        ])
+        # Change the bar mode
+        fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
+        fig.update_layout(
+            # title='Anzahl der monatlichen MODIS Aufnahmen',
+            titlefont_size=28,
+            xaxis=dict(
+                title='month',
+                titlefont_size=20,
+                tickfont_size=14,
+            ),
+            yaxis=dict(
+                title='number of scenes',
+                titlefont_size=20,
+                tickfont_size=14,
+                range=[0, 40]
+            ),
+            barmode='group',
+            bargap=0.25,  # gap between bars of adjacent location coordinates.
+            xaxis_tickangle=45,
+        )
+        fig.update_traces(marker_color='indianred')
     fig.show()
 
 
 ########################################################################################################################
 
 land_cover_types_station = ["coniferous", "mixed forest", "agriculture", "urban", "industry"]
-
 land_cover_types_region = ["coniferous", "mixed forest", "agriculture", "urban", "deciduous"]
 
 
@@ -112,21 +148,17 @@ def station_land_covers(place):
                    bbox_transform=plt.gcf().transFigure)
         plt.subplots_adjust(left=0.0, bottom=0.1, right=0.85)
 
-        plt.show()
-        plt.clf()
-        plt.close()
     else:
         plt.gca().axis("equal")
         pie = plt.pie(values_region, startangle=0, autopct='%1.0f%%', pctdistance=0.9, radius=1.2)
         labels = land_cover_types_region
-        plt.title('Land Cover around the station (500 m)', weight='bold', size=14)
+        plt.title('Dominating land cover around the station (9km^2)', loc="left", weight='bold', size=14)
         plt.legend(pie[0], labels, bbox_to_anchor=(1, 0.5), loc="center right", fontsize=10,
                    bbox_transform=plt.gcf().transFigure)
         plt.subplots_adjust(left=0.0, bottom=0.1, right=0.85)
-
-        plt.show()
-        plt.clf()
-        plt.close()
+    plt.show()
+    plt.clf()
+    plt.close()
 
 
 def station_height():
@@ -136,18 +168,18 @@ def station_height():
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
     altitude = [303, 170, 316, 732, 500, 427, 450, 845, 937, 277, 348, 328, 160, 289, 156, 565, 312, 386, 265, 353]
     fig = go.Figure(data=[
-        go.Bar(name='Sen-3 SLSTR mittlere Nacht-Temperatur (°C)', x=stations,
+        go.Bar(name='', x=stations,
                y=altitude)])
     fig.update_layout(
-        title='Station altitude (Height above mean sea level in m)',
+        #title='Station height above mean sea level (in m)',
         titlefont_size=36,
         xaxis=dict(
-            title='Stations',
+            title='stations',
             titlefont_size=32,
             tickfont_size=26,
         ),
         yaxis=dict(
-            title='Station altitude (m)',
+            title='altitude (m)',
             titlefont_size=32,
             tickfont_size=28,
         ),
@@ -182,22 +214,31 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
                                                                                            daytime_MODIS=daytime_MODIS))
     ])
     # Change the bar mode
+    if daytime_S3 == "DAY":
+        fig.update_layout(yaxis=dict(
+            title='mean temperature (°C)',
+            titlefont_size=24,
+            tickfont_size=20,
+            range=[0,30]
+        ))
+    if daytime_S3 == "NIGHT":
+        fig.update_layout(yaxis=dict(
+            title='mean temperature (°C)',
+            titlefont_size=24,
+            tickfont_size=20,
+            range=[0,10]
+        ))
     fig.update_layout(
-        title='Mittlere Nacht-Temperatur (n = 23 Szenen)',
-        titlefont_size=36,
+        # title='Mittlere Nacht-Temperatur (n = 23 Szenen)',
+        titlefont_size=30,
         xaxis=dict(
-            title='Stationen',
-            titlefont_size=32,
-            tickfont_size=26,
-        ),
-        yaxis=dict(
-            title='Mittlere Nacht-Temperatur (°C)',
-            titlefont_size=32,
-            tickfont_size=28,
+            title='stations',
+            titlefont_size=24,
+            tickfont_size=20,
         ),
         legend=dict(
             x=0.82,
-            y=1.05,
+            y=1.25,
             bgcolor='rgba(255, 255, 255, 0)',
             bordercolor='rgba(255, 255, 255, 0)',
             font = dict(
@@ -207,8 +248,8 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
         ),
         barmode='group',
         xaxis_tickangle=45,
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
-        bargroupgap=0.1  # gap between bars of the same location coordinate.
+        bargap=0.4,  # gap between bars of adjacent location coordinates.
+        bargroupgap=0.05  # gap between bars of the same location coordinate.
     )
     fig.show()
 
@@ -263,17 +304,19 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
     fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
     fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
     fig.update_layout(
-        title='Mittlere Temperaturdifferenz von MODIS zu DWD-Daten (2m) (MODIS-DWD)',
+        # title='Mittlere Temperaturdifferenz von MODIS zu DWD-Daten (2m) (MODIS-DWD)',
         titlefont_size=30,
         xaxis=dict(
-            title='Stationen',
-            titlefont_size=20,
-            tickfont_size=14,
+            title='stations',
+            titlefont_size=24,
+            tickfont_size=20,
         ),
         yaxis=dict(
-            title='Mittlere Temperaturdifferenz von MODIS zu DWD-Daten (2m) (°C)',
-            titlefont_size=20,
-            tickfont_size=14,
+            title='mean difference (°C)',
+            titlefont_size=24,
+            tickfont_size=20,
+            range=[-0.9, 0.9]
+            # range=[-0.3, 0.9] # night
         ),
         legend=dict(
             x=0,
@@ -283,7 +326,7 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
         ),
         barmode='group',
         xaxis_tickangle=45,
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        bargap=0.2,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
     fig.show()
@@ -318,17 +361,17 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
     fig.update_traces(marker=dict(size=10),
                       selector=dict(mode='markers'))
     fig.update_layout(
-        title='Korrelation der mittleren Nacht-Temperatur (MODIS/S3)',
+        # title='Korrelation der mittleren Nacht-Temperatur (MODIS/S3)',
         titlefont_size=32,
         xaxis=dict(
-            title='Mittlere MODIS Nacht-Temperatur (°C)',
-            titlefont_size=32,
-            tickfont_size=26,
+            title='mean MODIS temperature (°C)',
+            titlefont_size=24,
+            tickfont_size=20,
         ),
         yaxis=dict(
-            title='Mittlere SENTINEL Nacht-Temperatur (°C)',
-            titlefont_size=32,
-            tickfont_size=26,
+            title='mean SLSTR temperature (°C)',
+            titlefont_size=24,
+            tickfont_size=20,
         ))
 
     fig.show()
@@ -511,7 +554,7 @@ def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_param
     # fig.savefig('fig1.png', bbox_inches='tight')
 
 
-def SenDWD_barchart(sen_directory, sen_shape_path, path_to_csv, DWD_temp_parameter):
+def SenDWD_barchart(sen_directory, sen_shape_path, path_to_csv):
     stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
@@ -530,13 +573,14 @@ def SenDWD_barchart(sen_directory, sen_shape_path, path_to_csv, DWD_temp_paramet
         titlefont_size=32,
         xaxis=dict(
             title='Stationen',
-            titlefont_size=32,
-            tickfont_size=26,
+            titlefont_size=24,
+            tickfont_size=16,
         ),
         yaxis=dict(
             title='Mittlere Temperatur (°C)',
-            titlefont_size=32,
-            tickfont_size=26,
+            titlefont_size=24,
+            tickfont_size=16,
+            range=[0, 17]
         ),
         legend=dict(
             x=0.82,
@@ -575,13 +619,14 @@ def ModDWD_barchart(mod_directory, mod_shape_path, path_to_csv):
         titlefont_size=28,
         xaxis=dict(
             title='Stationen',
-            titlefont_size=20,
-            tickfont_size=14,
+            titlefont_size=24,
+            tickfont_size=16,
         ),
         yaxis=dict(
             title='Mittlere Temperatur (°C)',
-            titlefont_size=20,
-            tickfont_size=14,
+            titlefont_size=24,
+            tickfont_size=16,
+            range=[0, 17]
         ),
         legend=dict(
             x=0.86,
