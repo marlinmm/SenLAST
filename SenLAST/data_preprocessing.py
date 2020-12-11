@@ -5,6 +5,7 @@ import numpy as np
 import shutil
 from SenLAST.base_information import extract_files_to_list, import_polygons
 
+
 def eliminate_MODIS_cloudy_data(mod_directory, shape_path):
     """
     eliminates the scenes which are not cloud_free
@@ -24,7 +25,7 @@ def eliminate_MODIS_cloudy_data(mod_directory, shape_path):
     for i, tifs in enumerate(selected_tifs):
         src1 = rio.open(selected_tifs[i])
         bool_list = []
-        flag = 0   #set boolean flag to 0
+        flag = 0  # set boolean flag to 0
 
         # loop through all weatherstations for each .tif file
         for j, polygons in enumerate(import_list):
@@ -47,7 +48,6 @@ def eliminate_MODIS_cloudy_data(mod_directory, shape_path):
                 break
         if flag == 0:
             shutil.copy(selected_tifs[i], cloud_free)
-
 
 
 def eliminate_nanoverlap(sen_directory, shape_path):
@@ -94,7 +94,7 @@ def eliminate_SENTINEL_cloudy_data(sen_directory, shape_path):
     for i, tifs in enumerate(selected_tifs):
         src1 = rio.open(selected_tifs[i])
         bool_list = []
-        flag = 0   #set boolean flag to 0
+        flag = 0  # set boolean flag to 0
 
         # loop through all weatherstations for each .tif file
         for j, polygons in enumerate(import_list):

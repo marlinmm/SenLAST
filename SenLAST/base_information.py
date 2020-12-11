@@ -28,7 +28,7 @@ def import_polygons(shape_path):
     """
     shape_list = []
     active_shapefile = fiona.open(shape_path, "r")
-    for i in range(0,len(list(active_shapefile))):
+    for i in range(0, len(list(active_shapefile))):
         shapes = [feature["geometry"] for feature in active_shapefile]
         shape_list.append(shapes)
     return shape_list
@@ -46,14 +46,14 @@ def extract_time_value_MODIS(mod_time_directory, shape_path):
     for i, tifs in enumerate(selected_tifs):
         src1 = rio.open(selected_tifs[i])
         # loop through all weatherstations for each .tif file
-        for j in range(0,1):
+        for j in range(0, 1):
             out_image1, out_transform1 = rio.mask.mask(src1, [import_list[0][j]], all_touched=1, crop=True,
                                                        nodata=np.nan)
             temp = np.nanmean(out_image1[0])
             str_temp = str(temp)
             result = str_temp.find(".")
-            sol_minute = int(int(str_temp[result+1:result+3]) * 60 / 100)
-            sol_hour = str_temp[result-2:result]
+            sol_minute = int(int(str_temp[result + 1:result + 3]) * 60 / 100)
+            sol_hour = str_temp[result - 2:result]
             normal_hour = int(sol_hour)
             normal_minute = int(sol_minute) - 46
             if normal_minute < 0:
@@ -74,12 +74,13 @@ def rename_files(mod_directory, mod_time_directory, shape_path):
     time_list = extract_time_value_MODIS(mod_time_directory=new_mod_time_directory, shape_path=shape_path)
     selected_tifs = extract_files_to_list(path_to_folder=new_mod_directory, datatype=".tif")
     for i, tifs in enumerate(selected_tifs):
-        #Marlin Index:
+        # Marlin Index:
         name = tifs[0:124]
         # Jonas Index:
-        #name = tifs[0:hier dein Index]
+        # name = tifs[0:hier dein Index]
         print(name)
         os.rename(tifs, name + time_list[i] + ".tif")
+
 
 def rename_sentinel(sen_directory):
     sentinel_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
@@ -87,6 +88,7 @@ def rename_sentinel(sen_directory):
     if not os.path.exists(rename_folder):
         os.mkdir(rename_folder)
     for i, tifs in enumerate(sentinel_list):
-        new_tif_name = tifs[tifs.index("S3")+8:len(tifs)-4] + "_" + tifs[tifs.index("S3"):tifs.index("S3")+3] + ".tif"
+        new_tif_name = tifs[tifs.index("S3") + 8:len(tifs) - 4] + "_" + tifs[
+                                                                        tifs.index("S3"):tifs.index("S3") + 3] + ".tif"
         print(new_tif_name)
         shutil.copy(tifs, rename_folder + new_tif_name)

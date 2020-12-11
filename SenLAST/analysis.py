@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 from SenLAST.base_information import extract_files_to_list, import_polygons
 
 # List of station names
-station_names = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
-                'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
-                'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
+station_names = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
+                 'Meiningen', 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben',
+                 'Krölpa-Rdorf', 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
 
 
 def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
@@ -48,7 +48,7 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
         Sen_final_range = []
 
         # print(scenes, ". weather station")
-        print("{}.{}".format(i +1, station_names[i]))
+        print("{}.{}".format(i + 1, station_names[i]))
 
         for j, tifs in enumerate(sentinel_file_list):
             if daytime_S3 in str(sentinel_file_list[j]):
@@ -124,7 +124,7 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
     print("#################### MODIS RESULTS ####################")
 
     for i, polygons in enumerate(import_list):
-        scenes = i+1
+        scenes = i + 1
 
         ## Initialize empty analysis lists
         Mod_final_mean = []
@@ -273,7 +273,7 @@ def analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_pa
     return DWD_mean_list, Sen_data_mean_list
 
 
-def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter,):
+def analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter, ):
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
     Mod_data_list = extract_MODIS_temp_list(mod_directory=mod_directory, mod_shape_path=mod_shape_path)
     DWD_mean_list = []
