@@ -22,6 +22,20 @@ def extract_SENTINEL_date(sen_directory):
     return SENTINEL_date_list
 
 
+def extract_SENTINEL_date_forDWD(sen_directory):
+    """
+    extracts the acquisition date of SENTINEL scenes sorted earlier on into a new list
+    :return:
+    """
+    SENTINEL_date_list = []
+
+    for filename in os.listdir(sen_directory):
+        timestamp = filename[0:10]
+        SENTINEL_date_list.append(os.path.join(timestamp))
+    # SENTINEL_date_list.sort()
+    return SENTINEL_date_list
+
+
 def extract_SENTINEL_timestamp(sen_directory):
     """
     extracts the acquisition time of SENTINEL scenes sorted earlier on into a new list
@@ -34,6 +48,26 @@ def extract_SENTINEL_timestamp(sen_directory):
         hour = int(hour)
         hour_in_minutes = hour * 60
         minutes = filename[22:24]
+        minutes = int(minutes)
+        ges_minutes = hour_in_minutes + minutes
+        ges_minutes = str(ges_minutes)
+        SENTINEL_timestamp_list.append(os.path.join(ges_minutes))
+    # print(SENTINEL_timestamp_list)
+    return SENTINEL_timestamp_list
+
+
+def extract_SENTINEL_timestamp_forDWD(sen_directory):
+    """
+    extracts the acquisition time of SENTINEL scenes sorted earlier on into a new list
+    :return:
+    """
+    SENTINEL_timestamp_list = []
+
+    for filename in os.listdir(sen_directory):
+        hour = filename[11:13]
+        hour = int(hour)
+        hour_in_minutes = hour * 60
+        minutes = filename[14:16]
         minutes = int(minutes)
         ges_minutes = hour_in_minutes + minutes
         ges_minutes = str(ges_minutes)

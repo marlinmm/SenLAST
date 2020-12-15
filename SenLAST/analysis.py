@@ -211,7 +211,7 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
         Mod_final_mean = []
 
         for j, tifs in enumerate(modis_file_list):
-            if daytime_MODIS in str(modis_file_list[j]):
+            # if daytime_MODIS in str(modis_file_list[j]):
                 src1 = rio.open(modis_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Mod_temperature_array = mask[0][0]
@@ -219,6 +219,46 @@ def extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS=None):
                 Mod_final_mean.append(mean_Mod)
         Mod_station_time_series.append(Mod_final_mean)
     return Mod_station_time_series
+
+
+# def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
+#     """
+#     returns the temperature value for each pixel of each station for each SENTINEL scene
+#     prints an array for the scenes according to the stations
+#     :return:
+#     returns three arrays (1st array displayed for each station is the temperature array)
+#     returns one temperature array for each station if a[0][0]
+#     """
+#     import_list = import_polygons(shape_path=sen_shape_path)
+#     sentinel_file_list = extract_files_to_list(path_to_folder=sen_directory, datatype=".tif")
+#
+#     Sen_station_time_series = []
+#
+#     for i, polygons in enumerate(import_list):
+#         ## Initialize empty analysis lists
+#         Sen_final_mean = []
+#
+#         for j, tifs in enumerate(sentinel_file_list):
+#             #print(sentinel_file_list[j])
+#             try:
+#                 if daytime_S3 in str(sentinel_file_list[j]):
+#                     src1 = rio.open(sentinel_file_list[j])
+#                     mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
+#                     Sen_temperature_array = mask[0][0]
+#
+#                     ## Calculate mean ##
+#                     mean_Sen = np.nanmean(Sen_temperature_array)
+#                     Sen_final_mean.append(mean_Sen)
+#             except TypeError:
+#                 src1 = rio.open(sentinel_file_list[j])
+#                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
+#                 Sen_temperature_array = mask[0][0]
+#
+#                 ## Calculate mean ##
+#                 mean_Sen = np.nanmean(Sen_temperature_array)
+#                 Sen_final_mean.append(mean_Sen)
+#         Sen_station_time_series.append(Sen_final_mean)
+#     return Sen_station_time_series
 
 
 def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
@@ -239,7 +279,7 @@ def extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3=None):
         Sen_final_mean = []
 
         for j, tifs in enumerate(sentinel_file_list):
-            if daytime_S3 in str(sentinel_file_list[j]):
+            # if daytime_S3 in str(sentinel_file_list[j]):
                 src1 = rio.open(sentinel_file_list[j])
                 mask = rio.mask.mask(src1, [import_list[0][i]], all_touched=True, crop=True, nodata=np.nan)
                 Sen_temperature_array = mask[0][0]

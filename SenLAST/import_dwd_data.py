@@ -5,11 +5,11 @@ from SenLAST.base_information import *
 
 
 def import_DWD_data_Sentinel(sen_directory, csv_directory):
-    sen_date = extract_SENTINEL_date(sen_directory=sen_directory)
+    sen_date = extract_SENTINEL_date_forDWD(sen_directory=sen_directory)
     print(sen_date)
     sen_date.sort()
     print(sen_date)
-    sen_time = extract_SENTINEL_timestamp(sen_directory=sen_directory)
+    sen_time = extract_SENTINEL_timestamp_forDWD(sen_directory=sen_directory)
     sen_date_time = []
     csv_file_list = extract_files_to_list(path_to_folder=csv_directory, datatype=".csv")
 
@@ -25,6 +25,7 @@ def import_DWD_data_Sentinel(sen_directory, csv_directory):
             hour = hour + 1
             minute = "00"
         sen_date_time.append(year + month + day + str(hour) + str(minute))
+        print(sen_date_time)
 
     for j, file in enumerate(csv_file_list):
         station_list = []
@@ -36,7 +37,7 @@ def import_DWD_data_Sentinel(sen_directory, csv_directory):
             for date in sen_date_time:
                 matching = [s for s in station_list if date in s]
                 value_list.append(matching)
-        with open(file[0:len(file)-4] + "_Sentinel" + ".csv", "w", newline='') as new_csvfile:
+        with open(file[0:len(file)-4] + "-3A" + ".csv", "w", newline='') as new_csvfile:
             wt = csv.writer(new_csvfile, quoting=csv.QUOTE_ALL)
             wt.writerows(value_list)
 

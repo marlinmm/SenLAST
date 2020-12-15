@@ -497,21 +497,37 @@ def plot_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_paramete
         plt.show()
 
 
-def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter):
+def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter): # , daytime_S3):
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
+    # Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path,
+    #                                            daytime_S3=daytime_S3)
+
     Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
+
+    print(len(Sen_data_list))
     DWD_mean_list = []
     Sen_data_mean_list = []
     boxplot_result_list = []
     print("######################## SENTINEL ########################")
     for i, file in enumerate(csv_list):
+
+        print(Sen_data_list[i])
+        print(len(Sen_data_list[i]))
+
+
         # Read csv data
         df = pd.read_csv(file, delimiter=",")
         temp_2m = df[DWD_temp_parameter]
 
+        print(temp_2m)
+        print(len(temp_2m))
+
         tmp = temp_2m[temp_2m == -999]
+        print(tmp)
         if len(tmp) > 0:
             for j, value in enumerate(tmp):
+                print(tmp.index[j])
+
                 temp_2m = temp_2m.drop([tmp.index[j]])
                 Sen_data_list[i].pop(tmp.index[j])
         if DWD_temp_parameter == "TM5_10":

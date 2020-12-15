@@ -8,8 +8,8 @@ from SenLAST.import_dwd_data import *
 from SenLAST.base_information import *
 from SenLAST.plots import *
 
-
 start_time = datetime.now()
+
 
 def main():
     ###################################     INPUT    ########################################
@@ -24,7 +24,7 @@ def main():
     MODIS_time_overlap_directory = Base_Folder + "MODIS/time_overlap"
 
     ## SENTINEL ##
-    SENTINEL_cloud_free_directory = Base_Folder + "Sentinel/cloud_free"
+    SENTINEL_cloud_free_directory = Base_Folder + "Sentinel/S3A_renamed"
     SENTINEL_time_overlap_directory = Base_Folder + "Sentinel/time_overlap"
 
     ## Datapairs ##
@@ -37,7 +37,7 @@ def main():
     # MODIS_Datapair_directory = "F:/GEO411_data/Processing/Sen_MOD_Datenpaare/MODIS/2018_09_30"
 
     ## DWD ##
-    SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel/"
+    SENTINEL_DWD_directory = Base_Folder + "DWD/Sentinel/S3A"
     # SENTINEL_DWD_directory = Base_Folder + "Juni_2020/Sentinel/DWD/"
     MODIS_DWD_directory = Base_Folder + "DWD/MODIS/"
 
@@ -83,12 +83,12 @@ def main():
     #                 mod_shape_path=MODIS_Shapefile_directory)
 
     ####################### DELIVERS SHIT RESULTS ###############################
-    # plot_Sentinel_DWD(sen_directory=SENTINEL_cloud_free_directory, sen_shape_path=SENTINEL_Shapefile_directory,
-    #                   path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")
+    plot_Sentinel_DWD(sen_directory=SENTINEL_cloud_free_directory, sen_shape_path=SENTINEL_Shapefile_directory,
+                      path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")  # , daytime_S3="DAY")
     #############################################################################
 
-    plot_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
-                   mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TM5_10")
+    # plot_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
+    #                mod_shape_path=MODIS_Shapefile_directory, DWD_temp_parameter="TT_10")
 
     # allstations_alldata(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
     #                     daytime_S3="",
