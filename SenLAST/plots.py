@@ -77,12 +77,12 @@ def count_all_occurences(satellite, satellite_directory):
             # title='Anzahl der monatlichen MODIS Aufnahmen',
             titlefont_size=28,
             xaxis=dict(
-                title='month',
+                title='Month',
                 titlefont_size=20,
                 tickfont_size=14,
             ),
             yaxis=dict(
-                title='number of scenes',
+                title='Number of scenes',
                 titlefont_size=20,
                 tickfont_size=14,
                 range=[0, 40]
@@ -111,12 +111,12 @@ def count_all_occurences(satellite, satellite_directory):
             # title='Anzahl der monatlichen MODIS Aufnahmen',
             titlefont_size=28,
             xaxis=dict(
-                title='month',
+                title='Month',
                 titlefont_size=20,
                 tickfont_size=14,
             ),
             yaxis=dict(
-                title='number of scenes',
+                title='Number of scenes',
                 titlefont_size=20,
                 tickfont_size=14,
                 range=[0, 40]
@@ -174,12 +174,12 @@ def station_height():
         #title='Station height above mean sea level (in m)',
         titlefont_size=36,
         xaxis=dict(
-            title='stations',
+            title='Stations',
             titlefont_size=32,
             tickfont_size=26,
         ),
         yaxis=dict(
-            title='altitude (m)',
+            title='Altitude (m)',
             titlefont_size=32,
             tickfont_size=28,
         ),
@@ -216,14 +216,14 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
     # Change the bar mode
     if daytime_S3 == "DAY":
         fig.update_layout(yaxis=dict(
-            title='mean temperature (°C)',
+            title='Mean temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
             range=[0,30]
         ))
     if daytime_S3 == "NIGHT":
         fig.update_layout(yaxis=dict(
-            title='mean temperature (°C)',
+            title='Mean temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
             range=[0,10]
@@ -232,7 +232,7 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
         # title='Mittlere Nacht-Temperatur (n = 23 Szenen)',
         titlefont_size=30,
         xaxis=dict(
-            title='stations',
+            title='Stations',
             titlefont_size=24,
             tickfont_size=20,
         ),
@@ -307,12 +307,12 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
         # title='Mittlere Temperaturdifferenz von MODIS zu DWD-Daten (2m) (MODIS-DWD)',
         titlefont_size=30,
         xaxis=dict(
-            title='stations',
+            title='Stations',
             titlefont_size=24,
             tickfont_size=20,
         ),
         yaxis=dict(
-            title='mean difference (°C)',
+            title='Mean difference (°C)',
             titlefont_size=24,
             tickfont_size=20,
             range=[-0.9, 0.9]
@@ -364,12 +364,12 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
         # title='Korrelation der mittleren Nacht-Temperatur (MODIS/S3)',
         titlefont_size=32,
         xaxis=dict(
-            title='mean MODIS temperature (°C)',
+            title='Mean MODIS temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
         ),
         yaxis=dict(
-            title='mean SLSTR temperature (°C)',
+            title='Mean SLSTR temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
         ))
@@ -488,7 +488,7 @@ def plot_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_paramete
 
 def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter):
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
-    Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
+    Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path, daytime_S3="DAY")
     DWD_mean_list = []
     Sen_data_mean_list = []
     boxplot_result_list = []
