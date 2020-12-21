@@ -103,6 +103,7 @@ def analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3):
         # Sen_station_mean.append(Sen_final_mean)
         # Sen_station_median.append(Sen_final_median)
 
+    print(len(Sen_final_mean))
     return Sen_station_mean
     # return Sen_station_median
 
@@ -191,6 +192,7 @@ def analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS):
         # Plot multiple means; order of scenes is fundamental; plots.py (line 118-122)
         # Mod_station_mean.append(Mod_final_mean)
 
+    print(len(Mod_final_mean))
     return Mod_station_mean
     # return Mod_station_median
 
