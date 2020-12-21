@@ -8,9 +8,9 @@ from SenLAST.comparison import *
 
 def datapairs():
     # Jonas Path
-    # csv_path = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/"
+    csv_path = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/"
     # Marlin Path
-    csv_path = "C:/Users/marli/Downloads/"
+    # csv_path = "C:/Users/marli/Downloads/"
 
     # Filename
     csv_file = "Datenpaare.csv"
@@ -23,19 +23,19 @@ def datapairs():
     print(df)
 
     # Plot csv data
-    fig = px.bar(df, y='Datenpaare', x='Monat', text='Datenpaare', title='S3/MODIS-Datenpaare (Zeitraum: 07/2018-05/2020)')
+    fig = px.bar(df, y='Datapairs', x='Month', text='Datapairs', title='S3/MODIS-Datenpaare (Period: 07/2018-05/2020)')
     fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
     fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
     fig.update_layout(
-        title='S3/MODIS Datenpaare (07/2018 - 05/2020)',
+        title='S3/MODIS Datapairs (07/2018 - 05/2020)',
         titlefont_size=30,
         xaxis=dict(
-            title='Monat',
+            title='Month',
             titlefont_size=26,
             tickfont_size=24,
         ),
         yaxis=dict(
-            title='Anzahl der Datenpaare',
+            title='Number of datapairs',
             titlefont_size=26,
             tickfont_size=24,
         ),
@@ -49,8 +49,8 @@ def datapairs():
         bargap=0.15, # gap between bars of adjacent location coordinates.
         bargroupgap=0.1 # gap between bars of the same location coordinate.
     )
+    fig.update_traces(marker_color='darkgrey')
     fig.show()
-# datapairs()
 
 
 def count_all_occurences(satellite, satellite_directory):
@@ -85,12 +85,13 @@ def count_all_occurences(satellite, satellite_directory):
                 title='Number of scenes',
                 titlefont_size=20,
                 tickfont_size=14,
-                range=[0, 40]
+                range=[0, 15]
             ),
             barmode='group',
             bargap=0.25,  # gap between bars of adjacent location coordinates.
             xaxis_tickangle=45,
         )
+    fig.update_traces(marker_color='black')
 
     if satellite == "Modis":
         sen_dates = extract_MODIS_date(satellite_directory)
@@ -126,6 +127,65 @@ def count_all_occurences(satellite, satellite_directory):
             xaxis_tickangle=45,
         )
         fig.update_traces(marker_color='indianred')
+    fig.show()
+
+
+def count_all_datapairs(sentinel_directory, modis_directory):
+    month_list = ["2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02",
+                  "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10",
+                  "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06"]
+    sen_dates = extract_SENTINEL_date(sentinel_directory)
+    sat_dates2 = [elem[:7] for elem in sen_dates]
+    occurence_list = []
+    for element in month_list:
+        print(element)
+        occurences = sat_dates2.count(element)
+        occurence_list.append(occurences)
+    print(occurence_list)
+
+    mod_dates = extract_MODIS_date(modis_directory)
+    sat_dates3 = [elem[:7] for elem in mod_dates]
+    occurence_list_mod = []
+    for element in month_list:
+        print(element)
+        occurences = sat_dates3.count(element)
+        occurence_list_mod.append(occurences)
+    print(occurence_list_mod)
+
+    fig = go.Figure(data=[
+        go.Bar(name='Anzahl der monatlichen SLSTR Aufnahmen', x=month_list, y=occurence_list,
+               text=occurence_list,
+               textposition="outside"),
+        go.Bar(name='Anzahl der monatlichen MODIS Aufnahmen', x=month_list, y=occurence_list_mod,
+               text=occurence_list_mod,
+               textposition="outside"),
+    ])
+    # Change the bar mode
+    fig.update_layout(uniformtext_minsize=15, uniformtext_mode='hide')
+    fig.update_layout(
+        # title='Anzahl der monatlichen MODIS Aufnahmen',
+        titlefont_size=28,
+        xaxis=dict(
+            title='Month',
+            titlefont_size=20,
+            tickfont_size=14,
+        ),
+        yaxis=dict(
+            title='Number of scenes',
+            titlefont_size=20,
+            tickfont_size=14,
+            range=[0, 38]
+        ),
+        legend=dict(
+            x=0,
+            y=1.2,
+            bgcolor='rgba(255, 255, 255, 0)',
+            bordercolor='rgba(255, 255, 255, 0)',
+        ),
+        barmode='group',
+        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        xaxis_tickangle=45,
+    )
     fig.show()
 
 
@@ -256,6 +316,7 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
 ########################################################################################################################
 
 def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS): #, path_to_csv):
+    import pandas as pd
     diff_list = []
     a = analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3)
     b = analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS)
@@ -275,14 +336,15 @@ def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, dayt
     zip_object = zip(a, b)
     # zip_object = zip(SENTINEL_1d, MODIS_1d)
     for list1_i, list2_i in zip_object:
-        # diff_list.append(abs(list1_i - list2_i))
-        diff_list.append(list1_i - list2_i)
+        diff_list.append(abs(list1_i - list2_i))
+        # diff_list.append(list1_i - list2_i)
     print("Difference S3-MODIS = ")
     print(diff_list)
     print("mean difference = ")
     print(np.mean(diff_list))
     print("median difference = ")
     print(np.median(diff_list))
+    print("stdev difference = ")
     print(np.std(diff_list))
 
     return diff_list
@@ -315,7 +377,7 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
             title='Mean difference (°C)',
             titlefont_size=24,
             tickfont_size=20,
-            range=[-0.9, 0.9]
+            range=[-1, 1.5]
             # range=[-0.3, 0.9] # night
         ),
         legend=dict(
@@ -329,6 +391,7 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
         bargap=0.2,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
+    fig.update_traces(marker_color='black')
     fig.show()
 
 
@@ -338,15 +401,27 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
 def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
     SENTINEL = extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3)
     MODIS = extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS)
-    print(SENTINEL)
-    print(MODIS)
+
     ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
     SENTINEL_1d = reduce(lambda x,y : x+y, SENTINEL)
     MODIS_1d = reduce(lambda x,y : x+y, MODIS)
+    print("Sentinel = ")
     print(SENTINEL_1d)
     print(len(SENTINEL_1d))
+    print("Modis = ")
     print(MODIS_1d)
     print(len(MODIS_1d))
+
+    difference = []
+    zip_object = zip(SENTINEL_1d, MODIS_1d)
+    for list1_i, list2_i in zip_object:
+        difference.append(list1_i - list2_i)
+    print(difference)
+    df = pd.DataFrame(difference, columns=["SLSTR minus MODIS Difference"])
+    diff_mean = np.mean(difference)
+    diff_median = np.median(difference)
+    diff_stdev = np.std(difference)
+    print(diff_mean, diff_median, diff_stdev)
 
     # regression
     reg = LinearRegression().fit(np.vstack(MODIS_1d), SENTINEL_1d)
@@ -356,10 +431,12 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
     # fig = go.Figure(data=go.Scatter(x=MODIS_1d, y=SENTINEL_1d, mode='markers',
     #                                   marker=dict(color='rgba(187, 67, 141, 1)', size=10, line_width=1)))
     fig = go.Figure()
-    fig.add_trace(go.Scatter(name='line of best fit', x=MODIS_1d, y=reg_fit, mode='lines'))
     fig.add_trace(go.Scatter(name='X vs Y', x=MODIS_1d, y=SENTINEL_1d, mode='markers'))
-    fig.update_traces(marker=dict(size=10),
+    fig.add_trace(
+        go.Scatter(name='line of best fit', x=MODIS_1d, y=reg_fit, mode='lines', line=dict(color='red', width=4)))
+    fig.update_traces(marker=dict(color="black", size=7),
                       selector=dict(mode='markers'))
+
     fig.update_layout(
         # title='Korrelation der mittleren Nacht-Temperatur (MODIS/S3)',
         titlefont_size=32,
@@ -369,7 +446,7 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
             tickfont_size=20,
         ),
         yaxis=dict(
-            title='Mean SLSTR temperature (°C)',
+            title='Mean S3A temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
         ))
@@ -659,12 +736,17 @@ def SenMod_histogram(mod_directory, sen_directory, sen_shape_path, mod_shape_pat
         difference.append(list1_i - list2_i)
     print(difference)
     df = pd.DataFrame(difference, columns=["SLSTR minus MODIS Difference"])
-    print(df)
+    diff_mean = np.mean(difference)
+    diff_median = np.median(difference)
+    diff_stdev = np.std(difference)
+    print(diff_mean, diff_median, diff_stdev)
     # sns.displot(data=df, x=df["SLSTR minus MODIS Difference"], kde=True)
 
     g = sns.displot(
-        data=df, x="SLSTR minus MODIS Difference", kde=True)
-    g.set_axis_labels(daytime_MODIS + "time SLSTR minus MODIS Difference", "Number")
+        data=df, x="SLSTR minus MODIS Difference", kde=True, color="black")
+    g.set_axis_labels(daytime_MODIS + "time SLSTR minus MODIS Difference (°C)", "Number")
+    # g.set_axis_labels(daytime_MODIS + "time S3A/S3B minus MODIS Difference (°C)", "Number")
+    # g.set_axis_labels("SLSTR minus MODIS Difference (°C)", "Number")
     g.set_titles("{Histogram of " + daytime_MODIS + "time Difference")
 
     plt.show()
