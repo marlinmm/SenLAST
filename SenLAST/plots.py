@@ -8,9 +8,9 @@ from SenLAST.comparison import *
 
 def datapairs():
     # Jonas Path
-    csv_path = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/"
+    # csv_path = "C:/Users/jz199/Documents/Studium/Master/2. Semester/Vorlesungsmitschriften/GEO411 - Landschaftsmanagement und Fernerkundung/"
     # Marlin Path
-    # csv_path = "C:/Users/marli/Downloads/"
+    csv_path = "C:/Users/marli/Downloads/"
 
     # Filename
     csv_file = "Datenpaare.csv"
@@ -23,19 +23,20 @@ def datapairs():
     print(df)
 
     # Plot csv data
-    fig = px.bar(df, y='Datapairs', x='Month', text='Datapairs', title='S3/MODIS-Datenpaare (Period: 07/2018-05/2020)')
+    fig = px.bar(df, y='Datenpaare', x='Monat', text='Datenpaare',
+                 title='S3/MODIS-Datenpaare (Zeitraum: 07/2018-05/2020)')
     fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
     fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
     fig.update_layout(
-        title='S3/MODIS Datapairs (07/2018 - 05/2020)',
+        title='S3/MODIS Datenpaare (07/2018 - 05/2020)',
         titlefont_size=30,
         xaxis=dict(
-            title='Month',
+            title='Monat',
             titlefont_size=26,
             tickfont_size=24,
         ),
         yaxis=dict(
-            title='Number of datapairs',
+            title='Anzahl der Datenpaare',
             titlefont_size=26,
             tickfont_size=24,
         ),
@@ -46,11 +47,13 @@ def datapairs():
             bordercolor='rgba(255, 255, 255, 0)'
         ),
         barmode='group',
-        bargap=0.15, # gap between bars of adjacent location coordinates.
-        bargroupgap=0.1 # gap between bars of the same location coordinate.
+        bargap=0.15,  # gap between bars of adjacent location coordinates.
+        bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
-    fig.update_traces(marker_color='darkgrey')
     fig.show()
+
+
+# datapairs()
 
 
 def count_all_occurences(satellite, satellite_directory):
@@ -77,21 +80,20 @@ def count_all_occurences(satellite, satellite_directory):
             # title='Anzahl der monatlichen MODIS Aufnahmen',
             titlefont_size=28,
             xaxis=dict(
-                title='Month',
+                title='month',
                 titlefont_size=20,
                 tickfont_size=14,
             ),
             yaxis=dict(
-                title='Number of scenes',
+                title='number of scenes',
                 titlefont_size=20,
                 tickfont_size=14,
-                range=[0, 15]
+                range=[0, 40]
             ),
             barmode='group',
             bargap=0.25,  # gap between bars of adjacent location coordinates.
             xaxis_tickangle=45,
         )
-    fig.update_traces(marker_color='black')
 
     if satellite == "Modis":
         sen_dates = extract_MODIS_date(satellite_directory)
@@ -104,7 +106,8 @@ def count_all_occurences(satellite, satellite_directory):
         print(occurence_list)
 
         fig = go.Figure(data=[
-            go.Bar(name='Anzahl der monatlichen MODIS Aufnahmen', x=month_list, y=occurence_list, text=occurence_list, textposition="outside"),
+            go.Bar(name='Anzahl der monatlichen MODIS Aufnahmen', x=month_list, y=occurence_list, text=occurence_list,
+                   textposition="outside"),
         ])
         # Change the bar mode
         fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
@@ -112,12 +115,12 @@ def count_all_occurences(satellite, satellite_directory):
             # title='Anzahl der monatlichen MODIS Aufnahmen',
             titlefont_size=28,
             xaxis=dict(
-                title='Month',
+                title='month',
                 titlefont_size=20,
                 tickfont_size=14,
             ),
             yaxis=dict(
-                title='Number of scenes',
+                title='number of scenes',
                 titlefont_size=20,
                 tickfont_size=14,
                 range=[0, 40]
@@ -127,65 +130,6 @@ def count_all_occurences(satellite, satellite_directory):
             xaxis_tickangle=45,
         )
         fig.update_traces(marker_color='indianred')
-    fig.show()
-
-
-def count_all_datapairs(sentinel_directory, modis_directory):
-    month_list = ["2018-07", "2018-08", "2018-09", "2018-10", "2018-11", "2018-12", "2019-01", "2019-02",
-                  "2019-03", "2019-04", "2019-05", "2019-06", "2019-07", "2019-08", "2019-09", "2019-10",
-                  "2019-11", "2019-12", "2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06"]
-    sen_dates = extract_SENTINEL_date(sentinel_directory)
-    sat_dates2 = [elem[:7] for elem in sen_dates]
-    occurence_list = []
-    for element in month_list:
-        print(element)
-        occurences = sat_dates2.count(element)
-        occurence_list.append(occurences)
-    print(occurence_list)
-
-    mod_dates = extract_MODIS_date(modis_directory)
-    sat_dates3 = [elem[:7] for elem in mod_dates]
-    occurence_list_mod = []
-    for element in month_list:
-        print(element)
-        occurences = sat_dates3.count(element)
-        occurence_list_mod.append(occurences)
-    print(occurence_list_mod)
-
-    fig = go.Figure(data=[
-        go.Bar(name='Anzahl der monatlichen SLSTR Aufnahmen', x=month_list, y=occurence_list,
-               text=occurence_list,
-               textposition="outside"),
-        go.Bar(name='Anzahl der monatlichen MODIS Aufnahmen', x=month_list, y=occurence_list_mod,
-               text=occurence_list_mod,
-               textposition="outside"),
-    ])
-    # Change the bar mode
-    fig.update_layout(uniformtext_minsize=15, uniformtext_mode='hide')
-    fig.update_layout(
-        # title='Anzahl der monatlichen MODIS Aufnahmen',
-        titlefont_size=28,
-        xaxis=dict(
-            title='Month',
-            titlefont_size=20,
-            tickfont_size=14,
-        ),
-        yaxis=dict(
-            title='Number of scenes',
-            titlefont_size=20,
-            tickfont_size=14,
-            range=[0, 38]
-        ),
-        legend=dict(
-            x=0,
-            y=1.2,
-            bgcolor='rgba(255, 255, 255, 0)',
-            bordercolor='rgba(255, 255, 255, 0)',
-        ),
-        barmode='group',
-        bargap=0.15,  # gap between bars of adjacent location coordinates.
-        xaxis_tickangle=45,
-    )
     fig.show()
 
 
@@ -231,15 +175,15 @@ def station_height():
         go.Bar(name='', x=stations,
                y=altitude)])
     fig.update_layout(
-        #title='Station height above mean sea level (in m)',
+        # title='Station height above mean sea level (in m)',
         titlefont_size=36,
         xaxis=dict(
-            title='Stations',
+            title='stations',
             titlefont_size=32,
             tickfont_size=26,
         ),
         yaxis=dict(
-            title='Altitude (m)',
+            title='altitude (m)',
             titlefont_size=32,
             tickfont_size=28,
         ),
@@ -262,37 +206,40 @@ def station_height():
 
 
 def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
-    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
+    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
+                'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
     fig = go.Figure(data=[
-        go.Bar(name='Sen-3 SLSTR mittlere Nacht-Temperatur (°C)', x=stations, y=analyze_SENTINEL_temperature(sen_directory=sen_directory,
-                                                                                           sen_shape_path=sen_shape_path,
-                                                                                           daytime_S3=daytime_S3)),
-        go.Bar(name='Terra MODIS mittlere Nacht-Temperatur (°C)', x=stations, y=analyze_MODIS_temperature(mod_directory=mod_directory,
-                                                                                           mod_shape_path=mod_shape_path,
-                                                                                           daytime_MODIS=daytime_MODIS))
+        go.Bar(name='Sen-3 SLSTR mittlere Nacht-Temperatur (°C)', x=stations,
+               y=analyze_SENTINEL_temperature(sen_directory=sen_directory,
+                                              sen_shape_path=sen_shape_path,
+                                              daytime_S3=daytime_S3)),
+        go.Bar(name='Terra MODIS mittlere Nacht-Temperatur (°C)', x=stations,
+               y=analyze_MODIS_temperature(mod_directory=mod_directory,
+                                           mod_shape_path=mod_shape_path,
+                                           daytime_MODIS=daytime_MODIS))
     ])
     # Change the bar mode
     if daytime_S3 == "DAY":
         fig.update_layout(yaxis=dict(
-            title='Mean temperature (°C)',
+            title='mean temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
-            range=[0,30]
+            range=[0, 30]
         ))
     if daytime_S3 == "NIGHT":
         fig.update_layout(yaxis=dict(
-            title='Mean temperature (°C)',
+            title='mean temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
-            range=[0,10]
+            range=[0, 10]
         ))
     fig.update_layout(
         # title='Mittlere Nacht-Temperatur (n = 23 Szenen)',
         titlefont_size=30,
         xaxis=dict(
-            title='Stations',
+            title='stations',
             titlefont_size=24,
             tickfont_size=20,
         ),
@@ -301,7 +248,7 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
             y=1.25,
             bgcolor='rgba(255, 255, 255, 0)',
             bordercolor='rgba(255, 255, 255, 0)',
-            font = dict(
+            font=dict(
                 size=16,
                 color="black"
             ),
@@ -313,10 +260,11 @@ def SenMod_DayNight(mod_directory, sen_directory, sen_shape_path, mod_shape_path
     )
     fig.show()
 
+
 ########################################################################################################################
 
-def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS): #, path_to_csv):
-    import pandas as pd
+def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3,
+              daytime_MODIS):  # , path_to_csv):
     diff_list = []
     a = analyze_SENTINEL_temperature(sen_directory, sen_shape_path, daytime_S3)
     b = analyze_MODIS_temperature(mod_directory, mod_shape_path, daytime_MODIS)
@@ -336,32 +284,31 @@ def mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, dayt
     zip_object = zip(a, b)
     # zip_object = zip(SENTINEL_1d, MODIS_1d)
     for list1_i, list2_i in zip_object:
-        diff_list.append(abs(list1_i - list2_i))
-        # diff_list.append(list1_i - list2_i)
+        # diff_list.append(abs(list1_i - list2_i))
+        diff_list.append(list1_i - list2_i)
     print("Difference S3-MODIS = ")
     print(diff_list)
     print("mean difference = ")
     print(np.mean(diff_list))
     print("median difference = ")
     print(np.median(diff_list))
-    print("stdev difference = ")
     print(np.std(diff_list))
 
     return diff_list
 
 
-def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS): #, path_to_csv):
+def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3,
+                       daytime_MODIS):  # , path_to_csv):
     stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
                 'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
 
-
     fig = go.Figure(data=[
         go.Bar(name='', x=stations,
                y=mean_diff(sen_directory=sen_directory, mod_directory=mod_directory,
-                                              sen_shape_path=sen_shape_path, mod_shape_path=mod_shape_path,
-                                              daytime_S3=daytime_S3, daytime_MODIS=daytime_MODIS)),
+                           sen_shape_path=sen_shape_path, mod_shape_path=mod_shape_path,
+                           daytime_S3=daytime_S3, daytime_MODIS=daytime_MODIS)),
     ])
     fig.update_traces(texttemplate='%{text:.2s}', textposition='outside')
     fig.update_layout(uniformtext_minsize=20, uniformtext_mode='hide')
@@ -369,15 +316,15 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
         # title='Mittlere Temperaturdifferenz von MODIS zu DWD-Daten (2m) (MODIS-DWD)',
         titlefont_size=30,
         xaxis=dict(
-            title='Stations',
+            title='stations',
             titlefont_size=24,
             tickfont_size=20,
         ),
         yaxis=dict(
-            title='Mean difference (°C)',
+            title='mean difference (°C)',
             titlefont_size=24,
             tickfont_size=20,
-            range=[-1, 1.5]
+            range=[-0.9, 0.9]
             # range=[-0.3, 0.9] # night
         ),
         legend=dict(
@@ -391,9 +338,7 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
         bargap=0.2,  # gap between bars of adjacent location coordinates.
         bargroupgap=0.1  # gap between bars of the same location coordinate.
     )
-    fig.update_traces(marker_color='black')
     fig.show()
-
 
 
 ########################################################################################################################
@@ -401,52 +346,37 @@ def barchart_mean_diff(mod_directory, sen_directory, sen_shape_path, mod_shape_p
 def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
     SENTINEL = extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3)
     MODIS = extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS)
-
+    print(SENTINEL)
+    print(MODIS)
     ### Multiple Means for every station and every scence --> order of scenes is fundamental !!! ###
-    SENTINEL_1d = reduce(lambda x,y : x+y, SENTINEL)
-    MODIS_1d = reduce(lambda x,y : x+y, MODIS)
-    print("Sentinel = ")
+    SENTINEL_1d = reduce(lambda x, y: x + y, SENTINEL)
+    MODIS_1d = reduce(lambda x, y: x + y, MODIS)
     print(SENTINEL_1d)
     print(len(SENTINEL_1d))
-    print("Modis = ")
     print(MODIS_1d)
     print(len(MODIS_1d))
-
-    difference = []
-    zip_object = zip(SENTINEL_1d, MODIS_1d)
-    for list1_i, list2_i in zip_object:
-        difference.append(list1_i - list2_i)
-    print(difference)
-    df = pd.DataFrame(difference, columns=["SLSTR minus MODIS Difference"])
-    diff_mean = np.mean(difference)
-    diff_median = np.median(difference)
-    diff_stdev = np.std(difference)
-    print(diff_mean, diff_median, diff_stdev)
 
     # regression
     reg = LinearRegression().fit(np.vstack(MODIS_1d), SENTINEL_1d)
     reg_fit = reg.predict(np.vstack(MODIS_1d))
 
-
     # fig = go.Figure(data=go.Scatter(x=MODIS_1d, y=SENTINEL_1d, mode='markers',
     #                                   marker=dict(color='rgba(187, 67, 141, 1)', size=10, line_width=1)))
     fig = go.Figure()
+    fig.add_trace(go.Scatter(name='line of best fit', x=MODIS_1d, y=reg_fit, mode='lines'))
     fig.add_trace(go.Scatter(name='X vs Y', x=MODIS_1d, y=SENTINEL_1d, mode='markers'))
-    fig.add_trace(
-        go.Scatter(name='line of best fit', x=MODIS_1d, y=reg_fit, mode='lines', line=dict(color='red', width=4)))
-    fig.update_traces(marker=dict(color="black", size=7),
+    fig.update_traces(marker=dict(size=10),
                       selector=dict(mode='markers'))
-
     fig.update_layout(
         # title='Korrelation der mittleren Nacht-Temperatur (MODIS/S3)',
         titlefont_size=32,
         xaxis=dict(
-            title='Mean MODIS temperature (°C)',
+            title='mean MODIS temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
         ),
         yaxis=dict(
-            title='Mean S3A temperature (°C)',
+            title='mean SLSTR temperature (°C)',
             titlefont_size=24,
             tickfont_size=20,
         ))
@@ -457,7 +387,8 @@ def SenMod_scatter(mod_directory, sen_directory, sen_shape_path, mod_shape_path,
 ########################################################################################################################
 
 def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_path, daytime_S3, daytime_MODIS):
-    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
+    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
+                'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
 
@@ -470,17 +401,20 @@ def allstations_alldata(mod_directory, sen_directory, sen_shape_path, mod_shape_
     # TM5_10 = [12.8, 15.7, 11.5, 10.4, 16.9, 11.9, 16.2, 8.5, 7.1, 12.8, 11.7, 13.0, 13.3, 15.1, 14.3, 15.7, 17.7, 17.1, 13.0, 16.1]
 
     # 2019-07-17
-    TT_10 = [12.3, 14.6, 15.2, 11.4, 12.6, 12.9, 14.6, 12.2, 11.6, 14.1, 12.9, 13.3, 13.4, 15.0, 14.0, 14.4, 17.1, 14.1, 11.5, 12.5]
-    TM5_10 = [10.7, 11.7, 12.9, 9.0, 11.8, 11.8, 12.5, 10.1, 10.1, 12.1, 11.5, 10.7, 11.1, 13.6, 12.3, 12.0, 15.3, 12.7, 8.3, 10.2]
-
+    TT_10 = [12.3, 14.6, 15.2, 11.4, 12.6, 12.9, 14.6, 12.2, 11.6, 14.1, 12.9, 13.3, 13.4, 15.0, 14.0, 14.4, 17.1, 14.1,
+             11.5, 12.5]
+    TM5_10 = [10.7, 11.7, 12.9, 9.0, 11.8, 11.8, 12.5, 10.1, 10.1, 12.1, 11.5, 10.7, 11.1, 13.6, 12.3, 12.0, 15.3, 12.7,
+              8.3, 10.2]
 
     fig = go.Figure(data=[
-        go.Bar(name='Mittlere S3 Temperatur (°C)', x=stations, y=analyze_SENTINEL_temperature(sen_directory=sen_directory,
-                                                                                           sen_shape_path=sen_shape_path,
-                                                                                           daytime_S3=daytime_S3)),
-        go.Bar(name='Mittlere MODIS Temperatur (°C)', x=stations, y=analyze_MODIS_temperature(mod_directory=mod_directory,
-                                                                                           mod_shape_path=mod_shape_path,
-                                                                                           daytime_MODIS=daytime_MODIS)),
+        go.Bar(name='Mittlere S3 Temperatur (°C)', x=stations,
+               y=analyze_SENTINEL_temperature(sen_directory=sen_directory,
+                                              sen_shape_path=sen_shape_path,
+                                              daytime_S3=daytime_S3)),
+        go.Bar(name='Mittlere MODIS Temperatur (°C)', x=stations,
+               y=analyze_MODIS_temperature(mod_directory=mod_directory,
+                                           mod_shape_path=mod_shape_path,
+                                           daytime_MODIS=daytime_MODIS)),
         go.Bar(name='DWD 2m Absolute Temperatur (°C)', x=stations,
                y=TT_10),
         go.Bar(name='DWD 5cm Absolute Temperatur (°C)', x=stations,
@@ -557,27 +491,43 @@ def plot_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_paramete
         ax.set_title('MODIS/DWD Temperatur Korrelation (' + station_names[i] + ")")
         ax.set_ylabel('MODIS Temperatur (°C)')
         ax.set_xlabel(DWD_variable)
-        #abline_values = [coefficient * i + intercept for i in Mod_DWD_correlation_list]
-        #plt.plot(reg_fit, temp_2m, ("#FFA500"))
+        # abline_values = [coefficient * i + intercept for i in Mod_DWD_correlation_list]
+        # plt.plot(reg_fit, temp_2m, ("#FFA500"))
         plt.plot(temp_2m, MOD_data_list[i], 'o')
         plt.show()
 
 
-def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter):
+def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter): # , daytime_S3):
     csv_list = extract_files_to_list(path_to_folder=path_to_csv, datatype=".csv")
-    Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path, daytime_S3="DAY")
+    # Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path,
+    #                                            daytime_S3=daytime_S3)
+
+    Sen_data_list = extract_Sentinel_temp_list(sen_directory=sen_directory, sen_shape_path=sen_shape_path)
+
+    print(len(Sen_data_list))
     DWD_mean_list = []
     Sen_data_mean_list = []
     boxplot_result_list = []
     print("######################## SENTINEL ########################")
     for i, file in enumerate(csv_list):
+
+        print(Sen_data_list[i])
+        print(len(Sen_data_list[i]))
+
+
         # Read csv data
         df = pd.read_csv(file, delimiter=",")
         temp_2m = df[DWD_temp_parameter]
 
+        print(temp_2m)
+        print(len(temp_2m))
+
         tmp = temp_2m[temp_2m == -999]
+        print(tmp)
         if len(tmp) > 0:
             for j, value in enumerate(tmp):
+                print(tmp.index[j])
+
                 temp_2m = temp_2m.drop([tmp.index[j]])
                 Sen_data_list[i].pop(tmp.index[j])
         if DWD_temp_parameter == "TM5_10":
@@ -632,7 +582,8 @@ def plot_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_param
 
 
 def SenDWD_barchart(sen_directory, sen_shape_path, path_to_csv):
-    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
+    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
+                'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
     DWD_2m, Sen = analyze_Sentinel_DWD(path_to_csv, sen_directory, sen_shape_path, DWD_temp_parameter="TT_10")
@@ -678,7 +629,8 @@ def SenDWD_barchart(sen_directory, sen_shape_path, path_to_csv):
 
 
 def ModDWD_barchart(mod_directory, mod_shape_path, path_to_csv):
-    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda', 'Meiningen',
+    stations = ['Bad Berka', 'Dachwig', 'Flughafen Erfurt', 'Kleiner Inselberg', 'Bad Lobenstein', 'Martinroda',
+                'Meiningen',
                 'Neuhaus a.R.', 'Schmücke', 'Schwarzburg', 'Waltershausen', 'Weimar-S.', 'Olbersleben', 'Krölpa-Rdorf',
                 'Eschwege', 'Hof', 'Kronach', 'Plauen', 'Sontra', 'Lichtentanne']
     DWD_2m, MOD = analyze_MODIS_DWD(path_to_csv, mod_directory, mod_shape_path, DWD_temp_parameter="TT_10")
@@ -724,8 +676,8 @@ def SenMod_histogram(mod_directory, sen_directory, sen_shape_path, mod_shape_pat
     import pandas as pd
     SENTINEL = extract_Sentinel_temp_list(sen_directory, sen_shape_path, daytime_S3)
     MODIS = extract_MODIS_temp_list(mod_directory, mod_shape_path, daytime_MODIS)
-    SENTINEL_1d = reduce(lambda x, y: x+y, SENTINEL)
-    MODIS_1d = reduce(lambda x, y: x+y, MODIS)
+    SENTINEL_1d = reduce(lambda x, y: x + y, SENTINEL)
+    MODIS_1d = reduce(lambda x, y: x + y, MODIS)
     print(SENTINEL_1d)
     print(len(SENTINEL_1d))
     print(MODIS_1d)
@@ -736,18 +688,12 @@ def SenMod_histogram(mod_directory, sen_directory, sen_shape_path, mod_shape_pat
         difference.append(list1_i - list2_i)
     print(difference)
     df = pd.DataFrame(difference, columns=["SLSTR minus MODIS Difference"])
-    diff_mean = np.mean(difference)
-    diff_median = np.median(difference)
-    diff_stdev = np.std(difference)
-    print(diff_mean, diff_median, diff_stdev)
+    print(df)
     # sns.displot(data=df, x=df["SLSTR minus MODIS Difference"], kde=True)
 
     g = sns.displot(
-        data=df, x="SLSTR minus MODIS Difference", kde=True, color="black")
-    g.set_axis_labels(daytime_MODIS + "time SLSTR minus MODIS Difference (°C)", "Number")
-    # g.set_axis_labels(daytime_MODIS + "time S3A/S3B minus MODIS Difference (°C)", "Number")
-    # g.set_axis_labels("SLSTR minus MODIS Difference (°C)", "Number")
+        data=df, x="SLSTR minus MODIS Difference", kde=True)
+    g.set_axis_labels(daytime_MODIS + "time SLSTR minus MODIS Difference", "Number")
     g.set_titles("{Histogram of " + daytime_MODIS + "time Difference")
 
     plt.show()
-

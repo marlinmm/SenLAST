@@ -72,10 +72,10 @@ def main():
 
     # mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="DAY",
     #          sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory, daytime_MODIS="Day")
-    barchart_mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
-                       daytime_S3="",
-                       sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
-                       daytime_MODIS="")
+    # barchart_mean_diff(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory,
+    #                    daytime_S3="",
+    #                    sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
+    #                    daytime_MODIS="")
 
     # SenMod_scatter(mod_directory=MODIS_Datapair_directory, sen_directory=Sentinel_Datapair_directory, daytime_S3="Night",
     #                 sen_shape_path=SENTINEL_Shapefile_directory, mod_shape_path=MODIS_Shapefile_directory,
@@ -94,8 +94,8 @@ def main():
     #                 mod_shape_path=MODIS_Shapefile_directory)
 
     ####################### DELIVERS SHIT RESULTS ###############################
-    # plot_Sentinel_DWD(sen_directory=SENTINEL_cloud_free_directory, sen_shape_path=SENTINEL_Shapefile_directory,
-    #                   path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")
+    plot_Sentinel_DWD(sen_directory=SENTINEL_cloud_free_directory, sen_shape_path=SENTINEL_Shapefile_directory,
+                      path_to_csv=SENTINEL_DWD_directory, DWD_temp_parameter="TT_10")
     #############################################################################
 
     # plot_MODIS_DWD(path_to_csv=MODIS_DWD_directory, mod_directory=MODIS_cloud_free_directory,
